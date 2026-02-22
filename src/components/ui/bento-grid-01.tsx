@@ -1,0 +1,355 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Smartphone, Globe, FileText, Wand2, Search, Mic, ExternalLink, CloudUpload, FileDown } from "lucide-react";
+
+// ── Animated sub-components ──────────────────────────────────────────────────
+
+function ResumeAnimation() {
+    const [scale, setScale] = useState(1);
+    useEffect(() => {
+        const interval = setInterval(() => setScale((p) => (p === 1 ? 1.4 : 1)), 2000);
+        return () => clearInterval(interval);
+    }, []);
+    return (
+        <div className="flex items-center justify-center h-full">
+            <motion.div
+                animate={{ scale }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '80px' }}
+            >
+                {[100, 75, 90, 60].map((w, i) => (
+                    <div key={i} style={{ height: '6px', width: `${w}%`, backgroundColor: 'rgba(15, 23, 42, 0.15)', borderRadius: '3px' }} />
+                ))}
+            </motion.div>
+        </div>
+    );
+}
+
+function LetterAnimation() {
+    const [layout, setLayout] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(() => setLayout((p) => (p + 1) % 3), 2500);
+        return () => clearInterval(interval);
+    }, []);
+    const widths = [[100, 80, 90], [90, 100, 70], [85, 95, 80]];
+    return (
+        <div className="h-full flex items-center justify-center">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '120px' }}>
+                {widths[layout].map((w, i) => (
+                    <motion.div
+                        key={i}
+                        layout
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ height: '6px', width: `${w}%`, backgroundColor: 'rgba(15, 23, 42, 0.1)', borderRadius: '3px' }}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function ScanAnimation() {
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const t = setTimeout(() => setLoading(false), 800);
+        return () => clearTimeout(t);
+    }, []);
+    return (
+        <div className="flex flex-col items-center justify-center h-full gap-4">
+            <div className="h-10 flex items-center justify-center overflow-hidden relative w-full">
+                <AnimatePresence mode="wait">
+                    {loading ? (
+                        <motion.div
+                            key="loader"
+                            style={{ height: '32px', width: '96px', backgroundColor: 'rgba(15, 23, 42, 0.05)', borderRadius: '6px' }}
+                            initial={{ opacity: 0.5 }}
+                            animate={{ opacity: [0.4, 0.7, 0.4] }}
+                            exit={{ opacity: 0, y: -20, position: 'absolute' }}
+                            transition={{ duration: 1, repeat: Infinity }}
+                        />
+                    ) : (
+                        <motion.span
+                            key="text"
+                            initial={{ y: 20, opacity: 0, filter: "blur(5px)" }}
+                            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                            style={{ fontSize: '2rem', fontWeight: 600, color: '#0f172a' }}
+                        >
+                            94%
+                        </motion.span>
+                    )}
+                </AnimatePresence>
+            </div>
+            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Match Score</span>
+            <div style={{ width: '120px', height: '6px', backgroundColor: 'rgba(15, 23, 42, 0.05)', borderRadius: '99px', overflow: 'hidden' }}>
+                <motion.div
+                    style={{ height: '100%', backgroundColor: '#3b82f6', borderRadius: '99px' }}
+                    initial={{ width: 0 }}
+                    animate={{ width: loading ? '0%' : '94%' }}
+                    transition={{ type: "spring", stiffness: 100, damping: 15 }}
+                />
+            </div>
+        </div>
+    );
+}
+
+function VoiceAnimation() {
+    const [bars, setBars] = useState([40, 60, 80, 50, 70]);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setBars([...Array(5)].map(() => Math.floor(Math.random() * 60) + 30));
+        }, 400);
+        return () => clearInterval(interval);
+    }, []);
+    return (
+        <div className="flex items-center justify-center h-full gap-2">
+            {bars.map((h, i) => (
+                <motion.div
+                    key={i}
+                    animate={{ height: `${h}%` }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    style={{ width: '8px', backgroundColor: '#3b82f6', borderRadius: '4px', minHeight: '8px', maxHeight: '64px', opacity: 0.7 }}
+                />
+            ))}
+        </div>
+    );
+}
+
+function GlobalNetwork() {
+    return (
+        <div className="flex items-center justify-center h-full relative">
+            <Globe className="w-16 h-16 text-slate-800 z-10" />
+            {[0, 1, 2, 3, 4].map((pulse) => (
+                <motion.div
+                    key={pulse}
+                    className="absolute w-16 h-16 border-2 border-slate-300 rounded-full"
+                    initial={{ scale: 0.5, opacity: 1 }}
+                    animate={{ scale: 3, opacity: 0 }}
+                    transition={{ duration: 3, repeat: Infinity, delay: pulse * 0.8, ease: "easeOut" }}
+                />
+            ))}
+        </div>
+    );
+}
+
+// ── Main Dashboard Bento ─────────────────────────────────────────────────────
+
+interface BentoDashboardProps {
+    navUrl: (path: string) => string;
+    displayName: string;
+}
+
+export default function BentoDashboard({ navUrl, displayName }: BentoDashboardProps) {
+    const handleExportWord = async () => {
+        try {
+            const demoText = "Welcome to Cursus!\n\nThis is a demonstration of the Word Document Export feature. When you generate a real Cover Letter or Resume inside their respective tools, clicking the Export to Word button will download that exact document formatted for Microsoft Word.\n\nEnjoy building your future!";
+            const res = await fetch("/api/export/word", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: demoText, title: "Cursus_Demo_Export" })
+            });
+            if (!res.ok) throw new Error("Export failed");
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Cursus_Demo_Export.docx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch (e) {
+            console.error("Failed to export demo document", e);
+            alert("Failed to export Word document. Please try again.");
+        }
+    };
+
+    const handleExportDocs = () => {
+        alert("To open in Google Docs: Click 'MS Word' to export the .docx file, then simply drag & drop the downloaded file into Google Docs! It automatically converts and formats perfectly.");
+    };
+
+    const cardStyle = {
+        backgroundColor: '#ffffff',
+        border: '1px solid #f1f5f9',
+        borderRadius: '16px',
+        padding: '2rem',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        cursor: 'pointer',
+        overflow: 'hidden',
+        textDecoration: 'none',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
+    };
+
+    return (
+        <section style={{ backgroundColor: '#fafafa', padding: '6rem 1.5rem', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ maxWidth: '1200px', width: '100%', margin: '0 auto' }}>
+
+                <motion.p
+                    style={{ color: '#64748b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.5rem', fontWeight: 600 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
+                    Your Dashboard
+                </motion.p>
+                <motion.h1
+                    style={{ color: '#0f172a', fontSize: 'clamp(2.5rem, 4.5vw, 3.5rem)', fontWeight: 850, letterSpacing: '-0.05em', marginBottom: '3.5rem', lineHeight: '1.1' }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 }}
+                >
+                    Welcome back, {displayName}!
+                </motion.h1>
+
+                {/* Bento Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1.25rem', gridAutoRows: '200px' }}>
+
+                    {/* 1. Resume Architect — tall 2x2 */}
+                    <motion.a
+                        href={navUrl("/dashboard/resume")}
+                        style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        whileHover={{ scale: 1.02, borderColor: '#e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <div style={{ flex: 1 }}><ResumeAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.25rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                <FileText size={18} color="#3b82f6" /> Resume Architect
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.5 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 2. Cover Letter — 2x1 */}
+                    <motion.a
+                        href={navUrl("/dashboard/letter")}
+                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
+                    >
+                        <div style={{ flex: 1 }}><LetterAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.15rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                <Wand2 size={16} color="#8b5cf6" /> Cover Letters
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stand out with highly-personalized letters that command attention.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 3. Career Link — tall 2x2 */}
+                    <motion.a
+                        href={navUrl("/dashboard/portfolio")}
+                        style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
+                    >
+                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <GlobalNetwork />
+                        </div>
+                        <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '1rem', border: '1px solid #f1f5f9' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.15rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                <Globe size={16} color="#10b981" /> Career Link
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Showcase your work and let the best opportunities come to you.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 4. Job Scanner — 2x1 */}
+                    <motion.a
+                        href={navUrl("/dashboard/jobs")}
+                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
+                    >
+                        <div style={{ flex: 1 }}><ScanAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                <Search size={16} color="#f59e0b" /> Job Scanner Pro
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 5. Interview Coach — 2x1 */}
+                    <motion.a
+                        href={navUrl("/dashboard/interview")}
+                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
+                    >
+                        <div style={{ flex: 1 }}><VoiceAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                <Mic size={16} color="#ef4444" /> Interview Coach
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 6. Export Integrations — 4x1 */}
+                    <motion.div
+                        style={{ ...cardStyle, gridColumn: 'span 4', cursor: 'default' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+                            <div style={{ maxWidth: '45%' }}>
+                                <h3 style={{ color: '#0f172a', fontSize: '1.4rem', fontWeight: 850, marginBottom: '10px', letterSpacing: '-0.03em', lineHeight: '1.1' }}>Export & Continue</h3>
+                                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                                    Send your generated Resumes and Cover Letters directly to your preferred word processor for final touches.
+                                </p>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                {/* Google Docs Button */}
+                                <button
+                                    onClick={handleExportDocs}
+                                    style={{
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
+                                        padding: '1.25rem', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px',
+                                        cursor: 'pointer', transition: 'all 0.2s ease', width: '130px'
+                                    }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#3b82f6'; e.currentTarget.style.backgroundColor = '#eff6ff'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+                                        <path fill="#4285F4" d="M14 2h20l10 10v30c0 2.2-1.8 4-4 4H14c-2.2 0-4-1.8-4-4V6c0-2.2 1.8-4 4-4z" />
+                                        <path fill="#188038" d="M34 2v10h10z" />
+                                        <path fill="#E8EAED" d="M18 16h16v3H18zm0 8h16v3H18zm0 8h12v3H18z" />
+                                    </svg>
+                                    <span style={{ color: '#0f172a', fontSize: '0.85rem', fontWeight: 600 }}>Google Docs</span>
+                                </button>
+
+                                {/* Microsoft Word Button */}
+                                <button
+                                    onClick={handleExportWord}
+                                    style={{
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
+                                        padding: '1.25rem', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px',
+                                        cursor: 'pointer', transition: 'all 0.2s ease', width: '130px'
+                                    }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#2b579a'; e.currentTarget.style.backgroundColor = '#f0f4f9'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+                                        <path fill="#2B579A" d="M28 6H8c-2.2 0-4 1.8-4 4v28c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4V10c0-2.2-1.8-4-4-4z" />
+                                        <path fill="#ffffff" d="M11.6 30L9 16h2.7l1.5 9.7h.1l2-9.7h2.6l2 9.7h.1l1.5-9.7h2.6l-2.6 14h-2.8L16 20.3h-.1L14.4 30h-2.8z" />
+                                        <path fill="#124078" d="M28 6v10h10v22c0 2.2-1.8 4-4 4H28v-4h4v-28h-4z" />
+                                    </svg>
+                                    <span style={{ color: '#0f172a', fontSize: '0.85rem', fontWeight: 600 }}>MS Word</span>
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                </div>
+            </div>
+        </section>
+    );
+}
