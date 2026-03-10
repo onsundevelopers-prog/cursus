@@ -37,7 +37,13 @@ Make the jobs look highly realistic, impressive, and tailored to the requested r
         });
 
         const jsonMatch = text.match(/\[[\s\S]*\]/);
-        const parsedJobs = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(text);
+        let parsedJobs = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(text);
+
+        // Ensure real working search links back to LinkedIn
+        parsedJobs = parsedJobs.map((job: any) => ({
+            ...job,
+            link: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title + ' ' + job.company)}`
+        }));
 
         return NextResponse.json(parsedJobs);
     } catch (error) {
@@ -55,7 +61,7 @@ Make the jobs look highly realistic, impressive, and tailored to the requested r
                 posted: "Just now",
                 match: 95,
                 tags: ["Leadership", "Strategy"],
-                link: "https://linkedin.com/jobs"
+                link: "https://www.linkedin.com/jobs/search/?keywords=Senior%20Role"
             }
         ]);
     }

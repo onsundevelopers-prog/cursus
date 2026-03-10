@@ -2,59 +2,123 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SpeechBubble2D } from "./speech-bubble-2d";
+import { Zap, Target, CircleDollarSign, X, CheckCircle2 } from 'lucide-react';
 
 interface MascotProps {
     className?: string;
 }
 
-const jobTips = [
-    "Execution is the only apology.",
-    "Your portfolio is your best resume.",
-    "Draft the vision, then build the engine.",
-    "Design for humans, build for the future.",
-    "Momentum is your most valuable currency."
+const features = [
+    {
+        title: "AI Job Application Autofill",
+        badge: "Chrome Extension",
+        icon: <Zap size={20} className="text-amber-500" />,
+        points: [
+            "Auto-fills job applications in one click",
+            "Saves 15-20 minutes per application",
+            "Supports Greenhouse, Lever, Workday, etc.",
+            "Detects 20+ field types automatically"
+        ],
+        pricing: "Free: 10/month | Pro: Unlimited"
+    },
+    {
+        title: "Company Research AI",
+        badge: "Interview Prep",
+        icon: <Target size={20} className="text-blue-500" />,
+        points: [
+            "Generates personalized interview prep briefs",
+            "Scrapes company website, news, Glassdoor, etc.",
+            "Creates custom talking points from YOUR resume",
+            "Includes questions to ask & culture insights"
+        ],
+        pricing: "Free: 2 briefs/month | Pro: Unlimited"
+    },
+    {
+        title: "Salary Negotiation Coach",
+        badge: "Live Coaching",
+        icon: <CircleDollarSign size={20} className="text-emerald-500" />,
+        points: [
+            "Shows market data vs your offer",
+            "Generates negotiation scripts (email + phone)",
+            "LIVE coach (listens & suggests responses in real-time)",
+            "Helps you negotiate $10K-$50K more"
+        ],
+        pricing: "Free: 1 analysis | Pro: Unlimited + live coach"
+    }
 ];
 
 export function Mascot({ className }: MascotProps) {
     const [isVisible, setIsVisible] = useState(false);
-    const [showBubble, setShowBubble] = useState(false);
-    const [tipIndex, setTipIndex] = useState(0);
+    const [showMenu, setShowMenu] = useState(false);
     const [isJumping, setIsJumping] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsVisible(true);
-            // Auto show bubble after a delay to be helpful
-            setTimeout(() => setShowBubble(true), 1500);
+            setTimeout(() => setShowMenu(true), 1500);
         }, 2000);
         return () => clearTimeout(timer);
     }, []);
 
     const handleClick = () => {
         setIsJumping(true);
-        setShowBubble(true);
-        setTipIndex((prev) => (prev + 1) % jobTips.length);
+        setShowMenu(true);
         setTimeout(() => setIsJumping(false), 800);
     };
 
     return (
         <div className={`fixed bottom-12 right-12 z-[999] flex flex-col items-end pointer-events-none ${className || ''}`}>
 
-            {/* The Exactly-Like-The-Photo Bubble */}
             <AnimatePresence>
-                {isVisible && showBubble && (
+                {isVisible && showMenu && (
                     <motion.div
-                        key={tipIndex}
-                        initial={{ opacity: 0, scale: 0.5, y: 50 }}
+                        initial={{ opacity: 0, scale: 0.9, y: 30, transformOrigin: 'bottom right' }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.5, y: 30 }}
-                        className="relative z-10"
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        className="relative z-10 pointer-events-auto mb-4 mr-4"
+                        style={{ width: '400px' }}
                     >
-                        <SpeechBubble2D
-                            text={jobTips[tipIndex]}
-                            onClose={() => setShowBubble(false)}
-                        />
+                        <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden relative">
+                            {/* Header */}
+                            <div className="bg-slate-900 text-white p-4 flex justify-between items-center">
+                                <h3 className="font-bold text-lg flex items-center gap-2">
+                                    <SparklesIcon className="text-blue-400" /> Cursus Pro Tools
+                                </h3>
+                                <button onClick={() => setShowMenu(false)} className="text-slate-400 hover:text-white transition-colors">
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            
+                            {/* Features List */}
+                            <div className="max-h-[60vh] overflow-y-auto p-2 scrollbar-hide">
+                                {features.map((feature, idx) => (
+                                    <div key={idx} className="p-4 mb-2 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className="flex items-center gap-2">
+                                                <div className="p-2 bg-white rounded-lg shadow-sm border border-slate-200">
+                                                    {feature.icon}
+                                                </div>
+                                                <h4 className="font-bold text-slate-900 text-[15px]">{feature.title}</h4>
+                                            </div>
+                                            <span className="text-[10px] uppercase font-black tracking-wider px-2 py-1 rounded-full bg-slate-200 text-slate-600">
+                                                {feature.badge}
+                                            </span>
+                                        </div>
+                                        <ul className="space-y-2 text-sm text-slate-600 mb-3 pl-2">
+                                            {feature.points.map((pt, i) => (
+                                                <li key={i} className="flex gap-2 leading-snug">
+                                                    <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                                                    <span>{pt}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div className="text-xs font-bold text-slate-900 bg-white border border-slate-200 px-3 py-2 rounded-lg text-center shadow-sm">
+                                            {feature.pricing}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -109,3 +173,7 @@ export function Mascot({ className }: MascotProps) {
         </div>
     );
 }
+
+const SparklesIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`w-5 h-5 ${className || ''}`}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /><path d="M5 3v4" /><path d="M19 17v4" /><path d="M3 5h4" /><path d="M17 19h4" /></svg>
+);
