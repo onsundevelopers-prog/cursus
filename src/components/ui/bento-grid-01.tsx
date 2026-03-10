@@ -381,7 +381,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                     document.body.removeChild(link);
                                     alert("Cursus Chrome Extension download started!");
                                 }}
-                                className="w-full flex items-center justify-center gap-2 py-3 bg-[#0f172a] hover:bg-black text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-slate-200"
+                                className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-amber-100"
                                 style={{ textDecoration: 'none' }}
                             >
                                 <FileDown size={18} /> Get Extension
@@ -390,38 +390,48 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     </motion.div>
 
                     {/* 7. Company Research AI */}
-                    <motion.a
-                        href={navUrl("#")}
-                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                    <motion.div
+                        style={{ ...cardStyle, gridColumn: 'span 2', cursor: 'pointer' }}
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
                         whileHover={{ scale: 0.98, borderColor: '#3b82f6' }}
+                        onClick={() => alert("Company Intel is coming soon!")}
                     >
                         <div style={{ flex: 1 }}><ResearchAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                <Target size={16} color="#3b82f6" /> Company Intel
-                            </h3>
+                            <div className="flex justify-between items-center mb-1">
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <Target size={16} color="#3b82f6" /> Company Intel
+                                </h3>
+                                <span className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md">
+                                    Soon
+                                </span>
+                            </div>
                             <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deep-scraped prep briefs & custom talking points.</p>
                         </div>
-                    </motion.a>
+                    </motion.div>
 
                     {/* 8. Salary Negotiation */}
-                    <motion.a
-                        href={navUrl("#")}
-                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                    <motion.div
+                        style={{ ...cardStyle, gridColumn: 'span 2', cursor: 'pointer' }}
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.7 }}
                         whileHover={{ scale: 0.98, borderColor: '#10b981' }}
+                        onClick={() => alert("Salary Coach is coming soon!")}
                     >
                         <div style={{ flex: 1 }}><NegotiationAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                <CircleDollarSign size={16} color="#10b981" /> Salary Coach
-                            </h3>
+                            <div className="flex justify-between items-center mb-1">
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <CircleDollarSign size={16} color="#10b981" /> Salary Coach
+                                </h3>
+                                <span className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md">
+                                    Soon
+                                </span>
+                            </div>
                             <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
                         </div>
-                    </motion.a>
+                    </motion.div>
 
                     {/* 9. Export Integrations — 6x1 */}
                     <motion.div
