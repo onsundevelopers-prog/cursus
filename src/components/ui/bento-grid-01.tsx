@@ -351,24 +351,43 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     </motion.a>
 
                     {/* 6. AI Job Application Autofill */}
-                    <motion.a
-                        href={navUrl("#")}
-                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                    <motion.div
+                        style={{ ...cardStyle, gridColumn: 'span 2', position: 'relative' }}
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                         whileHover={{ scale: 0.98, borderColor: '#f59e0b' }}
                     >
                         <div style={{ flex: 1 }}><AutofillAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
-                            <div className="flex justify-between items-center mb-1">
+                            <div className="flex justify-between items-center mb-2">
                                 <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Zap size={16} color="#f59e0b" /> Job Autofill
                                 </h3>
-                                <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Extension</span>
+                                <span className="text-[9px] uppercase tracking-wider font-bold bg-amber-50 text-amber-600 px-2 py-1 border border-amber-200/50 rounded-md">
+                                    Extension
+                                </span>
                             </div>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.25rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
+                            
+                            <a 
+                                href="#" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    const link = document.createElement('a');
+                                    link.href = 'data:application/zip;base64,UEsDBAoAAAAAA...'; // dummy zip
+                                    link.download = 'cursus-autofill-extension.zip';
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                    alert("Cursus Chrome Extension download started!");
+                                }}
+                                className="w-full flex items-center justify-center gap-2 py-3 bg-[#0f172a] hover:bg-black text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-slate-200"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <FileDown size={18} /> Get Extension
+                            </a>
                         </div>
-                    </motion.a>
+                    </motion.div>
 
                     {/* 7. Company Research AI */}
                     <motion.a
