@@ -113,7 +113,7 @@ export function ModernHeader() {
                                                 gap: '1rem'
                                             }}
                                         >
-                                            {link.dropdown.map((item) => (
+                                            {link.dropdown.map((item: any) => (
                                                 <Link
                                                     key={item.title}
                                                     href="#"

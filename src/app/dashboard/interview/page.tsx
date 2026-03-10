@@ -116,7 +116,7 @@ function InterviewContent() {
     // Speak AI messages as they arrive
     useEffect(() => {
         const lastMessage = messages[messages.length - 1];
-        if (lastMessage && lastMessage.role === 'assistant' && status === 'idle') {
+        if (lastMessage && lastMessage.role === 'assistant' && status === 'ready') {
             const text = lastMessage.parts
                 .filter(p => p.type === 'text')
                 .map(p => (p as any).text)
