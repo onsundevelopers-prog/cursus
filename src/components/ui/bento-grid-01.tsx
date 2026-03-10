@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Smartphone, Globe, FileText, Wand2, Search, Mic, ExternalLink, CloudUpload, FileDown } from "lucide-react";
+import { Smartphone, Globe, FileText, Wand2, Search, Mic, ExternalLink, CloudUpload, FileDown, Zap, Target, CircleDollarSign } from "lucide-react";
 
 // ── Animated sub-components ──────────────────────────────────────────────────
 
@@ -129,6 +129,64 @@ function GlobalNetwork() {
                     transition={{ duration: 3, repeat: Infinity, delay: pulse * 0.8, ease: "easeOut" }}
                 />
             ))}
+        </div>
+    );
+}
+
+function AutofillAnimation() {
+    const [filled, setFilled] = useState(false);
+    useEffect(() => {
+        const interval = setInterval(() => setFilled(p => !p), 1500);
+        return () => clearInterval(interval);
+    }, []);
+    return (
+        <div className="flex flex-col items-center justify-center h-full gap-2">
+            {[40, 80, 60].map((w, i) => (
+                <div key={i} className="flex gap-2 items-center">
+                    <div style={{ width: '12px', height: '12px', borderRadius: '4px', backgroundColor: 'rgba(15,23,42,0.1)' }} />
+                    <div style={{ width: '80px', height: '12px', borderRadius: '4px', backgroundColor: 'rgba(15,23,42,0.05)', overflow: 'hidden' }}>
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: filled ? `${w}%` : '0%' }}
+                            transition={{ duration: 0.5, delay: i * 0.15 }}
+                            style={{ height: '100%', backgroundColor: '#f59e0b' }}
+                        />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function ResearchAnimation() {
+    return (
+        <div className="flex items-center justify-center h-full relative">
+            <Target className="w-12 h-12 text-blue-500 z-10" />
+            <motion.div 
+                animate={{ rotate: 360 }} 
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="absolute w-20 h-20 border border-dashed border-blue-200 rounded-full"
+            />
+            <motion.div 
+                animate={{ rotate: -360 }} 
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                className="absolute w-24 h-24 border border-blue-100 rounded-full"
+            />
+        </div>
+    );
+}
+
+function NegotiationAnimation() {
+    const [chart, setChart] = useState(false);
+    useEffect(() => {
+        const t = setTimeout(() => setChart(true), 500);
+        return () => clearTimeout(t);
+    }, []);
+    return (
+        <div className="flex items-end justify-center h-full gap-2 pb-6">
+            <motion.div animate={{ height: chart ? '30px' : '10px' }} transition={{ duration: 1 }} style={{ width: '16px', backgroundColor: 'rgba(15,23,42,0.1)', borderRadius: '4px 4px 0 0' }} />
+            <motion.div animate={{ height: chart ? '50px' : '10px' }} transition={{ duration: 1, delay: 0.2 }} style={{ width: '16px', backgroundColor: 'rgba(15,23,42,0.2)', borderRadius: '4px 4px 0 0' }} />
+            <motion.div animate={{ height: chart ? '80px' : '10px' }} transition={{ duration: 1, delay: 0.4 }} style={{ width: '16px', backgroundColor: '#10b981', borderRadius: '4px 4px 0 0' }} />
         </div>
     );
 }
@@ -292,9 +350,63 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         </div>
                     </motion.a>
 
-                    {/* 6. Export Integrations — 4x1 */}
+                    {/* 6. AI Job Application Autofill */}
+                    <motion.a
+                        href={navUrl("#")}
+                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        whileHover={{ scale: 0.98, borderColor: '#f59e0b' }}
+                    >
+                        <div style={{ flex: 1 }}><AutofillAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <div className="flex justify-between items-center mb-1">
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Zap size={16} color="#f59e0b" /> Job Autofill
+                                </h3>
+                                <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Extension</span>
+                            </div>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 7. Company Research AI */}
+                    <motion.a
+                        href={navUrl("#")}
+                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        whileHover={{ scale: 0.98, borderColor: '#3b82f6' }}
+                    >
+                        <div style={{ flex: 1 }}><ResearchAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                <Target size={16} color="#3b82f6" /> Company Intel
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deep-scraped prep briefs & custom talking points.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 8. Salary Negotiation */}
+                    <motion.a
+                        href={navUrl("#")}
+                        style={{ ...cardStyle, gridColumn: 'span 2' }}
+                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 }}
+                        whileHover={{ scale: 0.98, borderColor: '#10b981' }}
+                    >
+                        <div style={{ flex: 1 }}><NegotiationAnimation /></div>
+                        <div style={{ marginTop: '1rem' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                <CircleDollarSign size={16} color="#10b981" /> Salary Coach
+                            </h3>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
+                        </div>
+                    </motion.a>
+
+                    {/* 9. Export Integrations — 6x1 */}
                     <motion.div
-                        style={{ ...cardStyle, gridColumn: 'span 4', cursor: 'default' }}
+                        style={{ ...cardStyle, gridColumn: 'span 6', cursor: 'default' }}
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                     >

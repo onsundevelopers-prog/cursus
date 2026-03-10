@@ -49,80 +49,22 @@ const features = [
 
 export function Mascot({ className }: MascotProps) {
     const [isVisible, setIsVisible] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
     const [isJumping, setIsJumping] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsVisible(true);
-            setTimeout(() => setShowMenu(true), 1500);
         }, 2000);
         return () => clearTimeout(timer);
     }, []);
 
     const handleClick = () => {
         setIsJumping(true);
-        setShowMenu(true);
         setTimeout(() => setIsJumping(false), 800);
     };
 
     return (
         <div className={`fixed bottom-12 right-12 z-[999] flex flex-col items-end pointer-events-none ${className || ''}`}>
-
-            <AnimatePresence>
-                {isVisible && showMenu && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 30, transformOrigin: 'bottom right' }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative z-10 pointer-events-auto mb-4 mr-4"
-                        style={{ width: '400px' }}
-                    >
-                        <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden relative">
-                            {/* Header */}
-                            <div className="bg-slate-900 text-white p-4 flex justify-between items-center">
-                                <h3 className="font-bold text-lg flex items-center gap-2">
-                                    <SparklesIcon className="text-blue-400" /> Cursus Pro Tools
-                                </h3>
-                                <button onClick={() => setShowMenu(false)} className="text-slate-400 hover:text-white transition-colors">
-                                    <X size={20} />
-                                </button>
-                            </div>
-                            
-                            {/* Features List */}
-                            <div className="max-h-[60vh] overflow-y-auto p-2 scrollbar-hide">
-                                {features.map((feature, idx) => (
-                                    <div key={idx} className="p-4 mb-2 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <div className="flex items-center gap-2">
-                                                <div className="p-2 bg-white rounded-lg shadow-sm border border-slate-200">
-                                                    {feature.icon}
-                                                </div>
-                                                <h4 className="font-bold text-slate-900 text-[15px]">{feature.title}</h4>
-                                            </div>
-                                            <span className="text-[10px] uppercase font-black tracking-wider px-2 py-1 rounded-full bg-slate-200 text-slate-600">
-                                                {feature.badge}
-                                            </span>
-                                        </div>
-                                        <ul className="space-y-2 text-sm text-slate-600 mb-3 pl-2">
-                                            {feature.points.map((pt, i) => (
-                                                <li key={i} className="flex gap-2 leading-snug">
-                                                    <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
-                                                    <span>{pt}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <div className="text-xs font-bold text-slate-900 bg-white border border-slate-200 px-3 py-2 rounded-lg text-center shadow-sm">
-                                            {feature.pricing}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             {/* 2D Mascot Character (SVG) */}
             <AnimatePresence>
                 {isVisible && (

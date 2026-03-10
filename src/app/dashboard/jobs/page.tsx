@@ -20,7 +20,7 @@ import {
 import { Sparkles, Zap, Target, ShieldCheck, Search, Database, Fingerprint } from "lucide-react";
 import GuestBanner from "../../components/GuestBanner";
 import { cn } from "@/lib/utils";
-import { SearchBar } from "@/components/ui/search-bar";
+import { PromptInputBox } from "@/components/ui/ai-prompt-box";
 
 function JobsContent() {
     const searchParams = useSearchParams();
@@ -123,24 +123,19 @@ function JobsContent() {
                             <div className="flex items-center gap-1.5"><ShieldCheck size={14} /> Safe Scan</div>
                             <div className="flex items-center gap-1.5"><Fingerprint size={14} /> Persona Matching</div>
                         </div>
-                        <div className="w-full flex justify-center mb-10">
-                            <SearchBar
+                        <div className="w-full flex justify-center mb-10 max-w-2xl">
+                            <PromptInputBox 
                                 placeholder="What role are you looking for? (e.g. CEO, Developer)"
-                                initialValue={query}
-                                onSearch={(val) => {
-                                    setQuery(val);
-                                    startScan(val);
+                                onSend={(msg: string) => {
+                                    setQuery(msg);
+                                    startScan(msg);
                                 }}
+                                isLoading={false}
                             />
                         </div>
-                        <button
-                            onClick={() => startScan()}
-                            disabled={!query.trim()}
-                            className="btn btn-primary px-8 py-3 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                            style={{ padding: '1rem 2.5rem', fontSize: '1.1rem' }}
-                        >
-                            Execute Deep Scan
-                        </button>
+                        <p className="text-slate-400 text-[10px] font-medium tracking-widest uppercase">
+                            Secure Deep Scan Active
+                        </p>
                     </motion.div>
                 )}
 
