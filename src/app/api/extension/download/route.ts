@@ -27,9 +27,9 @@ export async function GET() {
 
         addFilesToZip(extensionPath, zip);
 
-        const content = await zip.generateAsync({ type: 'nodebuffer' });
+        const content = await zip.generateAsync({ type: 'uint8array' });
 
-        return new NextResponse(content, {
+        return new NextResponse(content as any, {
             headers: {
                 'Content-Type': 'application/zip',
                 'Content-Disposition': 'attachment; filename=cursus-ai-extension.zip',
