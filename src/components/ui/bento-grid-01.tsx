@@ -373,12 +373,22 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                 href="#" 
                                 onClick={(e) => {
                                     e.preventDefault();
+                                    // Create a dummy but valid minimal zip file blob
+                                    const byteString = atob("UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==");
+                                    const ab = new ArrayBuffer(byteString.length);
+                                    const ia = new Uint8Array(ab);
+                                    for (let i = 0; i < byteString.length; i++) {
+                                        ia[i] = byteString.charCodeAt(i);
+                                    }
+                                    const blob = new Blob([ab], { type: "application/zip" });
+                                    const url = window.URL.createObjectURL(blob);
                                     const link = document.createElement('a');
-                                    link.href = 'data:application/zip;base64,UEsDBAoAAAAAA...'; // dummy zip
+                                    link.href = url;
                                     link.download = 'cursus-autofill-extension.zip';
                                     document.body.appendChild(link);
                                     link.click();
                                     document.body.removeChild(link);
+                                    window.URL.revokeObjectURL(url);
                                     alert("Cursus Chrome Extension download started!");
                                 }}
                                 className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-amber-100"
