@@ -123,44 +123,15 @@ function JobsContent() {
 
             <div className="flex justify-between items-end mb-12">
                 <div>
-                    <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center gap-2 mb-3"
-                    >
-                        <span className="px-3 py-1 bg-orange-100 text-orange-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-orange-200/50">
-                            WebNinja Enabled
-                        </span>
-                        <span className="px-3 py-1 bg-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-200/50">
-                            AI Matching Active
-                        </span>
-                    </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         style={{ fontSize: '3.5rem', fontWeight: 850, letterSpacing: '-0.05em', lineHeight: 1 }}
                     >
-                        Job Scanner <span className="text-orange-600 italic">Pro</span>
+                        WebNinja Job Scanner <span className="text-orange-600 italic">Pro</span>
                     </motion.h1>
                 </div>
                 
-                {!resumeUploaded && (
-                    <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="hidden md:flex flex-col items-end"
-                    >
-                        <button 
-                            onClick={() => {
-                                setResumeUploaded(true);
-                                alert("Resume uploaded and analyzed!");
-                            }}
-                            className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-dashed border-slate-200 text-slate-600 rounded-2xl hover:border-orange-400 hover:text-orange-600 transition-all font-bold"
-                        >
-                            <Upload size={18} /> Upload Resume for Match
-                        </button>
-                    </motion.div>
-                )}
             </div>
 
             <AnimatePresence mode="wait">
@@ -331,39 +302,6 @@ function JobsContent() {
                                 </div>
                             </div>
 
-                            {/* Resume Status */}
-                            <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-lg">
-                                <h3 className="font-black text-xl mb-4">Resume Intelligence</h3>
-                                {resumeUploaded ? (
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-2xl border border-orange-100">
-                                            <FileText className="text-orange-500" />
-                                            <div>
-                                                <p className="font-bold text-sm">resume_final.pdf</p>
-                                                <p className="text-[10px] text-orange-600 font-black">AI ANALYZED</p>
-                                            </div>
-                                        </div>
-                                        <div className="p-4 bg-slate-50 rounded-2xl">
-                                            <h4 className="text-xs font-black mb-3 text-slate-400 uppercase">Top Match Areas</h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                <span className="px-2 py-1 bg-white rounded-lg text-[10px] font-bold border border-slate-200">React</span>
-                                                <span className="px-2 py-1 bg-white rounded-lg text-[10px] font-bold border border-slate-200">UX Design</span>
-                                                <span className="px-2 py-1 bg-white rounded-lg text-[10px] font-bold border border-slate-200">Startups</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-6">
-                                        <p className="text-slate-400 text-sm mb-6">Unlock precision matching by syncing your resume.</p>
-                                        <button 
-                                            onClick={() => setResumeUploaded(true)}
-                                            className="w-full py-4 bg-slate-50 hover:bg-orange-50 hover:text-orange-600 rounded-2xl font-bold text-slate-500 transition-all border-2 border-dashed border-slate-200"
-                                        >
-                                            Upload Resume
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
                         </div>
                     </div>
                 )}

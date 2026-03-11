@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const WEBNINJA_API_KEY = "ak_5dv38gdb3j0u0j0bofyhxanovpd4xr4srhdi282yheogdkw";
+const WEBNINJA_API_KEY = process.env.WEBNINJA_API_KEY;
 const WEBNINJA_BASE_URL = "https://jsearch.p.rapidapi.com"; // Standard JSearch endpoint
 
 export async function POST(req: Request) {
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         const response = await fetch(`${WEBNINJA_BASE_URL}/search?${params.toString()}`, {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': WEBNINJA_API_KEY,
+                'X-RapidAPI-Key': (WEBNINJA_API_KEY || ""),
                 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
             }
         });

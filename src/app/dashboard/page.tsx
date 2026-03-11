@@ -6,7 +6,6 @@ import { Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import BentoDashboard from "@/components/ui/bento-grid-01";
-import { ChatHistory } from "@/components/ChatHistory";
 
 function DashboardContent() {
     const { user, isLoaded } = useUser();
@@ -76,16 +75,8 @@ function DashboardContent() {
             </AnimatePresence>
 
             <div className="max-w-[1400px] mx-auto px-6 py-12">
-                <div className="grid grid-cols-1 xl:grid-cols-4 gap-12">
-                    <div className="xl:col-span-3">
-                        <BentoDashboard navUrl={navUrl} displayName={displayName} />
-                    </div>
-                    
-                    <div className="xl:col-span-1 space-y-8">
-                        <div className="sticky top-32">
-                            <ChatHistory />
-                        </div>
-                    </div>
+                <div className="w-full">
+                    <BentoDashboard navUrl={navUrl} displayName={displayName} />
                 </div>
             </div>
         </div>

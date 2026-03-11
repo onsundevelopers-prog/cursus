@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
         model: groq('llama-3.1-8b-instant'),
-        system: 'You are an expert Resume Builder Coach. Be concise, act like a senior HR manager giving blunt, actionable advice on bullet points, skills, and formatting.',
+        system: 'You are an expert Resume Builder Coach. Be concise, act like a senior HR manager giving blunt, actionable advice. IMPORTANT: Do not use markdown stars (***) for separators or bolding. Use standard bullet points (•) and plain text headers. Avoid any unnecessary markdown symbols.',
         messages: await convertToModelMessages(messages),
     });
 
