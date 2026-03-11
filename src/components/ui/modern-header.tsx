@@ -12,7 +12,8 @@ import {
     ShieldCheck,
     Zap,
     MousePointer2,
-    Database
+    Database,
+    Target
 } from 'lucide-react';
 import {
     SignedIn,
@@ -23,7 +24,19 @@ import {
 } from "@clerk/nextjs";
 import { cn } from '@/lib/utils';
 
-const links: any[] = [];
+const links = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Jobs', href: '/dashboard/jobs' },
+    { 
+        title: 'Tools', 
+        href: '#',
+        dropdown: [
+            { icon: <Zap size={20} />, title: "Autofill Extension", desc: "One-click apps", href: "/dashboard" },
+            { icon: <Target size={20} />, title: "AI Interviewer", desc: "Live mock sessions", href: "/dashboard/interview" },
+            { icon: <Database size={20} />, title: "Resume Builder", desc: "ATS-optimized", href: "/dashboard/resume" }
+        ]
+    }
+];
 
 export function ModernHeader() {
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -102,33 +115,30 @@ export function ModernHeader() {
                                                 position: 'absolute',
                                                 top: '100%',
                                                 left: '-50%',
-                                                width: '480px',
+                                                width: '320px',
                                                 background: 'white',
                                                 borderRadius: '24px',
-                                                padding: '1.5rem',
+                                                padding: '1.25rem',
                                                 boxShadow: '0 20px 50px rgba(0,0,0,0.1)',
                                                 border: '1px solid #f1f5f9',
-                                                display: 'grid',
-                                                gridTemplateColumns: '1fr',
-                                                gap: '1rem'
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '0.5rem'
                                             }}
                                         >
                                             {link.dropdown.map((item: any) => (
                                                 <Link
                                                     key={item.title}
-                                                    href="#"
-                                                    className="group flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors text-decoration-none"
+                                                    href={item.href}
+                                                    className="group flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors"
                                                     style={{ textDecoration: 'none' }}
                                                 >
-                                                    <div className="shrink-0 w-12 h-12 bg-white rounded-xl border border-slate-100 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                                    <div className="shrink-0 w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors">
                                                         {item.icon}
                                                     </div>
-                                                    <div style={{ flex: 1 }}>
-                                                        <h4 style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.95rem', marginBottom: '4px' }}>{item.title}</h4>
-                                                        <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>{item.desc}</p>
-                                                    </div>
-                                                    <div className="shrink-0 rounded-xl overflow-hidden border border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <img src={item.image} alt={item.title} style={{ width: '80px', height: '54px', objectFit: 'cover' }} />
+                                                    <div>
+                                                        <h4 style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.9rem', marginBottom: '2px' }}>{item.title}</h4>
+                                                        <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0 }}>{item.desc}</p>
                                                     </div>
                                                 </Link>
                                             ))}

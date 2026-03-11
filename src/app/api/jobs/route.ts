@@ -42,7 +42,7 @@ Make the jobs look highly realistic, impressive, and tailored to the requested r
         // Ensure real working search links back to LinkedIn
         parsedJobs = parsedJobs.map((job: any) => ({
             ...job,
-            link: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title + ' ' + job.company)}`
+            link: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title + ' ' + job.company + ' ' + job.location)}`
         }));
 
         return NextResponse.json(parsedJobs);
