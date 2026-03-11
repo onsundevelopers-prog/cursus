@@ -178,14 +178,12 @@ function PortfolioContent() {
                                         background: m.role === 'user' ? '#0f172a' : '#f1f5f9',
                                         color: m.role === 'user' ? 'white' : '#1e293b',
                                         maxWidth: '90%',
-                                        fontSize: '0.95rem',
+                                        fontSize: m.role === 'assistant' ? '0.85rem' : '0.95rem',
                                         lineHeight: 1.5,
+                                        whiteSpace: 'pre-wrap',
+                                        fontFamily: m.role === 'assistant' ? 'monospace' : 'inherit',
                                     }}>
-                                        {m.role === 'assistant' ? (
-                                            <span style={{ fontStyle: 'italic', color: '#64748b' }}>Generated portfolio layout. Click 'Deploy to GitHub' when ready.</span>
-                                        ) : (
-                                            m.parts.map((part, i) => part.type === 'text' ? <span key={i}>{part.text}</span> : null)
-                                        )}
+                                        {m.parts.map((part, i) => part.type === 'text' ? <span key={i}>{part.text}</span> : null)}
                                     </div>
                                     <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.4rem', padding: '0 4px' }}>
                                         {m.role === 'user' ? 'You' : 'AI'}

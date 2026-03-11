@@ -250,9 +250,9 @@ function JobsContent() {
                                 >
                                     <div className="flex justify-between items-start">
                                         <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <h4 className="text-xl font-bold group-hover:text-orange-600 transition-colors">{job.title}</h4>
-                                                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-md border border-emerald-100">
+                                            <div className="flex items-center flex-wrap gap-3 mb-2">
+                                                <h4 className="text-xl font-bold group-hover:text-orange-600 transition-colors line-clamp-1">{job.title}</h4>
+                                                <span className="shrink-0 px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-md border border-emerald-100">
                                                     {job.match}% AI MATCH
                                                 </span>
                                             </div>

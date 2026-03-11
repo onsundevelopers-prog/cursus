@@ -231,13 +231,14 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
         backgroundColor: '#ffffff',
         border: '1px solid #f1f5f9',
         borderRadius: '16px',
-        padding: '2rem',
+        padding: '1.5rem',
         display: 'flex',
         flexDirection: 'column' as const,
         cursor: 'pointer',
         overflow: 'hidden',
         textDecoration: 'none',
         boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
+        height: '100%',
     };
 
     return (
@@ -252,7 +253,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     Your Dashboard
                 </motion.p>
                 <motion.h1
-                    style={{ color: '#0f172a', fontSize: 'clamp(2.5rem, 4.5vw, 3.5rem)', fontWeight: 850, letterSpacing: '-0.05em', marginBottom: '3.5rem', lineHeight: '1.1' }}
+                    style={{ color: '#0f172a', fontSize: 'clamp(2.5rem, 4.5vw, 3.5rem)', fontWeight: 850, letterSpacing: '-0.05em', marginBottom: '3.5rem', lineHeight: '1.1', overflowWrap: 'break-word', wordBreak: 'break-word' }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.05 }}
@@ -261,7 +262,13 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                 </motion.h1>
 
                 {/* Bento Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1.25rem', gridAutoRows: '200px' }}>
+                {/* Bento Grid */}
+                <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+                    gap: '1.25rem', 
+                    gridAutoRows: 'minmax(200px, auto)' 
+                }}>
 
                     {/* 1. Resume Architect — tall 2x2 */}
                     <motion.a
@@ -273,10 +280,10 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     >
                         <div style={{ flex: 1 }}><ResumeAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.25rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
                                 <FileText size={18} color="#3b82f6" /> Resume Architect
                             </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.5 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
+                            <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
                         </div>
                     </motion.a>
 
@@ -290,10 +297,10 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     >
                         <div style={{ flex: 1 }}><LetterAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.15rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
                                 <Wand2 size={16} color="#8b5cf6" /> Cover Letters
                             </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stand out with highly-personalized letters that command attention.</p>
+                            <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
                         </div>
                     </motion.a>
 
@@ -305,14 +312,14 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         transition={{ delay: 0.2 }}
                         whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
                     >
-                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '120px' }}>
                             <GlobalNetwork />
                         </div>
-                        <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '1rem', border: '1px solid #f1f5f9' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.15rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                        <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #f1f5f9' }}>
+                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
                                 <Globe size={16} color="#10b981" /> Career Link
                             </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Showcase your work and let the best opportunities come to you.</p>
+                            <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
                         </div>
                     </motion.a>
 
@@ -440,15 +447,15 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                     >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
-                            <div style={{ maxWidth: '45%' }}>
+                        <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem', height: '100%', width: '100%' }}>
+                            <div style={{ flex: '1 1 300px' }}>
                                 <h3 style={{ color: '#0f172a', fontSize: '1.4rem', fontWeight: 850, marginBottom: '10px', letterSpacing: '-0.03em', lineHeight: '1.1' }}>Export & Continue</h3>
                                 <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.5 }}>
                                     Send your generated Resumes and Cover Letters directly to your preferred word processor for final touches.
                                 </p>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                                 {/* Google Docs Button */}
                                 <button
                                     onClick={handleExportDocs}

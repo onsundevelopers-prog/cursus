@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
         model: groq('llama-3.1-8b-instant'),
-        system: 'You are an expert Career Link Setup Coach. Help users build their online portfolio and showcase their skills effectively.',
+        system: 'You are an expert Career Link Setup Coach. Help users build their online portfolio and showcase their skills effectively. When the user asks to build their portfolio, provide clear, high-quality code snippets in HTML and CSS that they can use. Be encouraging and highly actionable.',
         messages: await convertToModelMessages(messages),
     });
 
