@@ -29,6 +29,7 @@ import {
 import GuestBanner from "../../components/GuestBanner";
 import { cn } from "@/lib/utils";
 import { PromptInputBox } from "@/components/ui/ai-prompt-box";
+import LoadingLines from "@/components/ui/loading-lines";
 import { 
     Modal, 
     ModalContent, 
@@ -212,41 +213,37 @@ function JobsContent() {
                         key="scanning"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="max-w-3xl mx-auto py-20"
+                        exit={{ opacity: 0 }}
+                        className="flex flex-col items-center justify-center py-32"
                     >
-                        <div className="bg-white p-10 rounded-[32px] border border-slate-100 shadow-xl">
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
-                                        <Zap className="text-orange-600 animate-bounce" size={24} />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-extrabold text-xl">WebNinja Scan in Progress</h3>
-                                        <p className="text-slate-500 text-sm">Targeting high-match opportunities...</p>
-                                    </div>
-                                </div>
-                                <span className="text-orange-600 font-black text-2xl">{Math.round(scanProgress)}%</span>
+                        <div className="mb-20">
+                            <LoadingLines />
+                        </div>
+                        
+                        <div className="max-w-xl w-full">
+                            <div className="flex justify-between items-center mb-4">
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-600 animate-pulse">
+                                    Scouring the Web with WebNinja JSearch
+                                </p>
+                                <span className="text-slate-900 font-black">{Math.round(scanProgress)}%</span>
                             </div>
-
-                            <div className="w-full h-3 bg-slate-50 rounded-full overflow-hidden mb-10">
+                            <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden mb-8">
                                 <motion.div
-                                    className="h-full bg-gradient-to-r from-orange-400 to-orange-600"
+                                    className="h-full bg-orange-500"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${scanProgress}%` }}
                                 />
                             </div>
-
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 <AnimatePresence mode="popLayout">
-                                    {logs.slice(-4).map((log, i) => (
+                                    {logs.slice(-3).map((log, i) => (
                                         <motion.div
                                             key={log}
-                                            initial={{ opacity: 0, x: -10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, scale: 0.9 }}
-                                            className="flex items-center text-sm font-medium text-slate-600 gap-4 p-4 bg-slate-50 rounded-xl"
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="text-[11px] font-bold text-slate-400 text-center uppercase tracking-wider"
                                         >
-                                            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                                             {log}
                                         </motion.div>
                                     ))}
