@@ -1,19 +1,52 @@
 "use client";
 
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { Send, Loader2, FolderGit2, Github, CloudUpload, FileCode2, CheckCircle2, Circle, Info, Lightbulb } from "lucide-react";
+import { 
+    Send, Loader2, FolderGit2, Github, CloudUpload, 
+    FileCode2, CheckCircle2, Circle, Info, Lightbulb, 
+    Globe, ShieldCheck, Heart, Zap
+} from "lucide-react";
 import React, { useRef, useEffect, useState, Suspense } from "react";
 import GuestBanner from "../../components/GuestBanner";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 function PortfolioContent() {
     const [input, setInput] = useState("");
+    const [domainInput, setDomainInput] = useState("");
+    const [isSavingDomain, setIsSavingDomain] = useState(false);
+
+    const user = useQuery(api.users.getMe);
+    const saveDomain = useMutation(api.users.updateCustomDomain);
+
+    useEffect(() => {
+        if (user?.customDomain) {
+            setDomainInput(user.customDomain);
+        }
+    }, [user]);
+
     const { messages, sendMessage, status } = useChat({
         transport: new DefaultChatTransport({ api: "/api/chat/portfolio" }),
     });
 
     const isLoading = status === "streaming" || status === "submitted";
+
+    const handleSaveDomain = async () => {
+        if (!domainInput.trim()) return;
+        setIsSavingDomain(true);
+        try {
+            await saveDomain({ domain: domainInput });
+            alert("Custom domain updated! We'll begin DNS propagation shortly.");
+        } catch (e) {
+            console.error(e);
+            alert("Failed to save domain.");
+        } finally {
+            setIsSavingDomain(false);
+        }
+    };
 
     // Simplified guidance state
     const [checklist, setChecklist] = useState([
@@ -207,51 +240,114 @@ function PortfolioContent() {
                     </div>
                 </div>
 
-                {/* Right Panel: Repository Preview */}
-                <div style={{ width: '350px', padding: '1.5rem', overflowY: 'auto', background: '#fafafa' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '1rem', color: '#64748b' }}>
-                        <Info size={14} />
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>Project Preview</span>
+                {/* Right Panel: Repository Preview & Custom Domain */}
+                <div style={{ width: '380px', padding: '1.5rem', overflowY: 'auto', background: '#fafafa', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {/* Custom Domain Settings */}
+                    <div style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                        <div className="flex items-center gap-2 mb-4">
+                            <Globe size={18} className="text-orange-500" />
+                            <h3 className="font-extrabold text-sm uppercase tracking-tight">Custom Domain</h3>
+                        </div>
+                        <p className="text-[11px] text-slate-500 mb-4 leading-relaxed">
+                            Connect your personal brand. Pick a domain you own (e.g. <span className="font-bold">www.joseph.dev</span>) to host your Cursus portfolio.
+                        </p>
+                        <div className="flex gap-2">
+                            <input 
+                                value={domainInput}
+                                onChange={(e) => setDomainInput(e.target.value)}
+                                placeholder="yoursite.com"
+                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-orange-300 transition-all font-medium"
+                            />
+                            <button 
+                                onClick={handleSaveDomain}
+                                disabled={isSavingDomain}
+                                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-black uppercase transition-all flex items-center gap-1"
+                            >
+                                {isSavingDomain ? <Loader2 size={14} className="animate-spin" /> : 'Save'}
+                            </button>
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                             <div className="flex items-center gap-1.5 grayscale opacity-60">
+                                <ShieldCheck size={14} className="text-emerald-500" />
+                                <span className="text-[10px] font-bold text-slate-500">SSL READY</span>
+                             </div>
+                             <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] font-black text-slate-300">CURSUS PRO</span>
+                             </div>
+                        </div>
                     </div>
-                    <div style={{
-                        background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px',
-                        overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
-                    }}>
-                        <div style={{ background: '#f8fafc', padding: '1rem', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Github size={18} color="#475569" />
-                            <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.95rem' }}>username / my-portfolio</span>
-                            <span style={{ marginLeft: 'auto', background: '#e0e7ff', color: '#4f46e5', fontSize: '0.75rem', padding: '0.15rem 0.5rem', borderRadius: '4px', fontWeight: 600 }}>Public</span>
-                        </div>
 
-                        <div style={{ padding: '0' }}>
-                            {simulatedFiles.length === 0 ? (
-                                <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#94a3b8' }}>
-                                    <CloudUpload size={40} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
-                                    <p>Repository is empty.</p>
-                                    <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Use the AI on the left to generate your web portfolio templates.</p>
-                                </div>
-                            ) : (
-                                <div>
-                                    <div style={{ padding: '0.75rem 1.5rem', background: '#f1f5f9', fontSize: '0.85rem', color: '#64748b', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0' }}>
-                                        <span>Latest commit by <strong>cursus-ai</strong></span>
-                                        <span>Just now</span>
-                                    </div>
-                                    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                                        {simulatedFiles.map((file, i) => (
-                                            <li key={i} style={{
-                                                display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.5rem',
-                                                borderBottom: i !== simulatedFiles.length - 1 ? '1px solid #f1f5f9' : 'none',
-                                                transition: 'background 0.2s', cursor: 'pointer'
-                                            }} onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-                                                <FileCode2 size={18} color={file.type === 'code' ? '#3b82f6' : '#8b5cf6'} />
-                                                <span style={{ color: '#0f172a', fontWeight: 500, fontSize: '0.95rem' }}>{file.name}</span>
-                                                <span style={{ marginLeft: 'auto', color: '#94a3b8', fontSize: '0.85rem' }}>Generated layout structured data</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
+                    {/* Repository Preview */}
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '1rem', color: '#64748b' }}>
+                            <Info size={14} />
+                            <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>Project Preview</span>
                         </div>
+                        <div style={{
+                            background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px',
+                            overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+                        }}>
+                            <div style={{ background: '#f8fafc', padding: '1rem', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Github size={18} color="#475569" />
+                                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.95rem' }}>{user?.name?.toLowerCase().replace(/\s/g, '-') || 'user'}-portfolio</span>
+                                <span style={{ marginLeft: 'auto', background: '#e0e7ff', color: '#4f46e5', fontSize: '0.75rem', padding: '0.15rem 0.5rem', borderRadius: '4px', fontWeight: 600 }}>Public</span>
+                            </div>
+
+                            <div style={{ padding: '0' }}>
+                                {simulatedFiles.length === 0 ? (
+                                    <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#94a3b8' }}>
+                                        <CloudUpload size={40} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
+                                        <p>Repository is empty.</p>
+                                        <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Use the AI on the left to generate your web portfolio templates.</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div style={{ padding: '0.75rem 1.5rem', background: '#f1f5f9', fontSize: '0.85rem', color: '#64748b', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0' }}>
+                                            <span>Latest commit by <strong>cursus-ai</strong></span>
+                                            <span>Just now</span>
+                                        </div>
+                                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                            {simulatedFiles.map((file, i) => (
+                                                <li key={i} style={{
+                                                    display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.5rem',
+                                                    borderBottom: i !== simulatedFiles.length - 1 ? '1px solid #f1f5f9' : 'none',
+                                                    transition: 'background 0.2s', cursor: 'pointer'
+                                                }} onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+                                                    <FileCode2 size={18} color={file.type === 'code' ? '#3b82f6' : '#8b5cf6'} />
+                                                    <span style={{ color: '#0f172a', fontWeight: 500, fontSize: '0.95rem' }}>{file.name}</span>
+                                                    <span style={{ marginLeft: 'auto', color: '#94a3b8', fontSize: '0.85rem' }}>AI Generated</span>
+                                                </li>
+                                            ))}
+                                            {/* Made with Cursus Widget in Assets */}
+                                            <li style={{ padding: '1rem 1.5rem', background: '#fff7ed', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                <Heart size={18} className="text-orange-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="text-[11px] font-black text-slate-700 uppercase leading-none">Made with Cursus Badge</span>
+                                                    <span className="text-[9px] text-slate-500 font-bold mt-1">Links to https://cursus.ai</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Badge Preview */}
+                    <div className="flex flex-col gap-3">
+                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Widget Preview</span>
+                         <Link 
+                            href="/" 
+                            className="bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-md hover:shadow-lg transition-all flex items-center justify-between group no-underline"
+                         >
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                                    <Zap size={16} className="text-orange-600" />
+                                </div>
+                                <span className="font-extrabold text-sm text-slate-800">Made with <span className="text-orange-600">Cursus</span></span>
+                            </div>
+                            <Send size={14} className="text-slate-300 group-hover:text-orange-500 transition-colors" />
+                         </Link>
                     </div>
                 </div>
             </div>

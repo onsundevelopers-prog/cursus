@@ -7,6 +7,7 @@ export default defineSchema({
     name: v.optional(v.string()),
     email: v.optional(v.string()),
     plan: v.string(), // "free", "pro"
+    customDomain: v.optional(v.string()),
   }).index("by_clerkId", ["clerkId"]),
 
   conversations: defineTable({

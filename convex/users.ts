@@ -42,6 +42,25 @@ export const store = mutation({
   },
 });
 
+export const updateCustomDomain = mutation({
+  args: { domain: v.string() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(user._id, {
+      customDomain: args.domain,
+    });
+  },
+});
+
 export const getMe = query({
   args: {},
   handler: async (ctx) => {
