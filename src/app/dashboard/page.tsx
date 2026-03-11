@@ -6,6 +6,7 @@ import { Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import BentoDashboard from "@/components/ui/bento-grid-01";
+import { ChatHistory } from "@/components/ChatHistory";
 
 function DashboardContent() {
     const { user, isLoaded } = useUser();
@@ -38,7 +39,7 @@ function DashboardContent() {
     };
 
     return (
-        <>
+        <div className="bg-[#fafafa] min-h-screen">
             {/* Guest Banner */}
             <AnimatePresence>
                 {isGuest && !user && (
@@ -56,6 +57,8 @@ function DashboardContent() {
                             gap: '1rem',
                             fontSize: '0.875rem',
                             color: '#9a3412',
+                            position: 'relative',
+                            zIndex: 50
                         }}
                     >
                         <span>
@@ -72,8 +75,20 @@ function DashboardContent() {
                 )}
             </AnimatePresence>
 
-            <BentoDashboard navUrl={navUrl} displayName={displayName} />
-        </>
+            <div className="max-w-[1400px] mx-auto px-6 py-12">
+                <div className="grid grid-cols-1 xl:grid-cols-4 gap-12">
+                    <div className="xl:col-span-3">
+                        <BentoDashboard navUrl={navUrl} displayName={displayName} />
+                    </div>
+                    
+                    <div className="xl:col-span-1 space-y-8">
+                        <div className="sticky top-32">
+                            <ChatHistory />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 

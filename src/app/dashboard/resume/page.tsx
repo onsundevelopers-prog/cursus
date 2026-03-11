@@ -2,15 +2,86 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { useAuth } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
 import { Send, Loader2, FileText, Download } from "lucide-react";
 import React, { useRef, useEffect, useState, Suspense } from "react";
 import GuestBanner from "../../components/GuestBanner";
 
 function ResumeContent() {
+    const searchParams = useSearchParams();
+    const chatIdParam = searchParams.get('chatId');
+    const isGuest = searchParams.get('guest') === 'true';
+    const { userId } = useAuth();
+    
     const [input, setInput] = useState("");
-    const { messages, sendMessage, status } = useChat({
+    const [currentChatId, setCurrentChatId] = useState<string | null>(chatIdParam);
+
+    const { messages, sendMessage, status, setMessages } = useChat({
         transport: new DefaultChatTransport({ api: "/api/chat/resume" }),
     });
+
+    const createChat = useMutation(api.chats.createConversation);
+    const saveMsg = useMutation(api.chats.saveMessage);
+    
+    // Load existing messages if we have a chatId
+    const existingMessages = useQuery(api.chats.getMessages, 
+        currentChatId ? { conversationId: currentChatId as any } : "skip"
+    );
+
+    useEffect(() => {
+        if (existingMessages && messages.length === 0) {
+            setMessages(existingMessages.map((m: any) => ({
+                id: m._id,
+                role: m.role as any,
+                parts: [{ type: 'text', text: m.content }]
+            })));
+        }
+    }, [existingMessages]);
+
+    const handleSendMessage = async (text: string) => {
+        if (!text.trim()) return;
+        
+        // 1. Send to AI
+        sendMessage({ text });
+
+        // 2. Persist if authenticated
+        if (userId && !isGuest) {
+            let activeId = currentChatId;
+            if (!activeId) {
+                // Auto-create conversation on first message
+                const newId = await createChat({
+                    clerkId: userId,
+                    title: `Resume: ${text.slice(0, 30)}...`,
+                    type: "resume"
+                });
+                activeId = newId;
+                setCurrentChatId(newId);
+            }
+            
+            // Save user message
+            await saveMsg({
+                conversationId: activeId as any,
+                role: "user",
+                content: text
+            });
+        }
+    };
+
+    // Save AI response when it finishes
+    useEffect(() => {
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg?.role === 'assistant' && status === 'ready' && userId && !isGuest && currentChatId) {
+            const content = lastMsg.parts.map(p => p.type === 'text' ? p.text : '').join('');
+            saveMsg({
+                conversationId: currentChatId as any,
+                role: "assistant",
+                content: content
+            });
+        }
+    }, [status, messages, userId, isGuest, currentChatId]);
 
     const isLoading = status === "streaming" || status === "submitted";
 
@@ -21,7 +92,7 @@ function ResumeContent() {
     const handleSubmit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!input.trim()) return;
-        sendMessage({ text: input });
+        handleSendMessage(input);
         setInput("");
     };
 

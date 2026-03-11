@@ -12,6 +12,8 @@ import Link from "next/link";
 import Script from "next/script";
 import "./globals.css";
 
+import { ConvexClientProvider } from "@/components/ConvexClientProvider";
+import { SyncUser } from "@/components/SyncUser";
 import { ModernHeader } from "@/components/ui/modern-header";
 
 export const metadata: Metadata = {
@@ -25,33 +27,34 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <ClerkProvider>
-            <html lang="en">
-                <head>
-                    {/* Google tag (gtag.js) */}
-                    <Script 
-                        async 
-                        src="https://www.googletagmanager.com/gtag/js?id=G-TCHVB4WJG4" 
-                        strategy="afterInteractive"
-                    />
-                    <Script id="google-analytics" strategy="afterInteractive">
-                        {`
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
-                        gtag('js', new Date());
+        <html lang="en">
+            <head>
+                {/* Google tag (gtag.js) */}
+                <Script 
+                    async 
+                    src="https://www.googletagmanager.com/gtag/js?id=G-TCHVB4WJG4" 
+                    strategy="afterInteractive"
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
 
-                        gtag('config', 'G-TCHVB4WJG4');
-                        `}
-                    </Script>
-                    <link rel="preconnect" href="https://fonts.googleapis.com" />
-                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-                </head>
-                <body style={{ paddingTop: '80px' }}>
+                    gtag('config', 'G-TCHVB4WJG4');
+                    `}
+                </Script>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+            </head>
+            <body style={{ paddingTop: '80px' }}>
+                <ConvexClientProvider>
+                    <SyncUser />
                     <ModernHeader />
                     {children}
-                </body>
-            </html>
-        </ClerkProvider >
+                </ConvexClientProvider>
+            </body>
+        </html>
     );
 }

@@ -241,8 +241,8 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
     };
 
     return (
-        <section style={{ backgroundColor: '#fafafa', padding: '6rem 1.5rem', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ maxWidth: '1200px', width: '100%', margin: '0 auto' }}>
+        <section style={{ width: '100%' }}>
+            <div style={{ maxWidth: '1200px', width: '100%', margin: '0' }}>
 
                 <motion.p
                     style={{ color: '#64748b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.5rem', fontWeight: 600 }}
@@ -370,31 +370,22 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                             <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.25rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
                             
                             <a 
-                                href="#" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    // Create a dummy but valid minimal zip file blob
-                                    const byteString = atob("UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==");
-                                    const ab = new ArrayBuffer(byteString.length);
-                                    const ia = new Uint8Array(ab);
-                                    for (let i = 0; i < byteString.length; i++) {
-                                        ia[i] = byteString.charCodeAt(i);
-                                    }
-                                    const blob = new Blob([ab], { type: "application/zip" });
-                                    const url = window.URL.createObjectURL(blob);
-                                    const link = document.createElement('a');
-                                    link.href = url;
-                                    link.download = 'cursus-autofill-extension.zip';
-                                    document.body.appendChild(link);
-                                    link.click();
-                                    document.body.removeChild(link);
-                                    window.URL.revokeObjectURL(url);
-                                    alert("Cursus Chrome Extension download started!");
+                                href="/api/extension/download" 
+                                className="w-full flex items-center justify-center gap-2 py-4 text-white rounded-xl text-sm font-bold transition-all shadow-xl hover:shadow-orange-200/50 active:scale-[0.98] group"
+                                style={{ 
+                                    textDecoration: 'none',
+                                    background: 'linear-gradient(135deg, #FF6A00 0%, #EE5D00 100%)',
+                                    backgroundColor: '#FF6A00',
+                                    boxShadow: '0 8px 20px -6px rgba(255, 106, 0, 0.4)'
                                 }}
-                                className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-amber-100"
-                                style={{ textDecoration: 'none' }}
                             >
-                                <FileDown size={18} /> Get Extension
+                                <motion.div
+                                    animate={{ y: [0, -2, 0] }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                >
+                                    <FileDown size={20} /> Get Extension
+                                </motion.div>
                             </a>
                         </div>
                     </motion.div>

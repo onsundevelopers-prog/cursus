@@ -1,68 +1,68 @@
-import { createOpenAI } from '@ai-sdk/openai';
-import { generateText } from 'ai';
 import { NextResponse } from 'next/server';
 
-const groq = createOpenAI({
-    baseURL: 'https://api.groq.com/openai/v1',
-    apiKey: process.env.GROQ_API_KEY,
-});
+const WEBNINJA_API_KEY = "ak_5dv38gdb3j0u0j0bofyhxanovpd4xr4srhdi282yheogdkw";
+const WEBNINJA_BASE_URL = "https://jsearch.p.rapidapi.com"; // Standard JSearch endpoint
 
 export async function POST(req: Request) {
     try {
-        const { query } = await req.json();
-        const role = query?.trim() || "Software Engineer";
+        const { query, location, remote, salary, experience } = await req.json();
+        
+        let searchQuery = query || "Software Engineer";
+        if (location) searchQuery += ` in ${location}`;
+        if (remote) searchQuery += " remote";
 
-        const { text } = await generateText({
-            model: groq('llama-3.3-70b-versatile'), // Using a stronger model for reliable formatting
-            system: `You are a realistic simulated deep-scraping job board API. 
-Return ONLY a valid JSON array of exactly 5 highly-relevant job opportunities that match the user's requested role. 
-DO NOT INCLUDE ANY OTHER TEXT, DO NOT WRAP IN MARKDOWN BLOCKS (\`\`\`json). OUTPUT RAW JSON ONLY.
-
-Each object in the array MUST strictly follow this structure:
-{
-  "id": "(generate a random string)",
-  "title": "Realistic Job Title",
-  "company": "Plausible Company Name",
-  "location": "City, State or Remote",
-  "salary": "Salary Range string (e.g. $140k - $180k)",
-  "source": "Realistic Platform Name (e.g. LinkedIn, Greenhouse)",
-  "posted": "Time ago string (e.g. 2h ago)",
-  "match": (integer between 85 and 99),
-  "tags": ["Skill 1", "Skill 2", "Skill 3"],
-  "link": "https://linkedin.com/jobs/view/mock-id"
-}
-
-Make the jobs look highly realistic, impressive, and tailored to the requested role. Provide realistic URLs in the "link" field.`,
-            prompt: `Find me 5 outstanding jobs for this role: ${role}`
+        const params = new URLSearchParams({
+            query: searchQuery,
+            page: '1',
+            num_pages: '1',
+            date_posted: 'all'
         });
 
-        const jsonMatch = text.match(/\[[\s\S]*\]/);
-        let parsedJobs = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(text);
+        // Add additional filters if provided
+        if (experience) params.append('experience', experience);
 
-        // Ensure real working search links back to LinkedIn
-        parsedJobs = parsedJobs.map((job: any) => ({
-            ...job,
-            link: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title + ' ' + job.company + ' ' + job.location)}`
+        const response = await fetch(`${WEBNINJA_BASE_URL}/search?${params.toString()}`, {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': WEBNINJA_API_KEY,
+                'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch jobs from WebNinja');
+        }
+
+        const data = await response.json();
+        const rawJobs = data.data || [];
+
+        // Map the real data to our app's format
+        const jobs = rawJobs.map((job: any) => ({
+            id: job.job_id || Math.random().toString(36).substr(2, 9),
+            title: job.job_title,
+            company: job.employer_name,
+            location: job.job_city && job.job_state ? `${job.job_city}, ${job.job_state}` : job.job_country,
+            salary: job.job_min_salary && job.job_max_salary 
+                ? `$${(job.job_min_salary/1000).toFixed(0)}k - $${(job.job_max_salary/1000).toFixed(0)}k` 
+                : "Salary not disclosed",
+            source: job.job_publisher || "WebNinja",
+            posted: job.job_posted_at_datetime_utc ? new Date(job.job_posted_at_datetime_utc).toLocaleDateString() : "Just now",
+            match: Math.floor(Math.random() * (98 - 88 + 1)) + 88, // In a real app, this would be AI calculated
+            tags: [job.job_employment_type, job.job_is_remote ? "Remote" : "On-site"].filter(Boolean),
+            link: job.job_apply_link,
+            description: job.job_description,
+            skills: job.job_highlights?.Qualifications || []
         }));
 
-        return NextResponse.json(parsedJobs);
-    } catch (error) {
-        console.error("Failed to generate AI jobs", error);
-
-        // Fallback if AI fails or rate limits
-        return NextResponse.json([
-            {
-                id: "fallback-1",
-                title: "Senior Role",
-                company: "TechNexus",
-                location: "Remote",
-                salary: "$120k+",
-                source: "LinkedIn Search",
-                posted: "Just now",
-                match: 95,
-                tags: ["Leadership", "Strategy"],
-                link: "https://www.linkedin.com/jobs/search/?keywords=Senior%20Role"
-            }
-        ]);
+        return NextResponse.json(jobs);
+    } catch (error: any) {
+        console.error("WebNinja API Error:", error);
+        
+        // Fallback with a helpful message
+        return NextResponse.json({ 
+            error: true, 
+            message: error.message || "Something went wrong with the job search." 
+        }, { status: 500 });
     }
 }

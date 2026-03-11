@@ -2,8 +2,12 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { Send, Loader2, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { useAuth } from "@clerk/nextjs";
+import { Send, Loader2, Mic, MicOff, Volume2, VolumeX, History } from "lucide-react";
 import React, { useRef, useEffect, useState, Suspense, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import GuestBanner from "../../components/GuestBanner";
 
 // Speech Recognition Type Definition
@@ -15,13 +19,80 @@ declare global {
 }
 
 function InterviewContent() {
+    const searchParams = useSearchParams();
+    const chatIdParam = searchParams.get('chatId');
+    const isGuest = searchParams.get('guest') === 'true';
+    const { userId } = useAuth();
+    
     const [input, setInput] = useState("");
     const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
-    const { messages, sendMessage, status } = useChat({
+    const [currentChatId, setCurrentChatId] = useState<string | null>(chatIdParam);
+
+    const { messages, sendMessage, status, setMessages } = useChat({
         transport: new DefaultChatTransport({ api: "/api/chat/interview" }),
     });
+
+    const createChat = useMutation(api.chats.createConversation);
+    const saveMsg = useMutation(api.chats.saveMessage);
+    
+    // Load existing messages if we have a chatId
+    const existingMessages = useQuery(api.chats.getMessages, 
+        currentChatId ? { conversationId: currentChatId as any } : "skip"
+    );
+
+    useEffect(() => {
+        if (existingMessages && messages.length === 0) {
+            setMessages(existingMessages.map((m: any) => ({
+                id: m._id,
+                role: m.role as any,
+                parts: [{ type: 'text', text: m.content }]
+            })));
+        }
+    }, [existingMessages]);
+
+    const handleSendMessage = async (text: string) => {
+        if (!text.trim()) return;
+        
+        // 1. Send to AI
+        sendMessage({ text });
+
+        // 2. Persist if authenticated
+        if (userId && !isGuest) {
+            let activeId = currentChatId;
+            if (!activeId) {
+                // Auto-create conversation on first message
+                const newId = await createChat({
+                    clerkId: userId,
+                    title: `Interview: ${text.slice(0, 30)}...`,
+                    type: "interview"
+                });
+                activeId = newId;
+                setCurrentChatId(newId);
+            }
+            
+            // Save user message
+            await saveMsg({
+                conversationId: activeId as any,
+                role: "user",
+                content: text
+            });
+        }
+    };
+
+    // Save AI response when it finishes
+    useEffect(() => {
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg?.role === 'assistant' && status === 'ready' && userId && !isGuest && currentChatId) {
+            const content = lastMsg.parts.map(p => p.type === 'text' ? p.text : '').join('');
+            saveMsg({
+                conversationId: currentChatId as any,
+                role: "assistant",
+                content: content
+            });
+        }
+    }, [status, messages, userId, isGuest, currentChatId]);
 
     const [isInsecure, setIsInsecure] = useState(false);
     const [micError, setMicError] = useState<string | null>(null);
@@ -54,7 +125,7 @@ function InterviewContent() {
                 setIsListening(false);
                 // Auto-submit if voice is enabled
                 if (transcript.trim()) {
-                    sendMessage({ text: transcript });
+                    handleSendMessage(transcript);
                     setInput("");
                 }
             };
@@ -140,7 +211,7 @@ function InterviewContent() {
     const handleSubmit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!input.trim()) return;
-        sendMessage({ text: input });
+        handleSendMessage(input);
         setInput("");
     };
 

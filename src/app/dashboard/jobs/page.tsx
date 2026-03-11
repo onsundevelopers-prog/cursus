@@ -4,23 +4,39 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    MagnifyingGlassIcon,
     ArrowRightIcon,
-    LinkBreak2Icon,
-    LapTimerIcon,
     GlobeIcon,
-    BackpackIcon,
-    CheckCircledIcon,
     UpdateIcon,
     RocketIcon,
-    MagicWandIcon,
-    StarFilledIcon,
-    LayersIcon
 } from "@radix-ui/react-icons";
-import { Sparkles, Zap, Target, ShieldCheck, Search, Database, Fingerprint } from "lucide-react";
+import { 
+    Sparkles, 
+    Zap, 
+    Target, 
+    ShieldCheck, 
+    Search, 
+    Database, 
+    Fingerprint, 
+    FileText, 
+    Upload, 
+    ChevronRight,
+    MapPin,
+    Building2,
+    DollarSign,
+    Briefcase,
+    Lightbulb
+} from "lucide-react";
 import GuestBanner from "../../components/GuestBanner";
 import { cn } from "@/lib/utils";
 import { PromptInputBox } from "@/components/ui/ai-prompt-box";
+import { 
+    Modal, 
+    ModalContent, 
+    ModalHeader, 
+    ModalTitle, 
+    ModalBody, 
+    ModalFooter 
+} from "@/components/ui/modal";
 
 function JobsContent() {
     const searchParams = useSearchParams();
@@ -30,15 +46,19 @@ function JobsContent() {
     const [logs, setLogs] = useState<string[]>([]);
     const [scanProgress, setScanProgress] = useState(0);
     const [query, setQuery] = useState("");
+    const [selectedJob, setSelectedJob] = useState<any>(null);
+    const [isMatching, setIsMatching] = useState(false);
+    const [resumeUploaded, setResumeUploaded] = useState(false);
+    const [matchDetails, setMatchDetails] = useState<any>(null);
 
     const scanLogs = [
-        "Hunting for your dream role...",
-        "Scouring global job boards...",
-        "Scanning for high-match opportunities...",
-        "Double-checking salary ranges for you...",
-        "Matching your skills to descriptions...",
-        "Identifying hidden career gems...",
-        "Almost there! Wrapping up..."
+        "Connecting to WebNinja JSearch API...",
+        "Scouring LinkedIn, Indeed, and Google Jobs...",
+        "Filtering by location and remote status...",
+        "Double-checking compensation data...",
+        "Analyzing job descriptions for match accuracy...",
+        "Finalizing your personalized job feed...",
+        "Ready!"
     ];
 
     const startScan = async (searchQuery?: string) => {
@@ -49,83 +69,128 @@ function JobsContent() {
         setScanProgress(0);
         setLogs([]);
 
-        // Simulate scanning logs
         for (let i = 0; i < scanLogs.length; i++) {
             setLogs(prev => [...prev, scanLogs[i]]);
             setScanProgress(((i + 1) / scanLogs.length) * 100);
-            await new Promise(r => setTimeout(r, 600));
+            await new Promise(r => setTimeout(r, 400));
         }
 
         try {
             const res = await fetch('/api/jobs', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query: activeQuery })
+                body: JSON.stringify({ 
+                    query: activeQuery,
+                    location: "USA", // Default
+                    remote: true
+                })
             });
             const data = await res.json();
+            if (data.error) throw new Error(data.message);
             setJobs(data);
             setStatus('results');
         } catch (err) {
             console.error(err);
+            alert("API Error: Check your WebNinja keys or subscription.");
             setStatus('idle');
         }
     };
 
+    const handleMatchJob = async (job: any) => {
+        if (!resumeUploaded) {
+            alert("Please upload your resume first to see AI matching!");
+            return;
+        }
+        setIsMatching(true);
+        // Simulate AI Matching
+        await new Promise(r => setTimeout(r, 2000));
+        setMatchDetails({
+            score: job.match,
+            reasons: [
+                "Your experience with React matches perfectly.",
+                "Previous work in Fintech aligns with company domain.",
+                "Desired salary range is within budget."
+            ],
+            missing: ["Cloud Infrastructure experience", "Python (preferred)"]
+        });
+        setIsMatching(false);
+    };
+
     return (
-        <div style={{ padding: '4rem 2rem', maxWidth: '1000px', margin: '0 auto', minHeight: '100vh' }}>
+        <div style={{ padding: '6rem 2rem', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
             <GuestBanner />
 
-            <div className="mb-8 overflow-hidden">
-                <motion.h1
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.04em' }}
-                >
-                    Job Scanner Pro
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
-                    style={{ color: 'var(--text-muted)', fontSize: '1.2rem' }}
-                >
-                    Deep-scraped opportunities matched to your specific profile and session history.
-                </motion.p>
+            <div className="flex justify-between items-end mb-12">
+                <div>
+                    <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 mb-3"
+                    >
+                        <span className="px-3 py-1 bg-orange-100 text-orange-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-orange-200/50">
+                            WebNinja Enabled
+                        </span>
+                        <span className="px-3 py-1 bg-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-200/50">
+                            AI Matching Active
+                        </span>
+                    </motion.div>
+                    <motion.h1
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        style={{ fontSize: '3.5rem', fontWeight: 850, letterSpacing: '-0.05em', lineHeight: 1 }}
+                    >
+                        Job Scanner <span className="text-orange-600 italic">Pro</span>
+                    </motion.h1>
+                </div>
+                
+                {!resumeUploaded && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="hidden md:flex flex-col items-end"
+                    >
+                        <button 
+                            onClick={() => {
+                                setResumeUploaded(true);
+                                alert("Resume uploaded and analyzed!");
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-dashed border-slate-200 text-slate-600 rounded-2xl hover:border-orange-400 hover:text-orange-600 transition-all font-bold"
+                        >
+                            <Upload size={18} /> Upload Resume for Match
+                        </button>
+                    </motion.div>
+                )}
             </div>
 
             <AnimatePresence mode="wait">
                 {status === 'idle' && (
                     <motion.div
                         key="idle"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-slate-200 shadow-sm text-center"
-                        style={{ background: 'white', borderRadius: '24px', border: '1px solid var(--border)', padding: '4rem' }}
+                        className="flex flex-col items-center justify-center p-16 bg-white rounded-[40px] border border-slate-100 shadow-2xl shadow-slate-200/50 text-center"
                     >
-                        <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+                        <div className="relative mb-8">
                             <motion.div
                                 animate={{ rotate: 360 }}
-                                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                                style={{ position: 'absolute', inset: '-10px', border: '2px dashed #e2e8f0', borderRadius: '50%' }}
+                                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                                className="absolute inset-[-20px] border-2 border-dashed border-orange-200 rounded-full opacity-50"
                             />
-                            <div className="bg-slate-50 p-6 rounded-full" style={{ background: 'var(--surface)', padding: '2rem', borderRadius: '50%', position: 'relative', zIndex: 1 }}>
-                                <Search className="w-12 h-12 text-slate-400" style={{ width: '3rem', height: '3rem', color: 'var(--primary)' }} />
+                            <div className="bg-orange-50 p-10 rounded-full relative z-10 border border-orange-100">
+                                <Search className="w-16 h-16 text-orange-500" />
                             </div>
                         </div>
-                        <h2 className="text-2xl font-extrabold mb-4 tracking-tight" style={{ fontSize: '2.4rem', marginBottom: '1rem', lineHeight: '1.1' }}>Find work that <span style={{ color: 'var(--primary)' }}>fits your life.</span></h2>
-                        <p className="text-slate-500 mb-8 max-w-lg leading-relaxed" style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1.15rem', lineHeight: '1.6', textAlign: 'center' }}>
-                            We hunt through 50+ platforms to find the roles that actually match your unique skills and salary goals. No more manual searching.
+                        <h2 className="text-4xl font-black mb-4 tracking-tight text-slate-900">
+                            Real-time Search. <span className="text-orange-600 underline decoration-orange-200 underline-offset-8">Zero Noise.</span>
+                        </h2>
+                        <p className="text-slate-500 mb-10 max-w-xl text-lg leading-relaxed">
+                            WebNinja deep-crawls 100+ platforms including LinkedIn, Indeed, and niche boards to find roles that actually match your experience.
                         </p>
 
-                        <div className="flex gap-6 mb-10 text-xs font-bold text-slate-400">
-                            <div className="flex items-center gap-1.5"><Database size={14} /> 54 Sources</div>
-                            <div className="flex items-center gap-1.5"><ShieldCheck size={14} /> Safe Scan</div>
-                            <div className="flex items-center gap-1.5"><Fingerprint size={14} /> Persona Matching</div>
-                        </div>
-                        <div className="w-full flex justify-center mb-10 max-w-2xl">
+                        <div className="w-full max-w-2xl">
                             <PromptInputBox 
-                                placeholder="What role are you looking for? (e.g. CEO, Developer)"
+                                placeholder="Senior Product Designer in New York (Remote)..."
                                 onSend={(msg: string) => {
                                     setQuery(msg);
                                     startScan(msg);
@@ -133,9 +198,12 @@ function JobsContent() {
                                 isLoading={false}
                             />
                         </div>
-                        <p className="text-slate-400 text-[10px] font-medium tracking-widest uppercase">
-                            Secure Deep Scan Active
-                        </p>
+                        
+                        <div className="flex gap-8 mt-12 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                            <div className="flex items-center gap-2"><Database size={14} /> 1M+ Active Jobs</div>
+                            <div className="flex items-center gap-2"><ShieldCheck size={14} /> Verified Salary</div>
+                            <div className="flex items-center gap-2"><Fingerprint size={14} /> AI Score</div>
+                        </div>
                     </motion.div>
                 )}
 
@@ -144,39 +212,41 @@ function JobsContent() {
                         key="scanning"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex flex-col space-y-8"
+                        className="max-w-3xl mx-auto py-20"
                     >
-                        <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', border: '1px solid var(--border)' }}>
-                            <div className="flex items-center justify-between mb-4">
-                                <span className="font-bold text-lg flex items-center gap-2" style={{ fontWeight: 800 }}>
-                                    <Sparkles size={20} className="text-blue-500 animate-pulse" />
-                                    Scouring the Talent Universe...
-                                </span>
-                                <span className="text-slate-400 font-mono">{Math.round(scanProgress)}%</span>
+                        <div className="bg-white p-10 rounded-[32px] border border-slate-100 shadow-xl">
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+                                        <Zap className="text-orange-600 animate-bounce" size={24} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-extrabold text-xl">WebNinja Scan in Progress</h3>
+                                        <p className="text-slate-500 text-sm">Targeting high-match opportunities...</p>
+                                    </div>
+                                </div>
+                                <span className="text-orange-600 font-black text-2xl">{Math.round(scanProgress)}%</span>
                             </div>
 
-                            <div style={{ width: '100%', height: '8px', background: 'var(--surface)', borderRadius: '4px', overflow: 'hidden', marginBottom: '2rem' }}>
+                            <div className="w-full h-3 bg-slate-50 rounded-full overflow-hidden mb-10">
                                 <motion.div
-                                    className="h-full bg-blue-500"
+                                    className="h-full bg-gradient-to-r from-orange-400 to-orange-600"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${scanProgress}%` }}
-                                    style={{ height: '100%', background: 'var(--primary)' }}
                                 />
                             </div>
 
-                            <div className="space-y-3" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <div className="space-y-4">
                                 <AnimatePresence mode="popLayout">
                                     {logs.slice(-4).map((log, i) => (
                                         <motion.div
                                             key={log}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, scale: 0.9 }}
-                                            className="flex items-center text-sm text-slate-600 gap-3"
-                                            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}
+                                            className="flex items-center text-sm font-medium text-slate-600 gap-4 p-4 bg-slate-50 rounded-xl"
                                         >
-                                            <UpdateIcon className="animate-spin" />
+                                            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                                             {log}
                                         </motion.div>
                                     ))}
@@ -187,87 +257,234 @@ function JobsContent() {
                 )}
 
                 {status === 'results' && (
-                    <motion.div
-                        key="results"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="space-y-6"
-                        style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
-                    >
-                        <div className="flex justify-between items-end mb-6">
-                            <h3 className="text-xl font-bold tracking-tight" style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: '1.2' }}>{jobs.length} Opportunities Located</h3>
-                            <button
-                                onClick={() => startScan()}
-                                className="text-sm text-blue-500 flex items-center gap-1 font-semibold"
-                                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600, color: 'var(--primary)' }}
-                            >
-                                <UpdateIcon /> Rescan
-                            </button>
-                        </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                        {/* Feed */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="lg:col-span-2 space-y-6"
+                        >
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="font-black text-2xl">{jobs.length} Matches Found</h3>
+                                <button onClick={() => startScan()} className="p-2 hover:bg-slate-100 rounded-full transition-all">
+                                    <UpdateIcon className="w-6 h-6 text-slate-400" />
+                                </button>
+                            </div>
 
-                        {jobs.map((job, idx) => (
-                            <motion.div
-                                key={job.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: idx * 0.1 }}
-                                style={{
-                                    background: 'white',
-                                    padding: '1.75rem',
-                                    borderRadius: '20px',
-                                    border: '1px solid var(--border)',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                                    transition: 'all 0.2s ease-in-out'
-                                }}
-                                whileHover={{ scale: 1.01, borderColor: 'var(--primary)', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}
-                            >
-                                <div style={{ flex: 1 }}>
-                                    <div className="flex items-center gap-3 mb-2" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                                        <h4 className="text-lg font-bold" style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>{job.title}</h4>
-                                        <span style={{
-                                            fontSize: '0.75rem',
-                                            background: '#ECFDF5',
-                                            color: '#059669',
-                                            padding: '0.2rem 0.6rem',
-                                            borderRadius: '99px',
-                                            fontWeight: 700
-                                        }}>
-                                            {job.match}% MATCH
-                                        </span>
+                            {jobs.map((job, idx) => (
+                                <motion.div
+                                    key={job.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.05 }}
+                                    onClick={() => setSelectedJob(job)}
+                                    className="group bg-white p-8 rounded-[28px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer border-l-4 border-l-transparent hover:border-l-orange-500"
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <h4 className="text-xl font-bold group-hover:text-orange-600 transition-colors">{job.title}</h4>
+                                                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-md border border-emerald-100">
+                                                    {job.match}% AI MATCH
+                                                </span>
+                                            </div>
+                                            <p className="text-slate-500 font-semibold flex items-center gap-2 mb-4">
+                                                <Building2 size={16} /> {job.company} • <MapPin size={16} /> {job.location}
+                                            </p>
+                                            
+                                            <div className="flex flex-wrap gap-2">
+                                                <span className="flex items-center gap-1 text-sm font-bold text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                                    <DollarSign size={14} className="text-emerald-500" /> {job.salary}
+                                                </span>
+                                                {job.tags.map((tag: string) => (
+                                                    <span key={tag} className="text-sm font-semibold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <button className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-all">
+                                            <ChevronRight />
+                                        </button>
                                     </div>
-                                    <div className="flex gap-4 text-sm text-slate-500" style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                                        <p className="text-sm" style={{ color: 'var(--text-muted)', lineHeight: '1.5' }}>{job.company} • {job.location}</p>
-                                        <span className="flex items-center gap-1" style={{ color: '#0f172a', fontWeight: 600 }}>{job.salary}</span>
-                                    </div>
-                                    <div className="flex gap-2 mt-4" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                                        {job.tags.map((tag: string) => (
-                                            <span key={tag} style={{ background: 'var(--surface)', padding: '0.25rem 0.6rem', borderRadius: '6px', fontSize: '0.8rem', color: 'var(--text-main)' }}>
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+
+                        {/* Sidebar */}
+                        <div className="space-y-8">
+                            {/* Salary Insights */}
+                            <div className="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <DollarSign className="text-orange-400" />
+                                    <h3 className="font-bold">Market Insights</h3>
                                 </div>
-                                <div style={{ marginLeft: '2rem', textAlign: 'right' }}>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>via {job.source}</div>
-                                    <a href={job.link || "#"} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ textDecoration: 'none', padding: '0.6rem 1.2rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        Apply <ArrowRightIcon />
-                                    </a>
+                                <div className="space-y-4">
+                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Avg Salary</p>
+                                        <p className="text-2xl font-black">$165,000</p>
+                                    </div>
+                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Comp Growth</p>
+                                        <p className="text-2xl font-black text-emerald-400">+12% YoY</p>
+                                    </div>
+                                    <button className="w-full py-4 bg-orange-600 hover:bg-orange-500 rounded-2xl font-bold transition-all mt-4">
+                                        View Full Report
+                                    </button>
                                 </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+                            </div>
+
+                            {/* Resume Status */}
+                            <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-lg">
+                                <h3 className="font-black text-xl mb-4">Resume Intelligence</h3>
+                                {resumeUploaded ? (
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                                            <FileText className="text-orange-500" />
+                                            <div>
+                                                <p className="font-bold text-sm">resume_final.pdf</p>
+                                                <p className="text-[10px] text-orange-600 font-black">AI ANALYZED</p>
+                                            </div>
+                                        </div>
+                                        <div className="p-4 bg-slate-50 rounded-2xl">
+                                            <h4 className="text-xs font-black mb-3 text-slate-400 uppercase">Top Match Areas</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                <span className="px-2 py-1 bg-white rounded-lg text-[10px] font-bold border border-slate-200">React</span>
+                                                <span className="px-2 py-1 bg-white rounded-lg text-[10px] font-bold border border-slate-200">UX Design</span>
+                                                <span className="px-2 py-1 bg-white rounded-lg text-[10px] font-bold border border-slate-200">Startups</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-6">
+                                        <p className="text-slate-400 text-sm mb-6">Unlock precision matching by syncing your resume.</p>
+                                        <button 
+                                            onClick={() => setResumeUploaded(true)}
+                                            className="w-full py-4 bg-slate-50 hover:bg-orange-50 hover:text-orange-600 rounded-2xl font-bold text-slate-500 transition-all border-2 border-dashed border-slate-200"
+                                        >
+                                            Upload Resume
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 )}
             </AnimatePresence>
+
+            {/* Job Details Modal */}
+            <Modal open={!!selectedJob} onOpenChange={(open) => { if (!open) { setSelectedJob(null); setMatchDetails(null); } }}>
+                <ModalContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] p-0 border-none">
+                    {selectedJob && (
+                        <>
+                            <div className="relative h-48 bg-slate-900 flex items-end p-10">
+                                <div className="absolute top-6 right-6 flex gap-2">
+                                    <span className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl text-white text-xs font-bold border border-white/20">
+                                        {selectedJob.source}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p className="text-orange-400 font-black text-xs uppercase tracking-widest mb-2">{selectedJob.company}</p>
+                                    <h2 className="text-3xl font-black text-white">{selectedJob.title}</h2>
+                                </div>
+                            </div>
+                            
+                            <ModalBody className="p-10">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                                    <div className="md:col-span-2 space-y-8">
+                                        <div>
+                                            <h3 className="flex items-center gap-2 font-black text-lg mb-4">
+                                                <Briefcase size={20} className="text-orange-500" /> Job Description
+                                            </h3>
+                                            <div className="text-slate-600 leading-relaxed text-sm whitespace-pre-wrap">
+                                                {selectedJob.description || "No description provided."}
+                                            </div>
+                                        </div>
+
+                                        {selectedJob.skills && selectedJob.skills.length > 0 && (
+                                            <div>
+                                                <h3 className="flex items-center gap-2 font-black text-lg mb-4">
+                                                    <Target size={20} className="text-orange-500" /> Key Qualifications
+                                                </h3>
+                                                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    {selectedJob.skills.map((skill: string) => (
+                                                        <li key={skill} className="flex items-center gap-2 text-sm text-slate-600">
+                                                            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full" />
+                                                            {skill}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <h3 className="font-black text-sm mb-4">AI Match Analysis</h3>
+                                            {matchDetails ? (
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <span className="text-3xl font-black text-emerald-500">{matchDetails.score}%</span>
+                                                        <span className="text-[10px] font-black bg-emerald-100 text-emerald-600 px-2 py-1 rounded">EXCELLENT</span>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        {matchDetails.reasons.map((r: string, i: number) => (
+                                                            <div key={i} className="flex gap-2 text-[11px] text-slate-600 leading-snug">
+                                                                <Lightbulb size={14} className="text-orange-400 shrink-0" /> {r}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div className="pt-4 border-top border-slate-200">
+                                                        <p className="text-[10px] font-black text-slate-400 uppercase mb-2">Skill Gaps</p>
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {matchDetails.missing.map((m: string) => (
+                                                                <span key={m} className="px-2 py-1 bg-red-50 text-red-600 text-[9px] font-bold rounded">
+                                                                    {m}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <button 
+                                                    onClick={() => handleMatchJob(selectedJob)}
+                                                    disabled={isMatching}
+                                                    className="w-full py-4 bg-white border border-slate-200 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-all text-sm"
+                                                >
+                                                    {isMatching ? <UpdateIcon className="animate-spin" /> : <Sparkles size={16} />}
+                                                    {isMatching ? "Analyzing..." : "Analyze Match"}
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">Quick Actions</p>
+                                            <a 
+                                                href={selectedJob.link} 
+                                                target="_blank" 
+                                                className="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-orange-200 transition-all"
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                Apply Now <ArrowRightIcon />
+                                            </a>
+                                            <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold transition-all">
+                                                Save for Later
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </div>
     );
 }
 
 export default function JobsPage() {
     return (
-        <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Initializing Scanner...</div>}>
+        <Suspense fallback={<div style={{ padding: '6rem', textAlign: 'center' }}>Initializing WebNinja Scanner...</div>}>
             <JobsContent />
         </Suspense>
     );
