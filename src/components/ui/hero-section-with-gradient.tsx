@@ -119,16 +119,12 @@ export default function HeroSection_05() {
                         position: 'absolute',
                         inset: 0,
                         zIndex: -1,
-                        backgroundImage: `
-                            linear-gradient(180deg, #ffffff 0%, #FFEDD5 25%, #FFDAB9 50%, #FFB6C1 70%, #E0BBE4 85%, #F3E5F5 100%),
-                            radial-gradient(at 20% 30%, #ffffff33 0%, transparent 60%),
-                            radial-gradient(at 80% 70%, #f3e5f533 0%, transparent 70%)
+                        background: `
+                            radial-gradient(circle at 10% 20%, rgba(255, 106, 0, 0.05) 0%, transparent 40%),
+                            radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+                            white
                         `,
-                        backgroundBlendMode: "overlay, screen",
-                        backdropFilter: "blur(40px)",
-                        WebkitBackdropFilter: "blur(40px)",
-                        maxHeight: '100%',
-                        transition: 'background-color 0.7s',
+                        backgroundAttachment: 'fixed'
                     }}
                 />
 
@@ -165,26 +161,52 @@ export default function HeroSection_05() {
                             className={cn("mt-16 flex flex-col items-center justify-center gap-3 md:flex-row")}
                         >
                             {/* Dominant Primary CTA */}
-                            <div style={{ background: 'linear-gradient(to right, #22d3ee, #3b82f6, #a855f7)', borderRadius: '14px', padding: '4px', boxShadow: '0 4px 14px 0 rgba(168, 85, 247, 0.39)' }}>
+                            <motion.div 
+                                style={{ borderRadius: '20px', padding: '2px', background: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)', boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.3)' }}
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                whileTap={{ scale: 0.98 }}
+                            >
                                 <button
                                     onClick={handleResumeClick}
                                     style={{
                                         display: 'inline-flex', alignItems: 'center',
-                                        padding: '1rem 2.5rem',
+                                        padding: '1.25rem 3rem',
                                         background: '#0f172a', color: 'white',
-                                        borderRadius: '10px', fontWeight: 800,
+                                        borderRadius: '18px', fontWeight: 900,
                                         fontSize: '1.25rem', textDecoration: 'none',
-                                        transition: 'background 0.2s, transform 0.2s',
+                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                                         whiteSpace: 'nowrap',
                                         border: 'none',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
                                     }}
-                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                                 >
-                                    Create Your Resume Now
+                                    Get Cursus Pro
                                 </button>
-                            </div>
+                            </motion.div>
+
+                            <motion.div
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                <Link
+                                    href="/api/extension/download"
+                                    style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                        padding: '1.25rem 2.5rem',
+                                        background: 'linear-gradient(135deg, #CC5500 0%, #FF6A00 100%)', 
+                                        color: 'white',
+                                        borderRadius: '18px', fontWeight: 900,
+                                        fontSize: '1.1rem', textDecoration: 'none',
+                                        boxShadow: '0 15px 30px -10px rgba(204, 85, 0, 0.4)',
+                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                                        whiteSpace: 'nowrap',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    <Zap size={18} fill="currentColor" /> Get Extension
+                                </Link>
+                            </motion.div>
 
                             {/* Ghost Secondary CTA */}
                             <div>

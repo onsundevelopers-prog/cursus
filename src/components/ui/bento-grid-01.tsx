@@ -228,17 +228,20 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
     };
 
     const cardStyle = {
-        backgroundColor: '#ffffff',
-        border: '1px solid #f1f5f9',
-        borderRadius: '16px',
-        padding: '1.5rem',
+        background: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(16px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+        border: '1px solid rgba(226, 232, 240, 0.6)',
+        borderRadius: '32px',
+        padding: '2rem',
         display: 'flex',
         flexDirection: 'column' as const,
         cursor: 'pointer',
         overflow: 'hidden',
         textDecoration: 'none',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
+        boxShadow: '0 10px 40px -10px rgba(15, 23, 42, 0.05)',
         height: '100%',
+        transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
     };
 
     return (
@@ -253,21 +256,56 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     Your Dashboard
                 </motion.p>
                 <motion.h1
-                    style={{ color: '#0f172a', fontSize: 'clamp(2.5rem, 4.5vw, 3.5rem)', fontWeight: 850, letterSpacing: '-0.05em', marginBottom: '3.5rem', lineHeight: '1.1', overflowWrap: 'break-word', wordBreak: 'break-word' }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 }}
+                    style={{ 
+                        color: '#0f172a', 
+                        fontSize: 'clamp(3rem, 6vw, 4.5rem)', 
+                        fontWeight: 900, 
+                        letterSpacing: '-0.04em', 
+                        marginBottom: '1rem', 
+                        lineHeight: '1', 
+                        overflowWrap: 'break-word', 
+                        wordBreak: 'break-word',
+                        background: 'linear-gradient(to bottom, #0f172a 60%, #475569)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    Welcome back, {displayName}!
+                    Welcome, {displayName}
                 </motion.h1>
 
-                {/* Bento Grid */}
+                <motion.div 
+                    style={{ 
+                        display: 'flex', 
+                        gap: '2.5rem', 
+                        marginBottom: '4rem',
+                        overflowX: 'auto',
+                        paddingBottom: '1rem'
+                    }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                >
+                    {[
+                        { label: 'Market Readiness', val: '94%', color: '#f97316' },
+                        { label: 'Active Opportunities', val: '12', color: '#0f172a' },
+                        { label: 'AI Match Accuracy', val: '98%', color: '#10b981' }
+                    ].map((stat, i) => (
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</span>
+                            <span style={{ fontSize: '2rem', fontWeight: 800, color: stat.color }}>{stat.val}</span>
+                        </div>
+                    ))}
+                </motion.div>
+
                 {/* Bento Grid */}
                 <div style={{ 
                     display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                    gap: '1.25rem', 
-                    gridAutoRows: 'minmax(200px, auto)' 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                    gap: '1.5rem', 
+                    gridAutoRows: 'minmax(240px, auto)' 
                 }}>
 
                     {/* 1. Resume Architect — tall 2x2 */}
@@ -275,8 +313,8 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         href={navUrl("/dashboard/resume")}
                         style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        whileHover={{ scale: 1.02, borderColor: '#e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
-                        transition={{ duration: 0.3 }}
+                        whileHover={{ y: -8, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
                         <div style={{ flex: 1 }}><ResumeAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>

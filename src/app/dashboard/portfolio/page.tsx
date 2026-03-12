@@ -27,8 +27,9 @@ function PortfolioContent() {
         }
     }, [user]);
 
-    const { messages, append, status, input, setInput } = useChat({
-        api: "/api/chat/portfolio",
+    const [input, setInput] = useState("");
+    const { messages, sendMessage, status } = useChat({
+        transport: new DefaultChatTransport({ api: "/api/chat/portfolio" }),
     });
 
     const isLoading = status === "streaming" || status === "submitted";
@@ -80,7 +81,7 @@ function PortfolioContent() {
     const handleSubmit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!input.trim()) return;
-        append({ role: 'user', content: input });
+        sendMessage({ text: input });
         setInput("");
     };
 
@@ -170,22 +171,36 @@ function PortfolioContent() {
                             </div>
                         ) : (
                             messages.map((m) => (
-                                <div key={m.id} style={{ display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
+                                <div key={m.id} style={{ 
+                                    display: 'flex', 
+                                    flexDirection: 'column', 
+                                    alignItems: m.role === 'user' ? 'flex-end' : 'flex-start',
+                                    gap: '4px'
+                                }}>
                                     <div style={{
-                                        padding: '0.85rem 1rem',
-                                        borderRadius: '12px',
-                                        background: m.role === 'user' ? '#0f172a' : '#f1f5f9',
+                                        padding: '1rem 1.25rem',
+                                        borderRadius: m.role === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+                                        background: m.role === 'user' ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' : 'white',
                                         color: m.role === 'user' ? 'white' : '#1e293b',
-                                        maxWidth: '90%',
-                                        lineHeight: 1.5,
+                                        maxWidth: '85%',
+                                        lineHeight: 1.6,
                                         whiteSpace: 'pre-wrap',
-                                        fontFamily: m.role === 'assistant' ? 'monospace' : 'inherit',
-                                        fontSize: m.role === 'assistant' ? '0.85rem' : '0.95rem',
+                                        fontFamily: m.role === 'assistant' ? 'var(--font-mono, monospace)' : 'inherit',
+                                        fontSize: m.role === 'assistant' ? '0.875rem' : '0.95rem',
+                                        boxShadow: m.role === 'user' ? '0 10px 15px -3px rgba(0,0,0,0.1)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+                                        border: m.role === 'user' ? 'none' : '1px solid #f1f5f9',
                                     }}>
-                                        {m.content}
+                                        {m.parts ? m.parts.map((p: any, i: number) => p.type === 'text' ? <span key={i}>{p.text}</span> : null) : (m as any).content}
                                     </div>
-                                    <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.4rem', padding: '0 4px' }}>
-                                        {m.role === 'user' ? 'You' : 'AI'}
+                                    <span style={{ 
+                                        fontSize: '0.7rem', 
+                                        color: '#94a3b8', 
+                                        fontWeight: 600,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.05em',
+                                        marginTop: '2px'
+                                    }}>
+                                        {m.role === 'user' ? 'Reviewer' : 'AI Strategist'}
                                     </span>
                                 </div>
                             ))
