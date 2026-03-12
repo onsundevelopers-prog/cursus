@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-const WEBNINJA_API_KEY = process.env.WEBNINJA_API_KEY;
-const WEBNINJA_BASE_URL = "https://jsearch.p.rapidapi.com"; // Standard JSearch endpoint
+const JOB_API_KEY = process.env.WEBNINJA_API_KEY;
+const JOB_API_URL = "https://jsearch.p.rapidapi.com"; // Standard JSearch endpoint
 
 export async function POST(req: Request) {
     try {
@@ -21,10 +21,10 @@ export async function POST(req: Request) {
         // Add additional filters if provided
         if (experience) params.append('experience', experience);
 
-        const response = await fetch(`${WEBNINJA_BASE_URL}/search?${params.toString()}`, {
+        const response = await fetch(`${JOB_API_URL}/search?${params.toString()}`, {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': (WEBNINJA_API_KEY || ""),
+                'X-RapidAPI-Key': (JOB_API_KEY || ""),
                 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
             }
         });
