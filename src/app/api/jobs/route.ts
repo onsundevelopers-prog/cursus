@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to fetch jobs from WebNinja');
+            throw new Error(errorData.message || 'Failed to fetch jobs from AI Search Hub');
         }
 
         const data = await response.json();
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
             salary: job.job_min_salary && job.job_max_salary 
                 ? `$${(job.job_min_salary/1000).toFixed(0)}k - $${(job.job_max_salary/1000).toFixed(0)}k` 
                 : "Salary not disclosed",
-            source: job.job_publisher || "WebNinja",
+            source: job.job_publisher || "AI Search Hub",
             posted: job.job_posted_at_datetime_utc ? new Date(job.job_posted_at_datetime_utc).toLocaleDateString() : "Just now",
             match: Math.floor(Math.random() * (98 - 88 + 1)) + 88, // In a real app, this would be AI calculated
             tags: [job.job_employment_type, job.job_is_remote ? "Remote" : "On-site"].filter(Boolean),
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json(jobs);
     } catch (error: any) {
-        console.error("WebNinja API Error:", error);
+        console.error("Job Search API Error:", error);
         
         // Fallback with a helpful message
         return NextResponse.json({ 

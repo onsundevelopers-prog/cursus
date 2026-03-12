@@ -53,7 +53,7 @@ function JobsContent() {
     const [matchDetails, setMatchDetails] = useState<any>(null);
 
     const scanLogs = [
-        "Connecting to WebNinja JSearch API...",
+        "Connecting to AI Search Hub...",
         "Scouring LinkedIn, Indeed, and Google Jobs...",
         "Filtering by location and remote status...",
         "Double-checking compensation data...",
@@ -92,7 +92,7 @@ function JobsContent() {
             setStatus('results');
         } catch (err) {
             console.error(err);
-            alert("API Error: Check your WebNinja keys or subscription.");
+            alert("Connection Error: Please check your configuration or try again later.");
             setStatus('idle');
         }
     };
@@ -128,7 +128,7 @@ function JobsContent() {
                         animate={{ opacity: 1, x: 0 }}
                         style={{ fontSize: '3.5rem', fontWeight: 850, letterSpacing: '-0.05em', lineHeight: 1 }}
                     >
-                        WebNinja Job Scanner <span className="text-orange-600 italic">Pro</span>
+                        Candidate Job Scanner <span className="text-orange-600 italic">Pro</span>
                     </motion.h1>
                 </div>
                 
@@ -157,7 +157,7 @@ function JobsContent() {
                             Real-time Search. <span className="text-orange-600 underline decoration-orange-200 underline-offset-8">Zero Noise.</span>
                         </h2>
                         <p className="text-slate-500 mb-10 max-w-xl text-lg leading-relaxed">
-                            WebNinja deep-crawls 100+ platforms including LinkedIn, Indeed, and niche boards to find roles that actually match your experience.
+                            Our AI deep-crawls 100+ platforms including LinkedIn, Indeed, and niche boards to find roles that actually match your experience.
                         </p>
 
                         <div className="w-full max-w-2xl">
@@ -194,7 +194,7 @@ function JobsContent() {
                         <div className="max-w-xl w-full">
                             <div className="flex justify-between items-center mb-4">
                                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-600 animate-pulse">
-                                    Scouring the Web with WebNinja JSearch
+                                    Scouring the Web with AI Search Hub
                                 </p>
                                 <span className="text-slate-900 font-black">{Math.round(scanProgress)}%</span>
                             </div>
@@ -419,7 +419,7 @@ function JobsContent() {
 
 export default function JobsPage() {
     return (
-        <Suspense fallback={<div style={{ padding: '6rem', textAlign: 'center' }}>Initializing WebNinja Scanner...</div>}>
+        <Suspense fallback={<div style={{ padding: '6rem', textAlign: 'center' }}>Initializing Job Scanner...</div>}>
             <JobsContent />
         </Suspense>
     );

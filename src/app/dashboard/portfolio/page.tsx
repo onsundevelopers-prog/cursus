@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 function PortfolioContent() {
-    const [input, setInput] = useState("");
     const [domainInput, setDomainInput] = useState("");
     const [isSavingDomain, setIsSavingDomain] = useState(false);
 
@@ -28,8 +27,8 @@ function PortfolioContent() {
         }
     }, [user]);
 
-    const { messages, sendMessage, status } = useChat({
-        transport: new DefaultChatTransport({ api: "/api/chat/portfolio" }),
+    const { messages, append, status, input, setInput } = useChat({
+        api: "/api/chat/portfolio",
     });
 
     const isLoading = status === "streaming" || status === "submitted";
@@ -81,7 +80,7 @@ function PortfolioContent() {
     const handleSubmit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!input.trim()) return;
-        sendMessage({ text: input });
+        append({ role: 'user', content: input });
         setInput("");
     };
 
@@ -178,12 +177,12 @@ function PortfolioContent() {
                                         background: m.role === 'user' ? '#0f172a' : '#f1f5f9',
                                         color: m.role === 'user' ? 'white' : '#1e293b',
                                         maxWidth: '90%',
-                                        fontSize: m.role === 'assistant' ? '0.85rem' : '0.95rem',
                                         lineHeight: 1.5,
                                         whiteSpace: 'pre-wrap',
                                         fontFamily: m.role === 'assistant' ? 'monospace' : 'inherit',
+                                        fontSize: m.role === 'assistant' ? '0.85rem' : '0.95rem',
                                     }}>
-                                        {m.parts.map((part, i) => part.type === 'text' ? <span key={i}>{part.text}</span> : null)}
+                                        {m.content}
                                     </div>
                                     <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.4rem', padding: '0 4px' }}>
                                         {m.role === 'user' ? 'You' : 'AI'}
