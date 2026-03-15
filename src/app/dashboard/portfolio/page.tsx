@@ -190,7 +190,15 @@ function PortfolioContent() {
                                         boxShadow: m.role === 'user' ? '0 10px 15px -3px rgba(0,0,0,0.1)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
                                         border: m.role === 'user' ? 'none' : '1px solid #f1f5f9',
                                     }}>
+<<<<<<< HEAD
                                         {m.parts ? m.parts.map((p: any, i: number) => p.type === 'text' ? <span key={i}>{p.text}</span> : null) : (m as any).content}
+=======
+                                        {m.parts ? (
+                                            m.parts.map((part, i) => part.type === 'text' ? <span key={i}>{part.text}</span> : null)
+                                        ) : (
+                                            <span>{m.content}</span>
+                                        )}
+>>>>>>> 50ead3f (Final cleanup: Removed WebNinja, fixed Job Search JSX, upgraded AI prompts to \ SaaS aesthetic, and fixed Portfolio chat display.)
                                     </div>
                                     <span style={{ 
                                         fontSize: '0.7rem', 
