@@ -158,54 +158,39 @@ export default function HeroSection_05() {
                                 },
                                 ...transitionVariants,
                             }}
-                            className={cn("mt-16 flex flex-col items-center justify-center gap-3 md:flex-row")}
+                            className={cn("mt-12 flex flex-col items-center justify-center gap-6")}
                         >
-                            {/* Dominant Primary CTA */}
+                            {/* Dominant Primary CTA with Glowing Border */}
                             <motion.div 
-                                style={{ borderRadius: '20px', padding: '2px', background: 'linear-gradient(135deg, #0f172a 0%, #334155 100%)', boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.3)' }}
-                                whileHover={{ scale: 1.02, y: -2 }}
+                                style={{ 
+                                    borderRadius: '16px', 
+                                    padding: '3px', 
+                                    background: 'linear-gradient(90deg, #3b82f6, #a855f7, #3b82f6)',
+                                    backgroundSize: '200% auto',
+                                    boxShadow: '0 0 40px -10px rgba(59, 130, 246, 0.4)'
+                                }}
+                                animate={{ backgroundPosition: ['0% center', '200% center'] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                                whileHover={{ scale: 1.05, boxShadow: '0 0 50px -5px rgba(59, 130, 246, 0.5)' }}
                                 whileTap={{ scale: 0.98 }}
                             >
                                 <button
                                     onClick={handleResumeClick}
                                     style={{
                                         display: 'inline-flex', alignItems: 'center',
-                                        padding: '1.25rem 3rem',
-                                        background: '#0f172a', color: 'white',
-                                        borderRadius: '18px', fontWeight: 900,
-                                        fontSize: '1.25rem', textDecoration: 'none',
-                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                                        padding: '1.5rem 4rem',
+                                        background: '#0a0a0c', color: 'white',
+                                        borderRadius: '14px', fontWeight: 900,
+                                        fontSize: '1.4rem', textDecoration: 'none',
+                                        transition: 'all 0.2s',
                                         whiteSpace: 'nowrap',
                                         border: 'none',
                                         cursor: 'pointer',
+                                        letterSpacing: '-0.02em'
                                     }}
                                 >
-                                    Get Cursus Pro
+                                    Create Your Resume Now
                                 </button>
-                            </motion.div>
-
-                            <motion.div
-                                whileHover={{ scale: 1.02, y: -2 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                <Link
-                                    href="/api/extension/download"
-                                    style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                        padding: '1.25rem 2.5rem',
-                                        background: 'linear-gradient(135deg, #CC5500 0%, #FF6A00 100%)', 
-                                        color: 'white',
-                                        borderRadius: '18px', fontWeight: 900,
-                                        fontSize: '1.1rem', textDecoration: 'none',
-                                        boxShadow: '0 15px 30px -10px rgba(204, 85, 0, 0.4)',
-                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                                        whiteSpace: 'nowrap',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    <Zap size={18} fill="currentColor" /> Get Extension
-                                </Link>
                             </motion.div>
 
                             {/* Ghost Secondary CTA */}
@@ -215,14 +200,15 @@ export default function HeroSection_05() {
                                     style={{
                                         display: 'inline-flex', alignItems: 'center',
                                         padding: '0.75rem 1.75rem',
-                                        color: '#64748b',
-                                        fontWeight: 600,
-                                        fontSize: '1rem', textDecoration: 'none',
+                                        color: '#94a3b8',
+                                        fontWeight: 800,
+                                        fontSize: '1.1rem', textDecoration: 'none',
                                         transition: 'all 0.2s',
                                         whiteSpace: 'nowrap',
+                                        letterSpacing: '-0.01em'
                                     }}
                                     onMouseEnter={(e) => e.currentTarget.style.color = '#0f172a'}
-                                    onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
                                 >
                                     Or explore sandbox
                                 </Link>
@@ -255,11 +241,47 @@ export default function HeroSection_05() {
                                 width={2700}
                                 height={1440}
                                 style={{ borderRadius: '12px', width: '100%', height: 'auto' }}
-                                unoptimized
-                            />
+                                />
                         </div>
                     </div>
                 </AnimatedGroup>
+
+                {/* Floating Action Circles (Bottom Right Column) */}
+                <div style={{
+                    position: 'fixed',
+                    right: '24px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    zIndex: 200
+                }}>
+                    {['S', 'W', 'X'].map((letter, idx) => (
+                        <motion.div
+                            key={letter}
+                            whileHover={{ scale: 1.1, x: -5 }}
+                            style={{
+                                width: '42px',
+                                height: '42px',
+                                borderRadius: '50%',
+                                background: 'white',
+                                border: `1.5px solid ${letter === 'X' ? '#a855f7' : '#3b82f6'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.9rem',
+                                fontWeight: 800,
+                                color: letter === 'X' ? '#a855f7' : '#3b82f6',
+                                cursor: 'pointer',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                                backdropFilter: 'blur(10px)'
+                            }}
+                        >
+                            {letter}
+                        </motion.div>
+                    ))}
+                </div>
             </div>
         </div>
     );

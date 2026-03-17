@@ -193,7 +193,7 @@ function PortfolioContent() {
                                         {m.parts ? (
                                             m.parts.map((part, i) => part.type === 'text' ? <span key={i}>{part.text}</span> : null)
                                         ) : (
-                                            <span>{m.content}</span>
+                                            <span>{(m as any).content}</span>
                                         )}
                                     </div>
                                     <span style={{ 
