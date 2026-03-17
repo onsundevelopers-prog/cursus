@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Smartphone, Globe, FileText, Wand2, Search, Mic, ExternalLink, CloudUpload, FileDown, Zap, Target, CircleDollarSign } from "lucide-react";
+import Link from "next/link";
 
 // ── Animated sub-components ──────────────────────────────────────────────────
 
@@ -276,124 +277,119 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     Welcome, {displayName}
                 </motion.h1>
 
-                <motion.div 
-                    style={{ 
-                        display: 'flex', 
-                        gap: '2.5rem', 
-                        marginBottom: '4rem',
-                        overflowX: 'auto',
-                        paddingBottom: '1rem'
-                    }}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    {[
-                        { label: 'Market Readiness', val: '94%', color: '#f97316' },
-                        { label: 'Active Opportunities', val: '12', color: '#0f172a' },
-                        { label: 'AI Match Accuracy', val: '98%', color: '#10b981' }
-                    ].map((stat, i) => (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</span>
-                            <span style={{ fontSize: '2rem', fontWeight: 800, color: stat.color }}>{stat.val}</span>
-                        </div>
-                    ))}
-                </motion.div>
+                {/* Stats row removed per user request */}
 
-                {/* Bento Grid */}
+                {/* Improved Bento Grid — 4 Columns on Large Screens */}
                 <div style={{ 
                     display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                    gridTemplateColumns: 'repeat(4, 1fr)', 
                     gap: '1.5rem', 
                     gridAutoRows: 'minmax(240px, auto)' 
-                }}>
+                }} className="dashboard-grid">
+                    <style jsx>{`
+                        @media (max-width: 1024px) {
+                            .dashboard-grid {
+                                grid-template-columns: repeat(2, 1fr) !important;
+                            }
+                        }
+                        @media (max-width: 640px) {
+                            .dashboard-grid {
+                                grid-template-columns: 1fr !important;
+                            }
+                        }
+                    `}</style>
 
                     {/* 1. Resume Architect — tall 2x2 */}
-                    <motion.a
-                        href={navUrl("/dashboard/resume")}
-                        style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        whileHover={{ y: -8, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                        <div style={{ flex: 1 }}><ResumeAnimation /></div>
-                        <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                <FileText size={18} color="#3b82f6" /> Resume Architect
-                            </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
-                        </div>
-                    </motion.a>
+                    <Link href={navUrl("/dashboard/resume")} style={{ textDecoration: 'none' }}>
+                        <motion.div
+                            style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
+                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            whileHover={{ y: -8, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
+                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                            <div style={{ flex: 1 }}><ResumeAnimation /></div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                    <FileText size={18} color="#3b82f6" /> Resume Architect
+                                </h3>
+                                <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
+                            </div>
+                        </motion.div>
+                    </Link>
 
                     {/* 2. Cover Letter — 2x1 */}
-                    <motion.a
-                        href={navUrl("/dashboard/letter")}
-                        style={{ ...cardStyle, gridColumn: 'span 2' }}
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
-                    >
-                        <div style={{ flex: 1 }}><LetterAnimation /></div>
-                        <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                <Wand2 size={16} color="#8b5cf6" /> Cover Letters
-                            </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
-                        </div>
-                    </motion.a>
+                    <Link href={navUrl("/dashboard/letter")} style={{ textDecoration: 'none' }}>
+                        <motion.div
+                            style={{ ...cardStyle, gridColumn: 'span 2' }}
+                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
+                        >
+                            <div style={{ flex: 1 }}><LetterAnimation /></div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                    <Wand2 size={16} color="#8b5cf6" /> Cover Letters
+                                </h3>
+                                <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
+                            </div>
+                        </motion.div>
+                    </Link>
 
                     {/* 3. Career Link — tall 2x2 */}
-                    <motion.a
-                        href={navUrl("/dashboard/portfolio")}
-                        style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
-                    >
-                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '120px' }}>
-                            <GlobalNetwork />
-                        </div>
-                        <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #f1f5f9' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                <Globe size={16} color="#10b981" /> Career Link
-                            </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
-                        </div>
-                    </motion.a>
+                    <Link href={navUrl("/dashboard/portfolio")} style={{ textDecoration: 'none' }}>
+                        <motion.div
+                            style={{ ...cardStyle, gridColumn: 'span 2', gridRow: 'span 2' }}
+                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
+                        >
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '120px' }}>
+                                <GlobalNetwork />
+                            </div>
+                            <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #f1f5f9' }}>
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                    <Globe size={16} color="#10b981" /> Career Link
+                                </h3>
+                                <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
+                            </div>
+                        </motion.div>
+                    </Link>
 
-                    {/* 4. Job Scanner — 2x1 */}
-                    <motion.a
-                        href={navUrl("/dashboard/jobs")}
-                        style={{ ...cardStyle, gridColumn: 'span 2' }}
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
-                    >
-                        <div style={{ flex: 1 }}><ScanAnimation /></div>
-                        <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                                <Search size={16} color="#f59e0b" /> Job Scanner Pro
-                            </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
-                        </div>
-                    </motion.a>
+                    {/* 4. Job Finder — 2x1 */}
+                    <Link href={navUrl("/dashboard/jobs")} style={{ textDecoration: 'none' }}>
+                        <motion.div
+                            style={{ ...cardStyle, gridColumn: 'span 2' }}
+                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
+                        >
+                            <div style={{ flex: 1 }}><ScanAnimation /></div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                    <Search size={16} color="#f59e0b" /> Job Finder
+                                </h3>
+                                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
+                            </div>
+                        </motion.div>
+                    </Link>
 
                     {/* 5. Interview Coach — 2x1 */}
-                    <motion.a
-                        href={navUrl("/dashboard/interview")}
-                        style={{ ...cardStyle, gridColumn: 'span 2' }}
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
-                    >
-                        <div style={{ flex: 1 }}><VoiceAnimation /></div>
-                        <div style={{ marginTop: '1rem' }}>
-                            <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                                <Mic size={16} color="#ef4444" /> Interview Coach
-                            </h3>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
-                        </div>
-                    </motion.a>
+                    <Link href={navUrl("/dashboard/interview")} style={{ textDecoration: 'none' }}>
+                        <motion.div
+                            style={{ ...cardStyle, gridColumn: 'span 2' }}
+                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
+                        >
+                            <div style={{ flex: 1 }}><VoiceAnimation /></div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                    <Mic size={16} color="#ef4444" /> Interview Coach
+                                </h3>
+                                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
+                            </div>
+                        </motion.div>
+                    </Link>
 
                     {/* 6. AI Job Application Autofill */}
                     <motion.div
@@ -479,12 +475,25 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         </div>
                     </motion.div>
 
-                    {/* 9. Export Integrations — 6x1 */}
+                    {/* 9. Export Integrations — full width */}
                     <motion.div
-                        style={{ ...cardStyle, gridColumn: 'span 6', cursor: 'default' }}
+                        style={{ ...cardStyle, gridColumn: 'span 4', cursor: 'default' }}
                         initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
+                        className="export-card"
                     >
+                        <style jsx>{`
+                            @media (max-width: 1024px) {
+                                .export-card {
+                                    grid-column: span 2 !important;
+                                }
+                            }
+                            @media (max-width: 640px) {
+                                .export-card {
+                                    grid-column: 1 / -1 !important;
+                                }
+                            }
+                        `}</style>
                         <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem', height: '100%', width: '100%' }}>
                             <div style={{ flex: '1 1 300px' }}>
                                 <h3 style={{ color: '#0f172a', fontSize: '1.4rem', fontWeight: 850, marginBottom: '10px', letterSpacing: '-0.03em', lineHeight: '1.1' }}>Export & Continue</h3>

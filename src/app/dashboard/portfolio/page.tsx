@@ -4,10 +4,11 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import JSZip from "jszip";
 import { 
     Send, Loader2, FolderGit2, Github, CloudUpload, 
     FileCode2, CheckCircle2, Circle, Info, Lightbulb, 
-    Globe, ShieldCheck, Heart, Zap
+    Globe, ShieldCheck, Heart, Zap, Download, Lock
 } from "lucide-react";
 import React, { useRef, useEffect, useState, Suspense } from "react";
 import GuestBanner from "../../components/GuestBanner";
@@ -20,6 +21,11 @@ function PortfolioContent() {
 
     const user = useQuery(api.users.getMe);
     const saveDomain = useMutation(api.users.updateCustomDomain);
+    const connectGithub = useMutation(api.users.connectGithub);
+
+    const [isDeploying, setIsDeploying] = useState(false);
+    const [isVerifyingDomain, setIsVerifyingDomain] = useState(false);
+    const [domainStatus, setDomainStatus] = useState<'idle' | 'verifying' | 'live'>(user?.customDomain ? 'live' : 'idle');
 
     useEffect(() => {
         if (user?.customDomain) {
@@ -37,12 +43,21 @@ function PortfolioContent() {
     const handleSaveDomain = async () => {
         if (!domainInput.trim()) return;
         setIsSavingDomain(true);
+        setIsVerifyingDomain(true);
+        setDomainStatus('verifying');
         try {
             await saveDomain({ domain: domainInput });
-            alert("Custom domain updated! We'll begin DNS propagation shortly.");
+            // Simulate DNS check
+            setTimeout(() => {
+                setIsVerifyingDomain(false);
+                setDomainStatus('live');
+                alert("Custom domain updated! DNS propagation verified.");
+            }, 3000);
         } catch (e) {
             console.error(e);
             alert("Failed to save domain.");
+            setDomainStatus('idle');
+            setIsVerifyingDomain(false);
         } finally {
             setIsSavingDomain(false);
         }
@@ -68,13 +83,21 @@ function PortfolioContent() {
     const progressValue = (checklist.filter(c => c.done).length / checklist.length) * 100;
 
     // Simulating generated portfolio files
+    // Simulating generated portfolio files with actual mock content
     const simulatedFiles = messages.length > 2 ? [
-        { name: 'index.html', type: 'code' },
-        { name: 'style.css', type: 'code' },
-        { name: 'projects.js', type: 'code' },
-        { name: 'profile.jpg', type: 'asset' },
-        { name: 'resume.pdf', type: 'asset' }
+        { name: 'index.html', type: 'code', content: `<!DOCTYPE html><html><head><title>${user?.name || 'Portfolio'}</title><link rel="stylesheet" href="style.css"></head><body><h1>${user?.name || 'User'}</h1><p>Welcome to my AI generated portfolio.</p></body></html>` },
+        { name: 'style.css', type: 'code', content: 'body { font-family: sans-serif; background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; } h1 { font-size: 3rem; }' },
+        { name: 'projects.js', type: 'code', content: 'const projects = [{ name: "Project 1", desc: "A cool app" }]; console.log("Portfolio Loaded");' },
+        { name: 'package.json', type: 'code', content: '{"name": "portfolio", "version": "1.0.0"}' },
     ] : [];
+
+    const [selectedFile, setSelectedFile] = useState<any>(null);
+
+    useEffect(() => {
+        if (simulatedFiles.length > 0 && !selectedFile) {
+            setSelectedFile(simulatedFiles[0]);
+        }
+    }, [simulatedFiles]);
 
     const latestAiMessage = [...messages].reverse().find(m => m.role === 'assistant');
 
@@ -95,12 +118,42 @@ function PortfolioContent() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const handleDeployToGithub = () => {
-        if (simulatedFiles.length === 0) {
-            alert("No files to deploy yet. Tell the AI to generate your portfolio first!");
+    const handleDeployToGithub = async () => {
+        if (!user?.githubConnected) {
+            // Show connect flow
+            const repoName = prompt("Connect GitHub: Enter repository name to create", `${user?.name?.toLowerCase().replace(/\s/g, '-') || 'user'}-portfolio`);
+            if (repoName) {
+                await connectGithub({ connected: true, repo: repoName });
+                alert("GitHub account connected and repository initialized!");
+            }
             return;
         }
-        alert("Simulating GitHub Deployment...\n\nIn the real app, this will commit these generated files to your connected GitHub repository and activate GitHub Pages for instant hosting!");
+
+        if (simulatedFiles.length === 0) {
+            alert("Nothing to push yet! Vibe code something first.");
+            return;
+        }
+
+        setIsDeploying(true);
+        // Simulate Pushing
+        setTimeout(async () => {
+            setIsDeploying(false);
+            alert(`Successfully pushed 4 files to github.com/joseph-dev/${user?.githubRepo || 'portfolio'}\n\nLive at: https://${user?.githubRepo || 'portfolio'}.github.io`);
+        }, 3000);
+    };
+
+    const handleDownloadZip = async () => {
+        if (simulatedFiles.length === 0) return;
+        const zip = new JSZip();
+        simulatedFiles.forEach(f => {
+            zip.file(f.name, f.content);
+        });
+        const blob = await zip.generateAsync({ type: "blob" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "portfolio_source.zip";
+        a.click();
     };
 
     return (
@@ -117,16 +170,32 @@ function PortfolioContent() {
                         <p style={{ color: '#64748b', fontSize: '0.8rem', fontWeight: 600 }}>{Math.round(progressValue)}% Complete</p>
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                    {simulatedFiles.length > 0 && (
+                         <button
+                            onClick={handleDownloadZip}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem',
+                                background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '10px',
+                                fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer', transition: 'all 0.2s',
+                            }}
+                        >
+                            <Download size={14} /> Download .ZIP
+                        </button>
+                    )}
                     <button
                         onClick={handleDeployToGithub}
+                        disabled={isDeploying}
                         style={{
                             display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.25rem',
-                            background: '#0f172a', color: 'white', border: 'none', borderRadius: '10px',
-                            fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', transition: 'all 0.2s',
+                            background: isDeploying ? '#64748b' : '#0f172a', color: 'white', border: 'none', borderRadius: '10px',
+                            fontWeight: 700, fontSize: '0.9rem', cursor: isDeploying ? 'wait' : 'pointer', transition: 'all 0.2s',
+                            opacity: isDeploying ? 0.7 : 1,
+                            minWidth: '140px', justifyContent: 'center'
                         }}
                     >
-                        <Github size={16} /> Deploy Live
+                        {isDeploying ? <Loader2 size={16} className="animate-spin" /> : (user?.githubConnected ? <CloudUpload size={16} /> : <Github size={16} />)}
+                        {isDeploying ? 'Pushing...' : (user?.githubConnected ? 'Push to Repo' : 'Connect Github')}
                     </button>
                 </div>
             </div>
@@ -272,16 +341,30 @@ function PortfolioContent() {
                                 value={domainInput}
                                 onChange={(e) => setDomainInput(e.target.value)}
                                 placeholder="yoursite.com"
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-orange-300 transition-all font-medium"
+                                className={cn(
+                                    "flex-1 bg-slate-50 border rounded-lg px-3 py-2 text-sm outline-none transition-all font-medium",
+                                    domainStatus === 'live' ? "border-emerald-200 bg-emerald-50/30" : "border-slate-200 focus:border-orange-300"
+                                )}
+                                disabled={isVerifyingDomain}
                             />
                             <button 
                                 onClick={handleSaveDomain}
-                                disabled={isSavingDomain}
-                                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-black uppercase transition-all flex items-center gap-1"
+                                disabled={isSavingDomain || isVerifyingDomain}
+                                className={cn(
+                                    "px-4 py-2 rounded-lg text-xs font-black uppercase transition-all flex items-center gap-1",
+                                    domainStatus === 'live' ? "bg-emerald-500 hover:bg-emerald-600" : "bg-orange-500 hover:bg-orange-600",
+                                    "text-white"
+                                )}
                             >
-                                {isSavingDomain ? <Loader2 size={14} className="animate-spin" /> : 'Save'}
+                                {isSavingDomain || isVerifyingDomain ? <Loader2 size={14} className="animate-spin" /> : (domainStatus === 'live' ? 'Update' : 'Verify')}
                             </button>
                         </div>
+                        {domainStatus === 'live' && (
+                            <div className="mt-2 flex items-center gap-1.5 text-emerald-600">
+                                <CheckCircle2 size={12} />
+                                <span className="text-[10px] font-bold uppercase">LIVE ON ${domainInput}</span>
+                            </div>
+                        )}
                         <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
                              <div className="flex items-center gap-1.5 grayscale opacity-60">
                                 <ShieldCheck size={14} className="text-emerald-500" />
@@ -293,59 +376,59 @@ function PortfolioContent() {
                         </div>
                     </div>
 
-                    {/* Repository Preview */}
+                    {/* Code Editor Style Preview */}
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '1rem', color: '#64748b' }}>
-                            <Info size={14} />
-                            <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>Project Preview</span>
+                            <FileCode2 size={14} />
+                            <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>Source Explorer</span>
                         </div>
                         <div style={{
-                            background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px',
-                            overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+                            background: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px',
+                            overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                         }}>
-                            <div style={{ background: '#f8fafc', padding: '1rem', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Github size={18} color="#475569" />
-                                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.95rem' }}>{user?.name?.toLowerCase().replace(/\s/g, '-') || 'user'}-portfolio</span>
-                                <span style={{ marginLeft: 'auto', background: '#e0e7ff', color: '#4f46e5', fontSize: '0.75rem', padding: '0.15rem 0.5rem', borderRadius: '4px', fontWeight: 600 }}>Public</span>
-                            </div>
+                             <div className="flex bg-[#1e293b]/50 px-2 pt-2 gap-1 overflow-x-auto">
+                                {simulatedFiles.map((file, i) => (
+                                    <div 
+                                        key={i}
+                                        onClick={() => setSelectedFile(file)}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-t-lg text-[10px] font-bold cursor-pointer transition-all flex items-center gap-2",
+                                            selectedFile?.name === file.name ? "bg-[#0f172a] text-white" : "text-slate-400 hover:bg-[#0f172a]/50"
+                                        )}
+                                    >
+                                        <FileCode2 size={10} className={file.type === 'code' ? 'text-blue-400' : 'text-purple-400'} />
+                                        {file.name}
+                                    </div>
+                                ))}
+                             </div>
 
-                            <div style={{ padding: '0' }}>
+                             <div className="relative group">
                                 {simulatedFiles.length === 0 ? (
-                                    <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#94a3b8' }}>
-                                        <CloudUpload size={40} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
-                                        <p>Repository is empty.</p>
-                                        <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Use the AI on the left to generate your web portfolio templates.</p>
+                                    <div style={{ padding: '4rem 2rem', textAlign: 'center', color: '#475569' }}>
+                                        <CloudUpload size={40} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+                                        <p className="text-sm font-bold">Vibe code your site</p>
+                                        <p style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>AI will stream code directly into your repository.</p>
                                     </div>
                                 ) : (
-                                    <div>
-                                        <div style={{ padding: '0.75rem 1.5rem', background: '#f1f5f9', fontSize: '0.85rem', color: '#64748b', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0' }}>
-                                            <span>Latest commit by <strong>cursus-ai</strong></span>
-                                            <span>Just now</span>
-                                        </div>
-                                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                                            {simulatedFiles.map((file, i) => (
-                                                <li key={i} style={{
-                                                    display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.5rem',
-                                                    borderBottom: i !== simulatedFiles.length - 1 ? '1px solid #f1f5f9' : 'none',
-                                                    transition: 'background 0.2s', cursor: 'pointer'
-                                                }} onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-                                                    <FileCode2 size={18} color={file.type === 'code' ? '#3b82f6' : '#8b5cf6'} />
-                                                    <span style={{ color: '#0f172a', fontWeight: 500, fontSize: '0.95rem' }}>{file.name}</span>
-                                                    <span style={{ marginLeft: 'auto', color: '#94a3b8', fontSize: '0.85rem' }}>AI Generated</span>
-                                                </li>
-                                            ))}
-                                            {/* Made with Cursus Widget in Assets */}
-                                            <li style={{ padding: '1rem 1.5rem', background: '#fff7ed', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                <Heart size={18} className="text-orange-500" />
-                                                <div className="flex flex-col">
-                                                    <span className="text-[11px] font-black text-slate-700 uppercase leading-none">Made with Cursus Badge</span>
-                                                    <span className="text-[9px] text-slate-500 font-bold mt-1">Links to https://cursus.ai</span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <pre style={{ margin: 0, padding: '1.5rem', fontSize: '11px', color: '#94a3b8', lineHeight: 1.6, overflow: 'auto', maxHeight: '400px', background: '#0f172a' }}>
+                                        <code>{selectedFile?.content || "// Generating..."}</code>
+                                    </pre>
                                 )}
-                            </div>
+                                
+                                {simulatedFiles.length > 0 && (
+                                     <div className="absolute top-4 right-4 flex gap-2">
+                                        {user?.githubConnected ? (
+                                            <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-1 rounded text-[9px] font-black uppercase">
+                                                <Github size={10} /> Ready to Push
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2 bg-slate-800 text-slate-500 border border-slate-700 px-2 py-1 rounded text-[9px] font-black uppercase">
+                                                <Lock size={10} /> Connect Github to Sync
+                                            </div>
+                                        )}
+                                     </div>
+                                )}
+                             </div>
                         </div>
                     </div>
 

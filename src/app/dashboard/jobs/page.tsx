@@ -128,7 +128,7 @@ function JobsContent() {
                         animate={{ opacity: 1, x: 0 }}
                         style={{ fontSize: '3.5rem', fontWeight: 850, letterSpacing: '-0.05em', lineHeight: 1 }}
                     >
-                        Candidate Job Scanner <span className="text-orange-600 italic">Pro</span>
+                        Job <span className="text-orange-600 italic">Finder</span>
                     </motion.h1>
                 </div>
                 
@@ -419,7 +419,7 @@ function JobsContent() {
 
 export default function JobsPage() {
     return (
-        <Suspense fallback={<div style={{ padding: '6rem', textAlign: 'center' }}>Initializing Job Scanner...</div>}>
+        <Suspense fallback={<div style={{ padding: '6rem', textAlign: 'center' }}>Initializing Job Finder...</div>}>
             <JobsContent />
         </Suspense>
     );

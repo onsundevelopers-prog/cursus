@@ -8,6 +8,8 @@ export default defineSchema({
     email: v.optional(v.string()),
     plan: v.string(), // "free", "pro"
     customDomain: v.optional(v.string()),
+    githubConnected: v.optional(v.boolean()),
+    githubRepo: v.optional(v.string()),
   }).index("by_clerkId", ["clerkId"]),
 
   conversations: defineTable({
