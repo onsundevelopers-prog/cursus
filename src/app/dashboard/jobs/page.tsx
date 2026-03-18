@@ -38,7 +38,7 @@ import {
     ModalBody, 
     ModalFooter 
 } from "@/components/ui/modal";
-import { ExpandingCards, CardItem } from "@/components/ui/expanding-cards";
+import HoverRevealCards from "@/components/ui/cards";
 
 function JobsContent() {
     const searchParams = useSearchParams();
@@ -296,19 +296,17 @@ function JobsContent() {
                                 </button>
                             </div>
 
-                            <div className="w-full overflow-hidden rounded-[32px]">
+                            <div className="w-full">
                                 {jobs.length > 0 && (
-                                    <ExpandingCards 
+                                    <HoverRevealCards 
                                         items={jobs.map((job) => ({
                                             id: job.id,
                                             title: job.title,
-                                            description: `${job.company} • ${job.location} • ${job.salary}`,
-                                            imgSrc: `https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop`,
-                                            icon: <Briefcase size={24} />,
-                                            linkHref: job.link
+                                            subtitle: `${job.company} • ${job.location}`,
+                                            imageUrl: `https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1470&auto=format&fit=crop`,
+                                            link: job.link
                                         }))} 
-                                        defaultActiveIndex={0}
-                                        className="h-[500px] md:h-[600px]"
+                                        className="grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-0 gap-6"
                                     />
                                 )}
                             </div>
