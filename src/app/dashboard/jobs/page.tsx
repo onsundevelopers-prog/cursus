@@ -128,7 +128,7 @@ function JobsContent() {
                         animate={{ opacity: 1, x: 0 }}
                         style={{ fontSize: '3.5rem', fontWeight: 850, letterSpacing: '-0.05em', lineHeight: 1 }}
                     >
-                        Job <span className="text-orange-600 italic">Finder</span>
+                        Job <span className="text-blue-600 italic">Finder</span>
                     </motion.h1>
                 </div>
                 
@@ -154,7 +154,7 @@ function JobsContent() {
                             </div>
                         </div>
                         <h2 className="text-4xl font-black mb-4 tracking-tight text-slate-900">
-                            Real-time Search. <span className="text-orange-600 underline decoration-orange-200 underline-offset-8">Zero Noise.</span>
+                            Real-time Search. <span className="text-blue-600 underline decoration-blue-200 underline-offset-8">Zero Noise.</span>
                         </h2>
                         <p className="text-slate-500 mb-10 max-w-xl text-lg leading-relaxed">
                             Our AI deep-crawls 100+ platforms including LinkedIn, Indeed, and niche boards to find roles that actually match your experience.
@@ -193,14 +193,14 @@ function JobsContent() {
                         
                         <div className="max-w-xl w-full">
                             <div className="flex justify-between items-center mb-4">
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-600 animate-pulse">
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 animate-pulse">
                                     Scouring the Web with AI Search Hub
                                 </p>
                                 <span className="text-slate-900 font-black">{Math.round(scanProgress)}%</span>
                             </div>
                             <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden mb-8">
                                 <motion.div
-                                    className="h-full bg-orange-500"
+                                    className="h-full bg-blue-500"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${scanProgress}%` }}
                                 />
@@ -239,44 +239,46 @@ function JobsContent() {
                                 </button>
                             </div>
 
-                            {jobs.map((job, idx) => (
-                                <motion.div
-                                    key={job.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: idx * 0.05 }}
-                                    onClick={() => setSelectedJob(job)}
-                                    className="group bg-white p-8 rounded-[28px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer border-l-4 border-l-transparent hover:border-l-orange-500"
-                                >
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex-1">
-                                            <div className="flex items-center flex-wrap gap-3 mb-2">
-                                                <h4 className="text-xl font-bold group-hover:text-orange-600 transition-colors line-clamp-1">{job.title}</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {jobs.map((job, idx) => (
+                                    <motion.div
+                                        key={job.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: idx * 0.05 }}
+                                        onClick={() => setSelectedJob(job)}
+                                        className="group bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer border-l-4 border-l-transparent hover:border-l-blue-500 flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <div className="flex justify-between items-start mb-3">
                                                 <span className="shrink-0 px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-md border border-emerald-100">
                                                     {job.match}% AI MATCH
                                                 </span>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{job.source}</div>
                                             </div>
-                                            <p className="text-slate-500 font-semibold flex items-center gap-2 mb-4">
-                                                <Building2 size={16} /> {job.company} • <MapPin size={16} /> {job.location}
-                                            </p>
+                                            <h4 className="text-lg font-bold group-hover:text-blue-600 transition-colors line-clamp-2 min-h-[3.5rem] leading-tight mb-2">{job.title}</h4>
                                             
-                                            <div className="flex flex-wrap gap-2">
-                                                <span className="flex items-center gap-1 text-sm font-bold text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                                    <DollarSign size={14} className="text-emerald-500" /> {job.salary}
-                                                </span>
-                                                {job.tags.map((tag: string) => (
-                                                    <span key={tag} className="text-sm font-semibold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                                        {tag}
-                                                    </span>
-                                                ))}
+                                            <div className="space-y-1 mb-4">
+                                                <p className="text-slate-600 font-bold text-sm flex items-center gap-2">
+                                                    <Building2 size={14} className="text-slate-400" /> {job.company}
+                                                </p>
+                                                <p className="text-slate-500 font-semibold text-xs flex items-center gap-2">
+                                                    <MapPin size={14} className="text-slate-400" /> {job.location}
+                                                </p>
                                             </div>
                                         </div>
-                                        <button className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-all">
-                                            <ChevronRight />
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            ))}
+                                        
+                                        <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
+                                            <span className="flex items-center gap-1 text-xs font-black text-slate-700">
+                                                <DollarSign size={12} className="text-emerald-500" /> {job.salary}
+                                            </span>
+                                            <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                                <ChevronRight size={18} />
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </motion.div>
 
                         {/* Sidebar */}
@@ -296,7 +298,7 @@ function JobsContent() {
                                         <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Comp Growth</p>
                                         <p className="text-2xl font-black text-emerald-400">+12% YoY</p>
                                     </div>
-                                    <button className="w-full py-4 bg-orange-600 hover:bg-orange-500 rounded-2xl font-bold transition-all mt-4">
+                                    <button className="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-bold transition-all mt-4">
                                         View Full Report
                                     </button>
                                 </div>
@@ -319,7 +321,7 @@ function JobsContent() {
                                     </span>
                                 </div>
                                 <div>
-                                    <p className="text-orange-400 font-black text-xs uppercase tracking-widest mb-2">{selectedJob.company}</p>
+                                    <p className="text-blue-400 font-black text-xs uppercase tracking-widest mb-2">{selectedJob.company}</p>
                                     <h2 className="text-3xl font-black text-white">{selectedJob.title}</h2>
                                 </div>
                             </div>
@@ -329,7 +331,7 @@ function JobsContent() {
                                     <div className="md:col-span-2 space-y-8">
                                         <div>
                                             <h3 className="flex items-center gap-2 font-black text-lg mb-4">
-                                                <Briefcase size={20} className="text-orange-500" /> Job Description
+                                                <Briefcase size={20} className="text-blue-500" /> Job Description
                                             </h3>
                                             <div className="text-slate-600 leading-relaxed text-sm whitespace-pre-wrap">
                                                 {selectedJob.description || "No description provided."}
@@ -339,12 +341,12 @@ function JobsContent() {
                                         {selectedJob.skills && selectedJob.skills.length > 0 && (
                                             <div>
                                                 <h3 className="flex items-center gap-2 font-black text-lg mb-4">
-                                                    <Target size={20} className="text-orange-500" /> Key Qualifications
+                                                    <Target size={20} className="text-blue-500" /> Key Qualifications
                                                 </h3>
                                                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     {selectedJob.skills.map((skill: string) => (
                                                         <li key={skill} className="flex items-center gap-2 text-sm text-slate-600">
-                                                            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full" />
+                                                            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
                                                             {skill}
                                                         </li>
                                                     ))}
@@ -365,7 +367,7 @@ function JobsContent() {
                                                     <div className="space-y-2">
                                                         {matchDetails.reasons.map((r: string, i: number) => (
                                                             <div key={i} className="flex gap-2 text-[11px] text-slate-600 leading-snug">
-                                                                <Lightbulb size={14} className="text-orange-400 shrink-0" /> {r}
+                                                                <Lightbulb size={14} className="text-blue-400 shrink-0" /> {r}
                                                             </div>
                                                         ))}
                                                     </div>
@@ -384,7 +386,7 @@ function JobsContent() {
                                                 <button 
                                                     onClick={() => handleMatchJob(selectedJob)}
                                                     disabled={isMatching}
-                                                    className="w-full py-4 bg-white border border-slate-200 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-all text-sm"
+                                                    className="w-full py-4 bg-white border border-slate-200 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all text-sm"
                                                 >
                                                     {isMatching ? <UpdateIcon className="animate-spin" /> : <Sparkles size={16} />}
                                                     {isMatching ? "Analyzing..." : "Analyze Match"}
@@ -397,7 +399,8 @@ function JobsContent() {
                                             <a 
                                                 href={selectedJob.link} 
                                                 target="_blank" 
-                                                className="w-full py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-orange-200 transition-all"
+                                                rel="noopener noreferrer"
+                                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-200 transition-all"
                                                 style={{ textDecoration: 'none' }}
                                             >
                                                 Apply Now <ArrowRightIcon />

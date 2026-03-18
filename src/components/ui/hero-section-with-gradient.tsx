@@ -240,6 +240,7 @@ export default function HeroSection_05() {
                                 alt="Cursus app preview"
                                 width={2700}
                                 height={1440}
+                                unoptimized
                                 style={{ borderRadius: '12px', width: '100%', height: 'auto' }}
                                 />
                         </div>
