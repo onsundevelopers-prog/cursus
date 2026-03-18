@@ -153,10 +153,10 @@ export function ModernHeader() {
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     <SignedOut>
                         <SignInButton mode="modal">
-                            <button className="nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.95rem', fontWeight: 600, color: '#475569' }}>Sign In</button>
+                            <span className="nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.95rem', fontWeight: 600, color: '#475569' }}>Sign In</span>
                         </SignInButton>
                         <SignUpButton mode="modal">
-                            <button style={{
+                            <span style={{
                                 padding: '0.75rem 1.5rem',
                                 background: '#0f172a',
                                 color: 'white',
@@ -165,10 +165,11 @@ export function ModernHeader() {
                                 fontSize: '0.95rem',
                                 border: 'none',
                                 cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                display: 'inline-block'
                             }}>
                                 Dashboard
-                            </button>
+                            </span>
                         </SignUpButton>
                     </SignedOut>
                     <SignedIn>
