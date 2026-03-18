@@ -38,6 +38,7 @@ import {
     ModalBody, 
     ModalFooter 
 } from "@/components/ui/modal";
+import { ExpandingCards, CardItem } from "@/components/ui/expanding-cards";
 
 function JobsContent() {
     const searchParams = useSearchParams();
@@ -174,7 +175,7 @@ function JobsContent() {
     };
 
     return (
-        <div className="px-4 py-8 md:px-8 lg:p-24 max-w-7xl mx-auto min-h-screen pt-24 md:pt-32">
+        <div className="px-4 py-8 md:px-8 lg:px-24 max-w-7xl mx-auto min-h-screen pt-12 md:pt-16">
             <GuestBanner />
 
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4">
@@ -295,45 +296,21 @@ function JobsContent() {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {jobs.map((job, idx) => (
-                                    <motion.div
-                                        key={job.id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: idx * 0.05 }}
-                                        onClick={() => setSelectedJob(job)}
-                                        className="group bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer border-l-4 border-l-transparent hover:border-l-orange-500 flex flex-col justify-between overflow-hidden min-h-[220px] max-w-full"
-                                    >
-                                        <div>
-                                            <div className="flex justify-between items-start gap-2 mb-3">
-                                                <span className="shrink-0 px-2 py-0.5 bg-orange-600/10 text-orange-600 text-[10px] font-black rounded-md border border-orange-100/50">
-                                                    {job.match}% AI MATCH
-                                                </span>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate max-w-[80px] text-right">{job.source}</div>
-                                            </div>
-                                             <h4 className="text-base font-bold group-hover:text-orange-600 transition-colors line-clamp-2 min-h-[2.8rem] leading-tight mb-2 break-words overflow-hidden">{job.title}</h4>
-                                            
-                                            <div className="space-y-1 mb-2 overflow-hidden">
-                                                <p className="text-slate-600 font-bold text-xs flex items-center gap-2 truncate">
-                                                    <Building2 size={12} className="text-slate-400 shrink-0" /> <span className="truncate">{job.company}</span>
-                                                </p>
-                                                <p className="text-slate-500 font-semibold text-[11px] flex items-center gap-2 truncate">
-                                                    <MapPin size={12} className="text-slate-400 shrink-0" /> <span className="truncate">{job.location}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
-                                            <span className="flex items-center gap-1 text-xs font-black text-slate-700">
-                                                <DollarSign size={12} className="text-emerald-500" /> {job.salary}
-                                            </span>
-                                            <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-all">
-                                                <ChevronRight size={18} />
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                            <div className="w-full overflow-hidden rounded-[32px]">
+                                {jobs.length > 0 && (
+                                    <ExpandingCards 
+                                        items={jobs.map((job) => ({
+                                            id: job.id,
+                                            title: job.title,
+                                            description: `${job.company} • ${job.location} • ${job.salary}`,
+                                            imgSrc: `https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop`,
+                                            icon: <Briefcase size={24} />,
+                                            linkHref: job.link
+                                        }))} 
+                                        defaultActiveIndex={0}
+                                        className="h-[500px] md:h-[600px]"
+                                    />
+                                )}
                             </div>
                         </motion.div>
 
