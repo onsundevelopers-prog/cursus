@@ -174,15 +174,15 @@ function JobsContent() {
     };
 
     return (
-        <div style={{ padding: '6rem 2rem', maxWidth: '1200px', margin: '0 auto', minHeight: '100vh' }}>
+        <div className="px-4 py-8 md:px-8 lg:p-24 max-w-7xl mx-auto min-h-screen pt-24 md:pt-32">
             <GuestBanner />
 
-            <div className="flex justify-between items-end mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4">
                 <div>
                     <motion.h1
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        style={{ fontSize: '3.5rem', fontWeight: 850, letterSpacing: '-0.05em', lineHeight: 1 }}
+                        className="text-4xl md:text-6xl font-[850] tracking-tighter leading-none"
                     >
                         Job <span className="text-orange-600 italic">Finder</span>
                     </motion.h1>
@@ -197,22 +197,22 @@ function JobsContent() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="flex flex-col items-center justify-center p-16 bg-white rounded-[40px] border border-slate-100 shadow-2xl shadow-slate-200/50 text-center"
+                        className="flex flex-col items-center justify-center p-6 md:p-16 bg-white rounded-[32px] md:rounded-[40px] border border-slate-100 shadow-2xl shadow-slate-200/50 text-center"
                     >
-                        <div className="relative mb-8">
+                        <div className="relative mb-6 md:mb-8 scale-75 md:scale-100">
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
                                 className="absolute inset-[-20px] border-2 border-dashed border-orange-200 rounded-full opacity-50"
                             />
-                            <div className="bg-orange-50 p-10 rounded-full relative z-10 border border-orange-100">
-                                <Search className="w-16 h-16 text-orange-500" />
+                            <div className="bg-orange-50 p-6 md:p-10 rounded-full relative z-10 border border-orange-100">
+                                <Search className="w-10 h-10 md:w-16 md:h-16 text-orange-500" />
                             </div>
                         </div>
-                        <h2 className="text-4xl font-black mb-4 tracking-tight text-slate-900">
+                        <h2 className="text-2xl md:text-4xl font-black mb-4 tracking-tight text-slate-900">
                             Real-time Search. <span className="text-orange-600 underline decoration-orange-200 underline-offset-8">Zero Noise.</span>
                         </h2>
-                        <p className="text-slate-500 mb-10 max-w-xl text-lg leading-relaxed">
+                        <p className="text-slate-500 mb-8 md:mb-10 max-w-xl text-base md:text-lg leading-relaxed px-2">
                             Our AI deep-crawls 100+ platforms including LinkedIn, Indeed, and niche boards to find roles that actually match your experience.
                         </p>
 
@@ -227,10 +227,10 @@ function JobsContent() {
                             />
                         </div>
                         
-                        <div className="flex gap-8 mt-12 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
-                            <div className="flex items-center gap-2"><Database size={14} /> 1M+ Active Jobs</div>
-                            <div className="flex items-center gap-2"><ShieldCheck size={14} /> Verified Salary</div>
-                            <div className="flex items-center gap-2"><Fingerprint size={14} /> AI Score</div>
+                        <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-8 md:mt-12 text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                            <div className="flex items-center gap-2 px-3 py-1 bg-slate-50 rounded-full"><Database size={12} /> 1M+ Active Jobs</div>
+                            <div className="flex items-center gap-2 px-3 py-1 bg-slate-50 rounded-full"><ShieldCheck size={12} /> Verified Salary</div>
+                            <div className="flex items-center gap-2 px-3 py-1 bg-slate-50 rounded-full"><Fingerprint size={12} /> AI Score</div>
                         </div>
                     </motion.div>
                 )}
@@ -366,26 +366,26 @@ function JobsContent() {
 
             {/* Job Details Modal */}
             <Modal open={!!selectedJob} onOpenChange={(open) => { if (!open) { setSelectedJob(null); setMatchDetails(null); } }}>
-                <ModalContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] p-0 border-none">
+                <ModalContent className="max-w-4xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto rounded-t-[32px] md:rounded-[32px] p-0 border-none">
                     {selectedJob && (
-                        <>
-                            <div className="relative h-48 bg-slate-900 flex items-end p-10">
-                                <div className="absolute top-6 right-6 flex gap-2">
-                                    <span className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl text-white text-xs font-bold border border-white/20">
+                        <div className="flex flex-col">
+                            <div className="relative min-h-[160px] md:h-48 bg-slate-900 flex items-end p-6 md:p-10">
+                                <div className="absolute top-4 right-4 md:top-6 md:right-6 flex gap-2">
+                                    <span className="px-3 py-1.5 md:px-4 md:py-2 bg-white/10 backdrop-blur-md rounded-xl text-white text-[10px] md:text-xs font-bold border border-white/20">
                                         {selectedJob.source}
                                     </span>
                                 </div>
-                                <div>
-                                    <p className="text-orange-400 font-black text-xs uppercase tracking-widest mb-2">{selectedJob.company}</p>
-                                    <h2 className="text-3xl font-black text-white">{selectedJob.title}</h2>
+                                <div className="w-full">
+                                    <p className="text-orange-400 font-black text-[10px] md:text-xs uppercase tracking-widest mb-1 md:mb-2">{selectedJob.company}</p>
+                                    <h2 className="text-xl md:text-3xl font-black text-white leading-tight break-words">{selectedJob.title}</h2>
                                 </div>
                             </div>
                             
-                            <ModalBody className="p-10">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                                    <div className="md:col-span-2 space-y-8">
+                            <ModalBody className="p-6 md:p-10">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                                    <div className="md:col-span-2 space-y-6 md:space-y-8 order-2 md:order-1">
                                         <div>
-                                            <h3 className="flex items-center gap-2 font-black text-lg mb-4">
+                                            <h3 className="flex items-center gap-2 font-black text-lg mb-3 md:mb-4">
                                                 <Briefcase size={20} className="text-orange-500" /> Job Description
                                             </h3>
                                             <div className="text-slate-600 leading-relaxed text-sm whitespace-pre-wrap">
@@ -410,9 +410,9 @@ function JobsContent() {
                                         )}
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                            <h3 className="font-black text-sm mb-4">AI Match Analysis</h3>
+                                    <div className="space-y-6 order-1 md:order-2">
+                                        <div className="p-5 md:p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <h3 className="font-black text-xs mb-4 uppercase tracking-tighter">AI Match Analysis</h3>
                                             {matchDetails ? (
                                                 <div className="space-y-4">
                                                     <div className="flex items-center justify-between mb-4">
@@ -426,7 +426,7 @@ function JobsContent() {
                                                             </div>
                                                         ))}
                                                     </div>
-                                                    <div className="pt-4 border-top border-slate-200">
+                                                    <div className="pt-4 border-t border-slate-200">
                                                         <p className="text-[10px] font-black text-slate-400 uppercase mb-2">Skill Gaps</p>
                                                         <div className="flex flex-wrap gap-1">
                                                             {matchDetails.missing.map((m: string) => (
@@ -450,7 +450,7 @@ function JobsContent() {
                                         </div>
 
                                         <div className="space-y-3">
-                                            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">Quick Actions</p>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">Quick Actions</p>
                                             <a 
                                                 href={selectedJob.link} 
                                                 target="_blank" 
@@ -467,7 +467,7 @@ function JobsContent() {
                                     </div>
                                 </div>
                             </ModalBody>
-                        </>
+                        </div>
                     )}
                 </ModalContent>
             </Modal>
