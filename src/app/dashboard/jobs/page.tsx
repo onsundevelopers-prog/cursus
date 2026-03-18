@@ -303,23 +303,23 @@ function JobsContent() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.05 }}
                                         onClick={() => setSelectedJob(job)}
-                                        className="group bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer border-l-4 border-l-transparent hover:border-l-orange-500 flex flex-col justify-between overflow-hidden min-h-[340px]"
+                                        className="group bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer border-l-4 border-l-transparent hover:border-l-orange-500 flex flex-col justify-between overflow-hidden min-h-[220px] max-w-full"
                                     >
                                         <div>
-                                            <div className="flex justify-between items-start mb-3">
+                                            <div className="flex justify-between items-start gap-2 mb-3">
                                                 <span className="shrink-0 px-2 py-0.5 bg-orange-600/10 text-orange-600 text-[10px] font-black rounded-md border border-orange-100/50">
                                                     {job.match}% AI MATCH
                                                 </span>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{job.source}</div>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate max-w-[80px] text-right">{job.source}</div>
                                             </div>
-                                             <h4 className="text-lg font-bold group-hover:text-orange-600 transition-colors line-clamp-2 min-h-[3.2rem] leading-tight mb-2 break-words">{job.title}</h4>
+                                             <h4 className="text-base font-bold group-hover:text-orange-600 transition-colors line-clamp-2 min-h-[2.8rem] leading-tight mb-2 break-words overflow-hidden">{job.title}</h4>
                                             
-                                            <div className="space-y-1 mb-4">
-                                                <p className="text-slate-600 font-bold text-sm flex items-center gap-2">
-                                                    <Building2 size={14} className="text-slate-400" /> {job.company}
+                                            <div className="space-y-1 mb-2 overflow-hidden">
+                                                <p className="text-slate-600 font-bold text-xs flex items-center gap-2 truncate">
+                                                    <Building2 size={12} className="text-slate-400 shrink-0" /> <span className="truncate">{job.company}</span>
                                                 </p>
-                                                <p className="text-slate-500 font-semibold text-xs flex items-center gap-2">
-                                                    <MapPin size={14} className="text-slate-400" /> {job.location}
+                                                <p className="text-slate-500 font-semibold text-[11px] flex items-center gap-2 truncate">
+                                                    <MapPin size={12} className="text-slate-400 shrink-0" /> <span className="truncate">{job.location}</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -338,9 +338,11 @@ function JobsContent() {
                         </motion.div>
 
                         {/* Sidebar */}
-                        <div className="space-y-8">
+                        <div className="lg:block space-y-8 h-fit lg:sticky lg:top-24">
                             {/* Salary Insights */}
-                            <div className="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl">
+                            <div className="bg-[#0f172a] p-8 rounded-[32px] text-white shadow-2xl relative overflow-hidden">
+                                {/* Subtle grain pattern bg */}
+                                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #475569 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
                                 <div className="flex items-center gap-3 mb-6">
                                     <DollarSign className="text-orange-400" />
                                     <h3 className="font-bold">Market Insights</h3>
