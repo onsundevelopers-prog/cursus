@@ -356,9 +356,6 @@ function JobsContent() {
                                         <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Comp Growth</p>
                                         <p className="text-2xl font-black text-emerald-400">+12% YoY</p>
                                     </div>
-                                    <button className="w-full py-4 bg-orange-600 hover:bg-orange-500 rounded-2xl font-bold transition-all mt-4">
-                                        View Full Report
-                                    </button>
                                 </div>
                             </div>
 
