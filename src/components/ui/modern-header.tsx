@@ -5,13 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
     ChevronDown,
-    Search,
-    CircleUser,
-    Rocket,
-    Layout,
-    ShieldCheck,
     Zap,
-    MousePointer2,
     Database,
     Target
 } from 'lucide-react';
@@ -31,9 +25,9 @@ const links = [
         title: 'Tools', 
         href: '#',
         dropdown: [
-            { icon: <Zap size={20} />, title: "Autofill Extension", desc: "One-click apps", href: "/dashboard" },
-            { icon: <Target size={20} />, title: "AI Interviewer", desc: "Live mock sessions", href: "/dashboard/interview" },
-            { icon: <Database size={20} />, title: "Resume Builder", desc: "ATS-optimized", href: "/dashboard/resume" }
+            { icon: <Zap size={18} />, title: "Autofill Extension", desc: "One-click apps", href: "/dashboard" },
+            { icon: <Target size={18} />, title: "AI Interviewer", desc: "Live mock sessions", href: "/dashboard/interview" },
+            { icon: <Database size={18} />, title: "Resume Builder", desc: "ATS-optimized", href: "/dashboard/resume" }
         ]
     }
 ];
@@ -48,9 +42,9 @@ export function ModernHeader() {
             left: 0,
             right: 0,
             height: '80px',
-            background: 'rgba(255, 255, 255, 0.8)',
+            background: 'rgba(9, 9, 11, 0.8)',
             backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid #f1f5f9',
+            borderBottom: '1px solid #27272a',
             zIndex: 100,
             display: 'flex',
             alignItems: 'center'
@@ -67,19 +61,30 @@ export function ModernHeader() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
                     <Link href="/" style={{
                         fontSize: '1.5rem',
-                        fontWeight: 900,
-                        color: '#0f172a',
+                        fontWeight: 800,
+                        color: '#fafafa',
                         textDecoration: 'none',
                         letterSpacing: '-0.04em',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.5rem'
                     }}>
-                        <div style={{ width: '32px', height: '32px', background: '#0f172a', borderRadius: '8px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>C</div>
+                        <div style={{ 
+                            width: '32px', 
+                            height: '32px', 
+                            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', 
+                            borderRadius: '8px', 
+                            color: 'white', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            fontSize: '1rem',
+                            fontWeight: 700
+                        }}>C</div>
                         Cursus
                     </Link>
 
-                    <nav style={{ display: 'flex', gap: '1.5rem' }}>
+                    <nav style={{ display: 'flex', gap: '0.5rem' }}>
                         {links.map((link) => (
                             <div
                                 key={link.title}
@@ -90,14 +95,24 @@ export function ModernHeader() {
                                 <Link
                                     href={link.href}
                                     style={{
-                                        color: '#475569',
+                                        color: '#a1a1aa',
                                         textDecoration: 'none',
-                                        fontSize: '0.95rem',
-                                        fontWeight: 600,
+                                        fontSize: '0.9rem',
+                                        fontWeight: 500,
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '0.25rem',
-                                        padding: '0.5rem 0'
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '8px',
+                                        transition: 'all 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.color = '#fafafa';
+                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.color = '#a1a1aa';
+                                        e.currentTarget.style.background = 'transparent';
                                     }}
                                 >
                                     {link.title}
@@ -115,30 +130,49 @@ export function ModernHeader() {
                                                 position: 'absolute',
                                                 top: '100%',
                                                 left: '-50%',
-                                                width: '320px',
-                                                background: 'white',
-                                                borderRadius: '24px',
-                                                padding: '1.25rem',
-                                                boxShadow: '0 20px 50px rgba(0,0,0,0.1)',
-                                                border: '1px solid #f1f5f9',
+                                                width: '280px',
+                                                background: '#18181b',
+                                                borderRadius: '16px',
+                                                padding: '0.75rem',
+                                                boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+                                                border: '1px solid #27272a',
                                                 display: 'flex',
                                                 flexDirection: 'column',
-                                                gap: '0.5rem'
+                                                gap: '0.25rem'
                                             }}
                                         >
                                             {link.dropdown.map((item: any) => (
                                                 <Link
                                                     key={item.title}
                                                     href={item.href}
-                                                    className="group flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors"
-                                                    style={{ textDecoration: 'none' }}
+                                                    className="group flex items-center gap-3 p-3 rounded-xl transition-colors"
+                                                    style={{ 
+                                                        textDecoration: 'none',
+                                                        background: 'transparent'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.background = '#27272a';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.background = 'transparent';
+                                                    }}
                                                 >
-                                                    <div className="shrink-0 w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-50 transition-colors">
+                                                    <div style={{
+                                                        width: '36px',
+                                                        height: '36px',
+                                                        background: '#27272a',
+                                                        borderRadius: '10px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: '#6366f1',
+                                                        transition: 'all 0.2s'
+                                                    }}>
                                                         {item.icon}
                                                     </div>
                                                     <div>
-                                                        <h4 style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.9rem', marginBottom: '2px' }}>{item.title}</h4>
-                                                        <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0 }}>{item.desc}</p>
+                                                        <h4 style={{ fontWeight: 600, color: '#fafafa', fontSize: '0.875rem', marginBottom: '2px' }}>{item.title}</h4>
+                                                        <p style={{ color: '#71717a', fontSize: '0.75rem', margin: 0 }}>{item.desc}</p>
                                                     </div>
                                                 </Link>
                                             ))}
@@ -150,37 +184,55 @@ export function ModernHeader() {
                     </nav>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                     <SignedOut>
                         <SignInButton mode="modal">
-                            <span className="nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.95rem', fontWeight: 600, color: '#475569' }}>Sign In</span>
+                            <span style={{ 
+                                background: 'none', 
+                                border: 'none', 
+                                cursor: 'pointer', 
+                                fontSize: '0.9rem', 
+                                fontWeight: 500, 
+                                color: '#a1a1aa',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '8px',
+                                transition: 'all 0.2s'
+                            }}>Sign In</span>
                         </SignInButton>
                         <SignUpButton mode="modal">
                             <span style={{
-                                padding: '0.75rem 1.5rem',
-                                background: '#0f172a',
+                                padding: '0.65rem 1.25rem',
+                                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
                                 color: 'white',
-                                borderRadius: '12px',
-                                fontWeight: 800,
-                                fontSize: '0.95rem',
+                                borderRadius: '10px',
+                                fontWeight: 600,
+                                fontSize: '0.9rem',
                                 border: 'none',
                                 cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                display: 'inline-block'
+                                boxShadow: '0 4px 16px rgba(99, 102, 241, 0.3)',
+                                display: 'inline-block',
+                                transition: 'all 0.2s'
                             }}>
-                                Dashboard
+                                Get Started
                             </span>
                         </SignUpButton>
                     </SignedOut>
                     <SignedIn>
                         <Link href="/dashboard" style={{
-                            fontSize: '0.95rem',
-                            fontWeight: 600,
-                            color: '#475569',
+                            fontSize: '0.9rem',
+                            fontWeight: 500,
+                            color: '#a1a1aa',
                             textDecoration: 'none',
-                            marginRight: '1rem'
+                            marginRight: '0.5rem',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '8px',
+                            transition: 'all 0.2s'
                         }}>Dashboard</Link>
-                        <UserButton appearance={{ elements: { userButtonAvatarBox: { width: '40px', height: '40px' } } }} />
+                        <UserButton appearance={{ 
+                            elements: { 
+                                userButtonAvatarBox: { width: '36px', height: '36px' }
+                            } 
+                        }} />
                     </SignedIn>
                 </div>
             </div>

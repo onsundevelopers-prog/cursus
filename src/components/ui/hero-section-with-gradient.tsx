@@ -9,11 +9,10 @@ import { ReactNode } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Sparkles, Stars, FileText, Zap, ShieldCheck, Target } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 import { duolingoSpring, duolingoEase } from "@/lib/animations";
 
-// ── AnimatedGroup ────────────────────────────────────────────────────────────
-
+// AnimatedGroup component
 type PresetType =
     | 'fade' | 'slide' | 'scale' | 'blur'
     | 'blur-slide' | 'zoom' | 'flip'
@@ -48,8 +47,6 @@ function AnimatedGroup({ children, className, variants, preset }: AnimatedGroupP
     );
 }
 
-// ── HeroSection ──────────────────────────────────────────────────────────────
-
 export default function HeroSection_05() {
     const gradientRef = useRef<HTMLDivElement>(null);
 
@@ -75,31 +72,6 @@ export default function HeroSection_05() {
         }
     };
 
-    const floatingVariants = {
-        animate: {
-            y: [0, -10, 0],
-            rotate: [0, 5, -5, 0],
-            transition: {
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-            }
-        }
-    };
-
-    const floatingDelayedVariants = {
-        animate: {
-            y: [0, -15, 0],
-            rotate: [0, -8, 8, 0],
-            transition: {
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1
-            }
-        }
-    };
-
     useEffect(() => {
         if (!gradientRef.current) return;
         gsap.fromTo(
@@ -110,47 +82,104 @@ export default function HeroSection_05() {
     }, []);
 
     return (
-        <div style={{ padding: '0', overflow: 'hidden' }}>
+        <div style={{ padding: '0', overflow: 'hidden', background: '#09090b' }}>
             <div style={{ position: 'relative', width: '100%' }}>
-                {/* Gradient background */}
+                {/* Premium gradient background */}
                 <div
                     ref={gradientRef}
                     style={{
                         position: 'absolute',
                         inset: 0,
-                        zIndex: -1,
+                        zIndex: 0,
                         background: `
-                            radial-gradient(circle at 10% 20%, rgba(255, 106, 0, 0.05) 0%, transparent 40%),
-                            radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
-                            white
+                            radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                            radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                            radial-gradient(circle at 80% 60%, rgba(99, 102, 241, 0.05) 0%, transparent 30%)
                         `,
-                        backgroundAttachment: 'fixed'
                     }}
                 />
+                
+                {/* Grid pattern overlay */}
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 0,
+                    backgroundImage: `
+                        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '64px 64px',
+                    maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 70%)'
+                }} />
 
-                {/* Hero text */}
-                <div style={{ paddingTop: '8rem', paddingBottom: '6rem', textAlign: 'center', position: 'relative' }}>
+                {/* Hero content */}
+                <div style={{ paddingTop: '10rem', paddingBottom: '8rem', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                    <div style={{ position: 'relative', maxWidth: '52rem', margin: '0 auto', padding: '0 1.5rem' }}>
+                        
+                        {/* Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            style={{ marginBottom: '2rem' }}
+                        >
+                            <span style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '0.5rem 1rem',
+                                background: 'rgba(99, 102, 241, 0.1)',
+                                border: '1px solid rgba(99, 102, 241, 0.2)',
+                                borderRadius: '9999px',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                color: '#a5b4fc'
+                            }}>
+                                <Sparkles size={14} />
+                                AI-Powered Career Platform
+                            </span>
+                        </motion.div>
 
-                    <div style={{ position: 'relative', maxWidth: '48rem', margin: '0 auto', zIndex: 2 }}>
+                        {/* Main headline */}
                         <motion.h1
                             initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
                             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            transition={{ duration: 0.8, ease: 'easeOut' }}
-                            style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 850, color: '#0f172a', letterSpacing: '-0.05em', lineHeight: 1.02 }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            style={{ 
+                                fontSize: 'clamp(2.75rem, 7vw, 5rem)', 
+                                fontWeight: 800, 
+                                letterSpacing: '-0.04em', 
+                                lineHeight: 1.05,
+                                marginBottom: '1.5rem'
+                            }}
                         >
-                            Build a career <span style={{ background: 'linear-gradient(to right, #3b82f6, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>you actually love.</span>
+                            <span style={{ color: '#fafafa' }}>Build a career</span>
+                            <br />
+                            <span style={{ 
+                                background: 'linear-gradient(135deg, #6366f1, #a855f7, #6366f1)', 
+                                backgroundSize: '200% auto',
+                                WebkitBackgroundClip: 'text', 
+                                WebkitTextFillColor: 'transparent'
+                            }}>you actually love.</span>
                         </motion.h1>
+
+                        {/* Subheadline */}
                         <motion.p
                             initial={{ opacity: 0, y: 16 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            style={{ marginTop: '1.5rem', fontSize: '1.25rem', color: '#64748b', maxWidth: '38rem', margin: '1.5rem auto 0', lineHeight: 1.6 }}
+                            style={{ 
+                                fontSize: 'clamp(1rem, 2vw, 1.25rem)', 
+                                color: '#a1a1aa', 
+                                maxWidth: '36rem', 
+                                margin: '0 auto', 
+                                lineHeight: 1.7 
+                            }}
                         >
                             No more boring resume builders. Cursus handles the hard stuff — so you can focus on landing that dream role.
                         </motion.p>
 
-
-
+                        {/* CTA Buttons */}
                         <AnimatedGroup
                             variants={{
                                 container: {
@@ -158,131 +187,146 @@ export default function HeroSection_05() {
                                 },
                                 ...transitionVariants,
                             }}
-                            className={cn("mt-12 flex flex-col items-center justify-center gap-6")}
+                            className={cn("mt-12 flex flex-col sm:flex-row items-center justify-center gap-4")}
                         >
-                            {/* Dominant Primary CTA with Glowing Border */}
-                            <motion.div 
-                                style={{ 
-                                    borderRadius: '16px', 
-                                    padding: '3px', 
-                                    background: 'linear-gradient(90deg, #3b82f6, #a855f7, #3b82f6)',
-                                    backgroundSize: '200% auto',
-                                    boxShadow: '0 0 40px -10px rgba(59, 130, 246, 0.4)'
-                                }}
-                                animate={{ backgroundPosition: ['0% center', '200% center'] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                                whileHover={{ scale: 1.05, boxShadow: '0 0 50px -5px rgba(59, 130, 246, 0.5)' }}
+                            {/* Primary CTA */}
+                            <motion.button
+                                onClick={handleResumeClick}
+                                whileHover={{ scale: 1.02, boxShadow: '0 0 40px rgba(99, 102, 241, 0.4)' }}
                                 whileTap={{ scale: 0.98 }}
+                                style={{
+                                    display: 'inline-flex', 
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    padding: '1.25rem 2.5rem',
+                                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', 
+                                    color: 'white',
+                                    borderRadius: '14px', 
+                                    fontWeight: 700,
+                                    fontSize: '1.1rem', 
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 4px 24px rgba(99, 102, 241, 0.3)',
+                                    transition: 'all 0.3s ease'
+                                }}
                             >
-                                <button
-                                    onClick={handleResumeClick}
-                                    style={{
-                                        display: 'inline-flex', alignItems: 'center',
-                                        padding: '1.5rem 4rem',
-                                        background: '#0a0a0c', color: 'white',
-                                        borderRadius: '14px', fontWeight: 900,
-                                        fontSize: '1.4rem', textDecoration: 'none',
-                                        transition: 'all 0.2s',
-                                        whiteSpace: 'nowrap',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                        letterSpacing: '-0.02em'
-                                    }}
-                                >
-                                    Create Your Resume Now
-                                </button>
-                            </motion.div>
+                                Get Started Free
+                                <ArrowRight size={18} />
+                            </motion.button>
 
-                            {/* Ghost Secondary CTA */}
-                            <div>
-                                <Link
-                                    href="/dashboard?guest=true"
-                                    style={{
-                                        display: 'inline-flex', alignItems: 'center',
-                                        padding: '0.75rem 1.75rem',
-                                        color: '#94a3b8',
-                                        fontWeight: 800,
-                                        fontSize: '1.1rem', textDecoration: 'none',
-                                        transition: 'all 0.2s',
-                                        whiteSpace: 'nowrap',
-                                        letterSpacing: '-0.01em'
-                                    }}
-                                    onMouseEnter={(e) => e.currentTarget.style.color = '#0f172a'}
-                                    onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
-                                >
-                                    Or explore sandbox
-                                </Link>
-                            </div>
+                            {/* Secondary CTA */}
+                            <Link
+                                href="/dashboard?guest=true"
+                                style={{
+                                    display: 'inline-flex', 
+                                    alignItems: 'center',
+                                    padding: '1.25rem 2rem',
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    color: '#fafafa',
+                                    borderRadius: '14px',
+                                    fontWeight: 600,
+                                    fontSize: '1.1rem', 
+                                    textDecoration: 'none',
+                                    transition: 'all 0.3s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                                }}
+                            >
+                                Explore Demo
+                            </Link>
                         </AnimatedGroup>
                     </div>
                 </div>
 
-                {/* App preview image */}
+                {/* App preview with premium styling */}
                 <AnimatedGroup
                     variants={{
                         container: { visible: { transition: { staggerChildren: 0.05, delayChildren: 0.75 } } },
                         ...transitionVariants,
                     }}
                 >
-                    <div style={{ position: 'relative', overflow: 'hidden', padding: '0 0.5rem' }}>
+                    <div style={{ position: 'relative', overflow: 'hidden', padding: '0 1rem' }}>
                         <div style={{
-                            position: 'relative', maxWidth: '64rem', margin: '0 auto',
-                            background: 'white', borderRadius: '16px 16px 0 0',
-                            border: '1px solid rgba(0,0,0,0.06)', borderBottom: 'none',
-                            padding: '1rem',
-                            boxShadow: '0 8px 40px rgba(0,0,0,0.08)',
-                            maxHeight: '40vh', overflow: 'hidden',
+                            position: 'relative', 
+                            maxWidth: '72rem', 
+                            margin: '0 auto',
+                            background: '#18181b', 
+                            borderRadius: '20px 20px 0 0',
+                            border: '1px solid #27272a', 
+                            borderBottom: 'none',
+                            padding: '0.75rem',
+                            boxShadow: '0 -20px 80px rgba(99, 102, 241, 0.1)',
                         }}>
-                            {/* Fade-out overlay */}
-                            <div style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'linear-gradient(to bottom, transparent 35%, white 100%)', borderRadius: '16px 16px 0 0' }} />
-                            <Image
-                                src="https://tailark.com/_next/image?url=%2Fmail2-light.png&w=3840&q=75"
-                                alt="Cursus app preview"
-                                width={2700}
-                                height={1440}
-                                unoptimized
-                                style={{ borderRadius: '12px', width: '100%', height: 'auto' }}
+                            {/* Browser chrome */}
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                paddingBottom: '0.75rem',
+                                borderBottom: '1px solid #27272a',
+                                marginBottom: '0.75rem'
+                            }}>
+                                <div style={{ display: 'flex', gap: '6px' }}>
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f57' }} />
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#febc2e' }} />
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#28c840' }} />
+                                </div>
+                                <div style={{ 
+                                    flex: 1, 
+                                    display: 'flex', 
+                                    justifyContent: 'center' 
+                                }}>
+                                    <div style={{
+                                        background: '#27272a',
+                                        borderRadius: '6px',
+                                        padding: '0.35rem 1rem',
+                                        fontSize: '0.75rem',
+                                        color: '#71717a'
+                                    }}>
+                                        cursus.ai/dashboard
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Screenshot container with fade */}
+                            <div style={{ 
+                                position: 'relative', 
+                                maxHeight: '45vh', 
+                                overflow: 'hidden',
+                                borderRadius: '12px'
+                            }}>
+                                {/* Fade overlay */}
+                                <div style={{ 
+                                    position: 'absolute', 
+                                    inset: 0, 
+                                    zIndex: 10, 
+                                    background: 'linear-gradient(to bottom, transparent 40%, #09090b 100%)', 
+                                    pointerEvents: 'none'
+                                }} />
+                                <Image
+                                    src="https://tailark.com/_next/image?url=%2Fmail2-light.png&w=3840&q=75"
+                                    alt="Cursus app preview"
+                                    width={2700}
+                                    height={1440}
+                                    unoptimized
+                                    style={{ 
+                                        borderRadius: '8px', 
+                                        width: '100%', 
+                                        height: 'auto',
+                                        opacity: 0.9
+                                    }}
                                 />
+                            </div>
                         </div>
                     </div>
                 </AnimatedGroup>
-
-                {/* Floating Action Circles (Bottom Right Column) */}
-                <div style={{
-                    position: 'fixed',
-                    right: '24px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                    zIndex: 200
-                }}>
-                    {['S', 'W', 'X'].map((letter, idx) => (
-                        <motion.div
-                            key={letter}
-                            whileHover={{ scale: 1.1, x: -5 }}
-                            style={{
-                                width: '42px',
-                                height: '42px',
-                                borderRadius: '50%',
-                                background: 'white',
-                                border: `1.5px solid ${letter === 'X' ? '#a855f7' : '#3b82f6'}`,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '0.9rem',
-                                fontWeight: 800,
-                                color: letter === 'X' ? '#a855f7' : '#3b82f6',
-                                cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-                                backdropFilter: 'blur(10px)'
-                            }}
-                        >
-                            {letter}
-                        </motion.div>
-                    ))}
-                </div>
             </div>
         </div>
     );

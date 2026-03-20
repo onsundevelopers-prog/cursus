@@ -231,20 +231,19 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
     };
 
     const cardStyle = {
-        background: 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(16px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-        border: '1px solid rgba(226, 232, 240, 0.6)',
-        borderRadius: '32px',
-        padding: '2rem',
+        background: '#18181b',
+        border: '1px solid #27272a',
+        borderRadius: '24px',
+        padding: '1.75rem',
         display: 'flex',
         flexDirection: 'column' as const,
         cursor: 'pointer',
         overflow: 'hidden',
         textDecoration: 'none',
-        boxShadow: '0 10px 40px -10px rgba(15, 23, 42, 0.05)',
+        boxShadow: '0 4px 24px rgba(0, 0, 0, 0.2)',
         height: '100%',
-        transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        position: 'relative' as const,
     };
 
     return (
@@ -252,7 +251,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
             <div style={{ maxWidth: '1200px', width: '100%', margin: '0' }}>
 
                 <motion.p
-                    style={{ color: '#64748b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.5rem', fontWeight: 600 }}
+                    style={{ color: '#71717a', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1rem', fontWeight: 600 }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
@@ -260,17 +259,14 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                 </motion.p>
                 <motion.h1
                     style={{ 
-                        color: '#0f172a', 
-                        fontSize: 'clamp(3rem, 6vw, 4.5rem)', 
-                        fontWeight: 900, 
-                        letterSpacing: '-0.04em', 
-                        marginBottom: '1rem', 
-                        lineHeight: '1', 
+                        color: '#fafafa', 
+                        fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
+                        fontWeight: 800, 
+                        letterSpacing: '-0.03em', 
+                        marginBottom: '2.5rem', 
+                        lineHeight: '1.1', 
                         overflowWrap: 'break-word', 
                         wordBreak: 'break-word',
-                        background: 'linear-gradient(to bottom, #0f172a 60%, #475569)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent'
                     }}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -289,16 +285,16 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <Link href={navUrl("/dashboard/resume")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
                             <motion.div
                                 style={{ ...cardStyle }}
-                                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.12)' }}
+                                whileHover={{ y: -8, scale: 1.02, borderColor: '#3f3f46', boxShadow: '0 20px 50px -10px rgba(99, 102, 241, 0.15)' }}
                                 whileTap={{ scale: 0.98 }}
                                 transition={{ duration: 0.3, ease: smoothEaseOut }}
                             >
                                 <div style={{ flex: 1 }}><ResumeAnimation /></div>
                                 <div style={{ marginTop: '1rem' }}>
-                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                        <FileText size={18} color="#3b82f6" /> Resume Architect
+                                    <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.01em', lineHeight: '1.2' }}>
+                                        <FileText size={18} color="#6366f1" /> Resume Architect
                                     </h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.85rem', lineHeight: 1.5 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
                                 </div>
                             </motion.div>
                         </Link>
@@ -309,16 +305,16 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <Link href={navUrl("/dashboard/letter")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
                             <motion.div
                                 style={{ ...cardStyle }}
-                                whileHover={{ y: -4, scale: 1.02, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.1)' }}
+                                whileHover={{ y: -4, scale: 1.02, borderColor: '#3f3f46', boxShadow: '0 16px 40px -10px rgba(139, 92, 246, 0.15)' }}
                                 whileTap={{ scale: 0.98 }}
                                 transition={{ duration: 0.3, ease: smoothEaseOut }}
                             >
                                 <div style={{ flex: 1 }}><LetterAnimation /></div>
                                 <div style={{ marginTop: '1rem' }}>
-                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                        <Wand2 size={16} color="#8b5cf6" /> Cover Letters
+                                    <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.01em', lineHeight: '1.2' }}>
+                                        <Wand2 size={16} color="#a855f7" /> Cover Letters
                                     </h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
                                 </div>
                             </motion.div>
                         </Link>
@@ -329,18 +325,18 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <Link href={navUrl("/dashboard/portfolio")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
                             <motion.div
                                 style={{ ...cardStyle }}
-                                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.12)' }}
+                                whileHover={{ y: -8, scale: 1.02, borderColor: '#3f3f46', boxShadow: '0 20px 50px -10px rgba(16, 185, 129, 0.15)' }}
                                 whileTap={{ scale: 0.98 }}
                                 transition={{ duration: 0.3, ease: smoothEaseOut }}
                             >
                                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '120px' }}>
                                     <GlobalNetwork />
                                 </div>
-                                <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #f1f5f9' }}>
-                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                <div style={{ marginTop: 'auto', backgroundColor: '#27272a', borderRadius: '12px', padding: '0.75rem', border: '1px solid #3f3f46' }}>
+                                    <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.01em', lineHeight: '1.2' }}>
                                         <Globe size={16} color="#10b981" /> Career Link
                                     </h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
                                 </div>
                             </motion.div>
                         </Link>
@@ -351,16 +347,16 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <Link href={navUrl("/dashboard/jobs")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
                             <motion.div
                                 style={{ ...cardStyle }}
-                                whileHover={{ y: -4, scale: 1.02, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.1)' }}
+                                whileHover={{ y: -4, scale: 1.02, borderColor: '#3f3f46', boxShadow: '0 16px 40px -10px rgba(245, 158, 11, 0.15)' }}
                                 whileTap={{ scale: 0.98 }}
                                 transition={{ duration: 0.3, ease: smoothEaseOut }}
                             >
                                 <div style={{ flex: 1 }}><ScanAnimation /></div>
                                 <div style={{ marginTop: '1rem' }}>
-                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                    <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                                         <Search size={16} color="#f59e0b" /> Job Finder
                                     </h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
                                 </div>
                             </motion.div>
                         </Link>
@@ -371,16 +367,16 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <Link href={navUrl("/dashboard/interview")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
                             <motion.div
                                 style={{ ...cardStyle }}
-                                whileHover={{ y: -4, scale: 1.02, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.1)' }}
+                                whileHover={{ y: -4, scale: 1.02, borderColor: '#3f3f46', boxShadow: '0 16px 40px -10px rgba(239, 68, 68, 0.15)' }}
                                 whileTap={{ scale: 0.98 }}
                                 transition={{ duration: 0.3, ease: smoothEaseOut }}
                             >
                                 <div style={{ flex: 1 }}><VoiceAnimation /></div>
                                 <div style={{ marginTop: '1rem' }}>
-                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                                        <Mic size={16} color="#ef4444" /> Interview Coach
+                                    <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                        <Mic size={16} color="#f43f5e" /> Interview Coach
                                     </h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
+                                    <p style={{ color: '#a1a1aa', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
                                 </div>
                             </motion.div>
                         </Link>
@@ -397,14 +393,14 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <div style={{ flex: 1 }}><AutofillAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
                             <div className="flex justify-between items-center mb-2">
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Zap size={16} color="#f59e0b" /> Job Autofill
                                 </h3>
-                                <span className="text-[9px] uppercase tracking-wider font-bold bg-amber-50 text-amber-600 px-2 py-1 border border-amber-200/50 rounded-md">
+                                <span className="text-[9px] uppercase tracking-wider font-bold bg-amber-900/30 text-amber-400 px-2 py-1 border border-amber-500/30 rounded-md">
                                     Extension
                                 </span>
                             </div>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.25rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
+                            <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginBottom: '1.25rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
                             
                             <a 
                                 href="/api/extension/download" 
@@ -440,14 +436,14 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                         <div style={{ flex: 1 }}><ResearchAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
                             <div className="flex justify-between items-center mb-1">
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                    <Target size={16} color="#3b82f6" /> Company Intel
+                                <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <Target size={16} color="#6366f1" /> Company Intel
                                 </h3>
-                                <AnimatedBadge className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md">
+                                <AnimatedBadge className="text-[9px] uppercase tracking-wider font-bold bg-indigo-900/30 text-indigo-400 px-2 py-1 border border-indigo-500/30 rounded-md">
                                     Soon
                                 </AnimatedBadge>
                             </div>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deep-scraped prep briefs & custom talking points.</p>
+                            <p style={{ color: '#a1a1aa', fontSize: '0.85rem' }}>Deep-scraped prep briefs & custom talking points.</p>
                         </div>
                         </motion.div>
                     </StaggerItem>
@@ -464,14 +460,14 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                             <div style={{ flex: 1 }}><NegotiationAnimation /></div>
                             <div style={{ marginTop: '1rem' }}>
                                 <div className="flex justify-between items-center mb-1">
-                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <h3 style={{ color: '#fafafa', fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                                         <CircleDollarSign size={16} color="#10b981" /> Salary Coach
                                     </h3>
-                                    <AnimatedBadge className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md">
+                                    <AnimatedBadge className="text-[9px] uppercase tracking-wider font-bold bg-emerald-900/30 text-emerald-400 px-2 py-1 border border-emerald-500/30 rounded-md">
                                         Soon
                                     </AnimatedBadge>
                                 </div>
-                                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
+                                <p style={{ color: '#a1a1aa', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
                             </div>
                         </motion.div>
                     </StaggerItem>
