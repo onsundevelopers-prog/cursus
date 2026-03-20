@@ -39,6 +39,16 @@ import {
     ModalFooter 
 } from "@/components/ui/modal";
 import HoverRevealCards from "@/components/ui/cards";
+import { 
+    PageTransition, 
+    ShimmerSkeleton, 
+    AnimatedProgressBar, 
+    AILoadingIndicator,
+    ScrollReveal,
+    StaggerContainer,
+    StaggerItem 
+} from "@/components/ui/animated-components";
+import { smoothEaseOut } from "@/lib/animations";
 
 function JobsContent() {
     const searchParams = useSearchParams();
@@ -175,8 +185,9 @@ function JobsContent() {
     };
 
     return (
-        <div className="px-4 py-8 md:px-8 lg:px-24 max-w-7xl mx-auto min-h-screen pt-12 md:pt-16">
-            <GuestBanner />
+        <PageTransition>
+            <div className="px-4 py-8 md:px-8 lg:px-24 max-w-7xl mx-auto min-h-screen pt-12 md:pt-16">
+                <GuestBanner />
 
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4">
                 <div>
@@ -446,13 +457,25 @@ function JobsContent() {
                     )}
                 </ModalContent>
             </Modal>
+            </div>
+        </PageTransition>
+    );
+}
+
+function JobsLoadingSkeleton() {
+    return (
+        <div className="px-4 py-8 md:px-8 lg:px-24 max-w-7xl mx-auto min-h-screen pt-12 md:pt-16">
+            <div className="space-y-4 mb-8">
+                <ShimmerSkeleton width="350px" height="48px" />
+            </div>
+            <ShimmerSkeleton height="400px" borderRadius="40px" />
         </div>
     );
 }
 
 export default function JobsPage() {
     return (
-        <Suspense fallback={<div style={{ padding: '6rem', textAlign: 'center' }}>Initializing Job Finder...</div>}>
+        <Suspense fallback={<JobsLoadingSkeleton />}>
             <JobsContent />
         </Suspense>
     );

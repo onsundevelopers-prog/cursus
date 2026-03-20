@@ -8,7 +8,14 @@ import { useAuth } from "@clerk/nextjs";
 import { Send, Loader2, Mic, MicOff, Volume2, VolumeX, History } from "lucide-react";
 import React, { useRef, useEffect, useState, Suspense, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import GuestBanner from "../../components/GuestBanner";
+import { 
+    PageTransition, 
+    ShimmerSkeleton, 
+    AILoadingIndicator 
+} from "@/components/ui/animated-components";
+import { smoothEaseOut } from "@/lib/animations";
 
 // Speech Recognition Type Definition
 declare global {
@@ -16,6 +23,19 @@ declare global {
         webkitSpeechRecognition: any;
         SpeechRecognition: any;
     }
+}
+
+function InterviewLoadingSkeleton() {
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', maxWidth: '1000px', margin: '0 auto', padding: '2rem' }}>
+            <div className="space-y-4 mb-6">
+                <ShimmerSkeleton width="300px" height="32px" />
+                <ShimmerSkeleton width="400px" height="20px" />
+            </div>
+            <ShimmerSkeleton height="400px" borderRadius="12px" className="mb-4" />
+            <ShimmerSkeleton height="100px" borderRadius="12px" />
+        </div>
+    );
 }
 
 function InterviewContent() {
@@ -226,76 +246,79 @@ function InterviewContent() {
     }, [messages]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', maxWidth: '1000px', margin: '0 auto', padding: '2rem' }}>
-            <GuestBanner />
-            {isInsecure && (
-                <div style={{
-                    background: '#fff3e0',
-                    color: '#e65100',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    marginBottom: '1rem',
-                    fontSize: '0.85rem',
-                    border: '1px solid #ffb74d',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                }}>
-                    <strong>⚠️ Microphone Unavailable:</strong> Browsers require a secure connection (localhost or HTTPS) to use the microphone. Please use <code>localhost:4380</code> instead of an IP address.
-                </div>
-            )}
+        <PageTransition>
+            <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)', maxWidth: '1000px', margin: '0 auto', padding: '2rem' }}>
+                <GuestBanner />
+                <AnimatePresence>
+                    {isInsecure && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            style={{
+                                background: '#fff3e0',
+                                color: '#e65100',
+                                padding: '0.75rem 1rem',
+                                borderRadius: '8px',
+                                marginBottom: '1rem',
+                                fontSize: '0.85rem',
+                                border: '1px solid #ffb74d',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}
+                        >
+                            <strong>Warning:</strong> Browsers require a secure connection (localhost or HTTPS) to use the microphone. Please use <code>localhost:4380</code> instead of an IP address.
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
-            {micError && (
-                <div style={{
-                    background: '#fee2e2',
-                    color: '#dc2626',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    marginBottom: '1rem',
-                    fontSize: '0.85rem',
-                    border: '1px solid #fca5a5',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                }}>
-                    <span><strong>⚠️ Permission Error:</strong> {micError}</span>
-                    <button onClick={() => setMicError(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontWeight: 'bold' }}>✕</button>
-                </div>
-            )}
-            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div>
-                    <h1 style={{ fontSize: '2rem', fontWeight: 600 }}>Interview Prep AI</h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Sharpen your skills with a realistic AI interview coach.</p>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button
-                        onClick={() => setIsVoiceEnabled(!isVoiceEnabled)}
-                        style={{
-                            padding: '0.5rem',
-                            borderRadius: '8px',
-                            background: isVoiceEnabled ? 'var(--primary)' : 'var(--surface)',
-                            color: isVoiceEnabled ? 'white' : 'var(--text-muted)',
-                            border: '1px solid var(--border)',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            fontSize: '0.9rem',
-                            transition: 'var(--transition)'
-                        }}
-                    >
-                        {isVoiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
-                        {isVoiceEnabled ? 'Voice On' : 'Voice Off'}
-                    </button>
-                    {isVoiceEnabled && (
-                        <button
-                            onClick={toggleListening}
+                <AnimatePresence>
+                    {micError && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            style={{
+                                background: '#fee2e2',
+                                color: '#dc2626',
+                                padding: '0.75rem 1rem',
+                                borderRadius: '8px',
+                                marginBottom: '1rem',
+                                fontSize: '0.85rem',
+                                border: '1px solid #fca5a5',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}
+                        >
+                            <span><strong>Permission Error:</strong> {micError}</span>
+                            <button onClick={() => setMicError(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontWeight: 'bold' }}>X</button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
+                >
+                    <div>
+                        <h1 style={{ fontSize: '2rem', fontWeight: 600 }}>Interview Prep AI</h1>
+                        <p style={{ color: 'var(--text-muted)' }}>Sharpen your skills with a realistic AI interview coach.</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <motion.button
+                            onClick={() => setIsVoiceEnabled(!isVoiceEnabled)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             style={{
                                 padding: '0.5rem',
                                 borderRadius: '8px',
-                                background: isListening ? '#ff4d4d' : 'var(--surface)',
-                                color: isListening ? 'white' : 'var(--text-muted)',
+                                background: isVoiceEnabled ? 'var(--primary)' : 'var(--surface)',
+                                color: isVoiceEnabled ? 'white' : 'var(--text-muted)',
                                 border: '1px solid var(--border)',
                                 cursor: 'pointer',
                                 display: 'flex',
@@ -305,112 +328,186 @@ function InterviewContent() {
                                 transition: 'var(--transition)'
                             }}
                         >
-                            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-                            {isListening ? 'Stop' : 'Speak'}
-                        </button>
-                    )}
-                </div>
-            </div>
+                            {isVoiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                            {isVoiceEnabled ? 'Voice On' : 'Voice Off'}
+                        </motion.button>
+                        {isVoiceEnabled && (
+                            <motion.button
+                                onClick={toggleListening}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                style={{
+                                    padding: '0.5rem',
+                                    borderRadius: '8px',
+                                    background: isListening ? '#ff4d4d' : 'var(--surface)',
+                                    color: isListening ? 'white' : 'var(--text-muted)',
+                                    border: '1px solid var(--border)',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    fontSize: '0.9rem',
+                                    transition: 'var(--transition)'
+                                }}
+                            >
+                                {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                                {isListening ? 'Stop' : 'Speak'}
+                            </motion.button>
+                        )}
+                    </div>
+                </motion.div>
 
-            <div style={{ flex: 1, overflowY: 'auto', marginBottom: '2rem', padding: '1rem', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}>
-                {messages.length === 0 ? (
-                    <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', textAlign: 'center' }}>
-                        <div>
-                            <p style={{ marginBottom: '0.5rem' }}>Ready for a mock interview.</p>
-                            <p style={{ fontSize: '0.9rem' }}>Type 'Start Interview' or tell me what role you're interviewing for.</p>
-                        </div>
-                    </div>
-                ) : (
-                    messages.map((m) => (
-                        <div key={m.id} style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
-                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.25rem', padding: '0 0.5rem' }}>
-                                {m.role === 'user' ? 'You' : 'AI Agent'}
-                            </div>
-                            <div style={{
-                                padding: '1rem',
-                                borderRadius: '12px',
-                                background: m.role === 'user' ? 'var(--primary)' : 'white',
-                                color: m.role === 'user' ? 'var(--primary-foreground)' : 'var(--text-main)',
-                                border: m.role === 'user' ? 'none' : '1px solid var(--border)',
-                                maxWidth: '85%',
-                                whiteSpace: 'pre-wrap'
-                            }}>
-                                {m.parts.map((part, i) => (
-                                    part.type === 'text' ? <span key={i}>{part.text}</span> : null
-                                ))}
-                            </div>
-                        </div>
-                    ))
-                )}
-                {isLoading && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', padding: '0.5rem' }}>
-                        <Loader2 className="animate-spin" size={16} /> Thinking...
-                    </div>
-                )}
-                {isSpeaking && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', padding: '0.5rem', fontSize: '0.9rem' }}>
-                        <Volume2 className="animate-pulse" size={16} /> AI Coach is speaking...
-                    </div>
-                )}
-                <div ref={messagesEndRef} />
-            </div>
-
-            <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
-                <textarea
-                    value={input}
-                    onChange={handleInputChange}
-                    placeholder="Type a message (e.g. 'Help me prepare for a Google Frontend interview...')"
-                    disabled={isLoading}
-                    style={{
-                        width: '100%',
-                        padding: '1rem',
-                        paddingRight: '60px',
-                        background: 'var(--surface)',
-                        border: '1px solid var(--border)',
-                        borderRadius: '12px',
-                        minHeight: '100px',
-                        resize: 'none',
-                        fontSize: '1rem',
-                        outline: 'none',
-                        fontFamily: 'inherit'
-                    }}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            if (input.trim()) handleSubmit(e as any);
-                        }
-                    }}
-                />
-                <button
-                    type="submit"
-                    disabled={isLoading || !input.trim()}
-                    style={{
-                        position: 'absolute',
-                        right: '1rem',
-                        bottom: '1rem',
-                        background: input.trim() ? 'var(--primary)' : 'var(--border)',
-                        color: 'white',
-                        border: 'none',
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: 'var(--radius-full)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: input.trim() ? 'pointer' : 'not-allowed',
-                        transition: 'var(--transition)',
-                    }}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    style={{ flex: 1, overflowY: 'auto', marginBottom: '2rem', padding: '1rem', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}
                 >
-                    <Send size={18} />
-                </button>
-            </form>
-        </div>
+                    {messages.length === 0 ? (
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', textAlign: 'center' }}
+                        >
+                            <div>
+                                <motion.div
+                                    animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
+                                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                >
+                                    <Mic size={48} style={{ margin: '0 auto 1rem', color: '#cbd5e1' }} />
+                                </motion.div>
+                                <p style={{ marginBottom: '0.5rem' }}>Ready for a mock interview.</p>
+                                <p style={{ fontSize: '0.9rem' }}>Type 'Start Interview' or tell me what role you're interviewing for.</p>
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <AnimatePresence mode="popLayout">
+                            {messages.map((m, index) => (
+                                <motion.div 
+                                    key={m.id} 
+                                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    transition={{ duration: 0.3, delay: index * 0.03 }}
+                                    style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start' }}
+                                >
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.25rem', padding: '0 0.5rem' }}>
+                                        {m.role === 'user' ? 'You' : 'AI Agent'}
+                                    </div>
+                                    <motion.div 
+                                        whileHover={{ scale: 1.01 }}
+                                        style={{
+                                            padding: '1rem',
+                                            borderRadius: '12px',
+                                            background: m.role === 'user' ? 'var(--primary)' : 'white',
+                                            color: m.role === 'user' ? 'var(--primary-foreground)' : 'var(--text-main)',
+                                            border: m.role === 'user' ? 'none' : '1px solid var(--border)',
+                                            maxWidth: '85%',
+                                            whiteSpace: 'pre-wrap'
+                                        }}
+                                    >
+                                        {m.parts.map((part, i) => (
+                                            part.type === 'text' ? <span key={i}>{part.text}</span> : null
+                                        ))}
+                                    </motion.div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    )}
+                    {isLoading && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            style={{ padding: '0.5rem' }}
+                        >
+                            <AILoadingIndicator text="Thinking..." />
+                        </motion.div>
+                    )}
+                    {isSpeaking && (
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', padding: '0.5rem', fontSize: '0.9rem' }}
+                        >
+                            <motion.div
+                                animate={{ scale: [1, 1.2, 1] }}
+                                transition={{ duration: 1, repeat: Infinity }}
+                            >
+                                <Volume2 size={16} />
+                            </motion.div>
+                            AI Coach is speaking...
+                        </motion.div>
+                    )}
+                    <div ref={messagesEndRef} />
+                </motion.div>
+
+                <motion.form 
+                    onSubmit={handleSubmit} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    style={{ position: 'relative' }}
+                >
+                    <textarea
+                        value={input}
+                        onChange={handleInputChange}
+                        placeholder="Type a message (e.g. 'Help me prepare for a Google Frontend interview...')"
+                        disabled={isLoading}
+                        style={{
+                            width: '100%',
+                            padding: '1rem',
+                            paddingRight: '60px',
+                            background: 'var(--surface)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '12px',
+                            minHeight: '100px',
+                            resize: 'none',
+                            fontSize: '1rem',
+                            outline: 'none',
+                            fontFamily: 'inherit'
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                if (input.trim()) handleSubmit(e as any);
+                            }
+                        }}
+                    />
+                    <motion.button
+                        type="submit"
+                        disabled={isLoading || !input.trim()}
+                        whileHover={input.trim() ? { scale: 1.1, filter: "brightness(1.1)" } : {}}
+                        whileTap={input.trim() ? { scale: 0.9 } : {}}
+                        style={{
+                            position: 'absolute',
+                            right: '1rem',
+                            bottom: '1rem',
+                            background: input.trim() ? 'var(--primary)' : 'var(--border)',
+                            color: 'white',
+                            border: 'none',
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: 'var(--radius-full)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: input.trim() ? 'pointer' : 'not-allowed',
+                            transition: 'var(--transition)',
+                        }}
+                    >
+                        <Send size={18} />
+                    </motion.button>
+                </motion.form>
+            </div>
+        </PageTransition>
     );
 }
 
 export default function InterviewCoachAgent() {
     return (
-        <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Loading Coach...</div>}>
+        <Suspense fallback={<InterviewLoadingSkeleton />}>
             <InterviewContent />
         </Suspense>
     );

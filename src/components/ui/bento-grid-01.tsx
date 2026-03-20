@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Smartphone, Globe, FileText, Wand2, Search, Mic, ExternalLink, CloudUpload, FileDown, Zap, Target, CircleDollarSign } from "lucide-react";
 import Link from "next/link";
+import { StaggerContainer, StaggerItem, AnimatedProgressBar, AnimatedBadge } from "@/components/ui/animated-components";
+import { smoothEaseOut, cardHover, cardTap } from "@/lib/animations";
 
 // ── Animated sub-components ──────────────────────────────────────────────────
 
@@ -280,108 +282,118 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                 {/* Stats row removed per user request */}
 
                 {/* Improved Bento Grid — 4 Columns on Large Screens */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[minmax(240px,auto)] w-full">
+                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[minmax(240px,auto)] w-full" staggerDelay={0.08}>
 
                     {/* 1. Resume Architect — tall 2x2 */}
-                    <Link href={navUrl("/dashboard/resume")} className="col-span-1 sm:col-span-2 row-span-2 no-underline" style={{ textDecoration: 'none' }}>
-                        <motion.div
-                            style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                            whileHover={{ y: -8, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
-                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                            <div style={{ flex: 1 }}><ResumeAnimation /></div>
-                            <div style={{ marginTop: '1rem' }}>
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                    <FileText size={18} color="#3b82f6" /> Resume Architect
-                                </h3>
-                                <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
-                            </div>
-                        </motion.div>
-                    </Link>
+                    <StaggerItem className="col-span-1 sm:col-span-2 row-span-2">
+                        <Link href={navUrl("/dashboard/resume")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
+                            <motion.div
+                                style={{ ...cardStyle }}
+                                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.12)' }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            >
+                                <div style={{ flex: 1 }}><ResumeAnimation /></div>
+                                <div style={{ marginTop: '1rem' }}>
+                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                        <FileText size={18} color="#3b82f6" /> Resume Architect
+                                    </h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.85rem', lineHeight: 1.4 }}>Land interviews 2x faster with an AI-crafted, ATS-optimized resume.</p>
+                                </div>
+                            </motion.div>
+                        </Link>
+                    </StaggerItem>
 
                     {/* 2. Cover Letter — 2x1 */}
-                    <Link href={navUrl("/dashboard/letter")} className="col-span-1 sm:col-span-2 no-underline" style={{ textDecoration: 'none' }}>
-                        <motion.div
-                            style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
-                        >
-                            <div style={{ flex: 1 }}><LetterAnimation /></div>
-                            <div style={{ marginTop: '1rem' }}>
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                    <Wand2 size={16} color="#8b5cf6" /> Cover Letters
-                                </h3>
-                                <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
-                            </div>
-                        </motion.div>
-                    </Link>
+                    <StaggerItem className="col-span-1 sm:col-span-2">
+                        <Link href={navUrl("/dashboard/letter")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
+                            <motion.div
+                                style={{ ...cardStyle }}
+                                whileHover={{ y: -4, scale: 1.02, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.1)' }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            >
+                                <div style={{ flex: 1 }}><LetterAnimation /></div>
+                                <div style={{ marginTop: '1rem' }}>
+                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                        <Wand2 size={16} color="#8b5cf6" /> Cover Letters
+                                    </h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Stand out with highly-personalized letters that command attention.</p>
+                                </div>
+                            </motion.div>
+                        </Link>
+                    </StaggerItem>
 
                     {/* 3. Career Link — tall 2x2 */}
-                    <Link href={navUrl("/dashboard/portfolio")} className="col-span-1 sm:col-span-2 row-span-2 no-underline" style={{ textDecoration: 'none' }}>
-                        <motion.div
-                            style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
-                        >
-                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '120px' }}>
-                                <GlobalNetwork />
-                            </div>
-                            <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #f1f5f9' }}>
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
-                                    <Globe size={16} color="#10b981" /> Career Link
-                                </h3>
-                                <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
-                            </div>
-                        </motion.div>
-                    </Link>
+                    <StaggerItem className="col-span-1 sm:col-span-2 row-span-2">
+                        <Link href={navUrl("/dashboard/portfolio")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
+                            <motion.div
+                                style={{ ...cardStyle }}
+                                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.12)' }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            >
+                                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '120px' }}>
+                                    <GlobalNetwork />
+                                </div>
+                                <div style={{ marginTop: 'auto', backgroundColor: '#f8fafc', borderRadius: '10px', padding: '0.75rem', border: '1px solid #f1f5f9' }}>
+                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px', letterSpacing: '-0.02em', lineHeight: '1.2' }}>
+                                        <Globe size={16} color="#10b981" /> Career Link
+                                    </h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Showcase your work and let the best opportunities come to you.</p>
+                                </div>
+                            </motion.div>
+                        </Link>
+                    </StaggerItem>
 
                     {/* 4. Job Finder — 2x1 */}
-                    <Link href={navUrl("/dashboard/jobs")} className="col-span-1 sm:col-span-2 no-underline" style={{ textDecoration: 'none' }}>
-                        <motion.div
-                            style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
-                        >
-                            <div style={{ flex: 1 }}><ScanAnimation /></div>
-                            <div style={{ marginTop: '1rem' }}>
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                                    <Search size={16} color="#f59e0b" /> Job Finder
-                                </h3>
-                                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
-                            </div>
-                        </motion.div>
-                    </Link>
+                    <StaggerItem className="col-span-1 sm:col-span-2">
+                        <Link href={navUrl("/dashboard/jobs")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
+                            <motion.div
+                                style={{ ...cardStyle }}
+                                whileHover={{ y: -4, scale: 1.02, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.1)' }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            >
+                                <div style={{ flex: 1 }}><ScanAnimation /></div>
+                                <div style={{ marginTop: '1rem' }}>
+                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                        <Search size={16} color="#f59e0b" /> Job Finder
+                                    </h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Stop searching manually. We find perfectly matched roles for you.</p>
+                                </div>
+                            </motion.div>
+                        </Link>
+                    </StaggerItem>
 
                     {/* 5. Interview Coach — 2x1 */}
-                    <Link href={navUrl("/dashboard/interview")} className="col-span-1 sm:col-span-2 no-underline" style={{ textDecoration: 'none' }}>
-                        <motion.div
-                            style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
-                        >
-                            <div style={{ flex: 1 }}><VoiceAnimation /></div>
-                            <div style={{ marginTop: '1rem' }}>
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                                    <Mic size={16} color="#ef4444" /> Interview Coach
-                                </h3>
-                                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
-                            </div>
-                        </motion.div>
-                    </Link>
+                    <StaggerItem className="col-span-1 sm:col-span-2">
+                        <Link href={navUrl("/dashboard/interview")} className="no-underline block h-full" style={{ textDecoration: 'none' }}>
+                            <motion.div
+                                style={{ ...cardStyle }}
+                                whileHover={{ y: -4, scale: 1.02, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.1)' }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            >
+                                <div style={{ flex: 1 }}><VoiceAnimation /></div>
+                                <div style={{ marginTop: '1rem' }}>
+                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                        <Mic size={16} color="#ef4444" /> Interview Coach
+                                    </h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Ace any behavioral round with real-time AI speech coaching.</p>
+                                </div>
+                            </motion.div>
+                        </Link>
+                    </StaggerItem>
 
                     {/* 6. AI Job Application Autofill */}
-                    <motion.div
-                        style={{ ...cardStyle, position: 'relative' }}
-                        className="col-span-1 sm:col-span-2"
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        whileHover={{ scale: 0.98, borderColor: '#f59e0b' }}
-                    >
+                    <StaggerItem className="col-span-1 sm:col-span-2">
+                        <motion.div
+                            style={{ ...cardStyle, position: 'relative' }}
+                            whileHover={{ y: -4, scale: 1.02, borderColor: '#f59e0b', boxShadow: '0 16px 32px -10px rgba(245, 158, 11, 0.15)' }}
+                            whileTap={{ scale: 0.98 }}
+                            transition={{ duration: 0.3, ease: smoothEaseOut }}
+                        >
                         <div style={{ flex: 1 }}><AutofillAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
                             <div className="flex justify-between items-center mb-2">
@@ -413,61 +425,64 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                 </motion.div>
                             </a>
                         </div>
-                    </motion.div>
+                        </motion.div>
+                    </StaggerItem>
 
                     {/* 7. Company Research AI */}
-                    <motion.div
-                        style={{ ...cardStyle, cursor: 'pointer' }}
-                        className="col-span-1 sm:col-span-2"
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        whileHover={{ scale: 0.98, borderColor: '#3b82f6' }}
-                        onClick={() => alert("Company Intel is coming soon!")}
-                    >
+                    <StaggerItem className="col-span-1 sm:col-span-2">
+                        <motion.div
+                            style={{ ...cardStyle, cursor: 'pointer' }}
+                            whileHover={{ y: -4, scale: 1.02, borderColor: '#3b82f6', boxShadow: '0 16px 32px -10px rgba(59, 130, 246, 0.15)' }}
+                            whileTap={{ scale: 0.98 }}
+                            transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            onClick={() => alert("Company Intel is coming soon!")}
+                        >
                         <div style={{ flex: 1 }}><ResearchAnimation /></div>
                         <div style={{ marginTop: '1rem' }}>
                             <div className="flex justify-between items-center mb-1">
                                 <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                                     <Target size={16} color="#3b82f6" /> Company Intel
                                 </h3>
-                                <span className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md">
+                                <AnimatedBadge className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md">
                                     Soon
-                                </span>
+                                </AnimatedBadge>
                             </div>
                             <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deep-scraped prep briefs & custom talking points.</p>
                         </div>
-                    </motion.div>
+                        </motion.div>
+                    </StaggerItem>
 
                     {/* 8. Salary Negotiation */}
-                    <motion.div
-                        style={{ ...cardStyle, cursor: 'pointer' }}
-                        className="col-span-1 sm:col-span-2"
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
-                        whileHover={{ scale: 0.98, borderColor: '#10b981' }}
-                        onClick={() => alert("Salary Coach is coming soon!")}
-                    >
-                        <div style={{ flex: 1 }}><NegotiationAnimation /></div>
-                        <div style={{ marginTop: '1rem' }}>
-                            <div className="flex justify-between items-center mb-1">
-                                <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                    <CircleDollarSign size={16} color="#10b981" /> Salary Coach
-                                </h3>
-                                <span className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md">
-                                    Soon
-                                </span>
+                    <StaggerItem className="col-span-1 sm:col-span-2">
+                        <motion.div
+                            style={{ ...cardStyle, cursor: 'pointer' }}
+                            whileHover={{ y: -4, scale: 1.02, borderColor: '#10b981', boxShadow: '0 16px 32px -10px rgba(16, 185, 129, 0.15)' }}
+                            whileTap={{ scale: 0.98 }}
+                            transition={{ duration: 0.3, ease: smoothEaseOut }}
+                            onClick={() => alert("Salary Coach is coming soon!")}
+                        >
+                            <div style={{ flex: 1 }}><NegotiationAnimation /></div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <div className="flex justify-between items-center mb-1">
+                                    <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                        <CircleDollarSign size={16} color="#10b981" /> Salary Coach
+                                    </h3>
+                                    <AnimatedBadge className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md">
+                                        Soon
+                                    </AnimatedBadge>
+                                </div>
+                                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
                             </div>
-                            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </StaggerItem>
 
                     {/* 9. Export Integrations — full width */}
-                    <motion.div
-                        style={{ ...cardStyle, cursor: 'default' }}
-                        initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="col-span-1 sm:col-span-2 lg:col-span-4"
-                    >
+                    <StaggerItem className="col-span-1 sm:col-span-2 lg:col-span-4">
+                        <motion.div
+                            style={{ ...cardStyle, cursor: 'default' }}
+                            whileHover={{ y: -4, boxShadow: '0 16px 32px -10px rgba(0,0,0,0.08)' }}
+                            transition={{ duration: 0.3, ease: smoothEaseOut }}
+                        >
                         <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1.5rem', height: '100%', width: '100%' }}>
                             <div style={{ flex: '1 1 300px' }}>
                                 <h3 style={{ color: '#0f172a', fontSize: '1.4rem', fontWeight: 850, marginBottom: '10px', letterSpacing: '-0.03em', lineHeight: '1.1' }}>Export & Continue</h3>
@@ -516,9 +531,10 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                 </button>
                             </div>
                         </div>
-                    </motion.div>
+                        </motion.div>
+                    </StaggerItem>
 
-                </div>
+                </StaggerContainer>
             </div>
         </section>
     );
