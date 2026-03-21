@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import {
   FileText,
   MessageSquare,
@@ -129,7 +130,7 @@ export const CyberneticBentoGrid = () => {
         <div className="bento-grid">
           {features.map((feature) => (
             <BentoItem key={feature.title} className={`${feature.className} cursor-pointer`}>
-              <a href={feature.href} className="block h-full group">
+              <Link href={feature.href} className="block h-full group">
                 <div className="flex flex-col justify-between h-full">
                   <div>
                     <div className="flex items-center gap-2 mb-3">
@@ -144,7 +145,7 @@ export const CyberneticBentoGrid = () => {
                     Explore →
                   </div>
                 </div>
-              </a>
+              </Link>
             </BentoItem>
           ))}
         </div>

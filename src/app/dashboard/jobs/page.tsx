@@ -29,6 +29,7 @@ import {
 import GuestBanner from "../../components/GuestBanner";
 import { cn } from "@/lib/utils";
 import { PromptInputBox } from "@/components/ui/ai-prompt-box";
+import { AIInputWithLoading } from "@/components/ui/ai-input-with-loading";
 import LoadingLines from "@/components/ui/loading-lines";
 import { 
     Modal, 
@@ -218,13 +219,14 @@ function JobsContent() {
                         </p>
 
                         <div className="w-full max-w-2xl">
-                            <PromptInputBox 
+                            <AIInputWithLoading
                                 placeholder="Senior Product Designer in New York (Remote)..."
-                                onSend={(msg: string) => {
+                                onSubmit={(msg: string) => {
                                     setQuery(msg);
                                     startScan(msg);
                                 }}
-                                isLoading={false}
+                                minHeight={56}
+                                maxHeight={200}
                             />
                         </div>
                         
