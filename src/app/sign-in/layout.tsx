@@ -1,3 +1,5 @@
+'use client';
+
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { ReactNode } from "react";
 
