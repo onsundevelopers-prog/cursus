@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-
 export const metadata: Metadata = {
     title: "Cursus — AI Career Platform",
     description: "The all-in-one AI platform to build resumes, ace interviews, and land your dream job.",
@@ -37,9 +35,7 @@ export default function RootLayout({
                 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
             </head>
             <body>
-                <ConvexClientProvider>
-                    {children}
-                </ConvexClientProvider>
+                {children}
             </body>
         </html>
     );
