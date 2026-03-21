@@ -1,20 +1,12 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
 import {
     ClerkProvider,
-    SignInButton,
-    SignUpButton,
-    SignedIn,
-    SignedOut,
-    UserButton,
 } from "@clerk/nextjs";
-import Link from "next/link";
 import Script from "next/script";
 import "./globals.css";
 
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { SyncUser } from "@/components/SyncUser";
-import { ModernHeader } from "@/components/ui/modern-header";
 
 export const metadata: Metadata = {
     title: "Cursus — AI Career Platform",
@@ -46,12 +38,11 @@ export default function RootLayout({
                 </Script>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
+                <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
             </head>
-            <body style={{ paddingTop: '80px' }}>
+            <body>
                 <ConvexClientProvider>
                     <SyncUser />
-                    <ModernHeader />
                     {children}
                 </ConvexClientProvider>
             </body>

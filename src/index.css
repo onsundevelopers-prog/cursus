@@ -1,14 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --primary: #E63946;
-  --primary-hover: #D62828;
-  --secondary: #F1FAEE;
-  --text-main: #1D3557;
-  --text-muted: #5C677D;
-  --background: #FFFFFF;
-  --surface: #F8F9FA;
-  --border: #E5E7EB;
+  --background: 0 0% 100%;
+  --foreground: 210 14% 17%;
+  --primary: 210 14% 17%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 184 5% 55%;
+  --accent: 239 84% 67%;
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --ring: 239 84% 67%;
+  --radius: 0.5rem;
+  --font-display: 'Instrument Serif', serif;
+  --font-body: 'Inter', sans-serif;
+  --shadow-dashboard: 0 25px 80px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06);
   
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -28,29 +36,35 @@
   padding: 0;
 }
 
+html, body, #__next {
+  height: 100%;
+  width: 100%;
+}
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: var(--text-main);
-  background-color: var(--background);
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--text-main);
+  color: hsl(var(--foreground));
   letter-spacing: -0.02em;
 }
 
 a {
-  color: var(--primary);
+  color: hsl(var(--primary));
   text-decoration: none;
   transition: var(--transition);
 }
 
 a:hover {
-  color: var(--primary-hover);
+  color: hsl(var(--foreground));
 }
 
 button {
@@ -66,8 +80,22 @@ button {
 
 /* Typography utilities */
 .text-center { text-align: center; }
-.text-primary { color: var(--primary); }
-.text-muted { color: var(--text-muted); }
+.text-primary { color: hsl(var(--primary)); }
+.text-muted { color: hsl(var(--muted-foreground)); }
+.text-foreground { color: hsl(var(--foreground)); }
+.text-background { color: hsl(var(--background)); }
+
+/* Background utilities */
+.bg-background { background-color: hsl(var(--background)); }
+.bg-foreground { background-color: hsl(var(--foreground)); }
+.bg-primary { background-color: hsl(var(--primary)); }
+.bg-secondary { background-color: hsl(var(--secondary)); }
+.bg-muted { background-color: hsl(var(--muted)); }
+.bg-accent { background-color: hsl(var(--accent)); }
+
+/* Border utilities */
+.border-border { border-color: hsl(var(--border)); }
+.border { border: 1px solid hsl(var(--border)); }
 
 /* Spacing utilities */
 .mt-4 { margin-top: 1rem; }
@@ -77,7 +105,7 @@ button {
 
 /* Flex utilities */
 .flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
+.flex-col { flex-direction: column; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }
 .justify-center { justify-content: center; }
@@ -101,26 +129,26 @@ button {
 }
 
 .btn-primary {
-  background-color: var(--primary);
-  color: white;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
+  background-color: hsl(var(--foreground));
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
-  color: white;
+  color: hsl(var(--primary-foreground));
 }
 
 .btn-secondary {
-  background-color: var(--surface);
-  color: var(--text-main);
-  border: 1px solid var(--border);
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: 1px solid hsl(var(--border));
 }
 
 .btn-secondary:hover {
-  background-color: var(--border);
-  color: var(--text-main);
+  background-color: hsl(var(--muted));
+  color: hsl(var(--secondary-foreground));
 }
 
 .btn-sm {

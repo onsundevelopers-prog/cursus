@@ -39,27 +39,16 @@ export interface ButtonProps
     asChild?: boolean
 }
 
-import { motion } from "framer-motion"
-
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant, size, asChild = false, ...props }, ref) => {
         const Comp = asChild ? Slot : "button"
         
-        // If asChild is used, it's safer to not wrap the whole thing strictly with a motion tag depending on the child,
-        // but Since the prompt requires "use framer-motion only", we wrap the Comp inside a motion wrapper if it's not a direct motion component
-        
         return (
-            <motion.div
-                whileHover={{ scale: 1.02, filter: "brightness(1.1)", opacity: 0.95 }}
-                whileTap={{ scale: 0.98 }}
-                style={{ display: "inline-flex" }}
-            >
-                <Comp
-                    className={cn(buttonVariants({ variant, size, className }))}
-                    ref={ref as any}
-                    {...props}
-                />
-            </motion.div>
+            <Comp
+                className={cn(buttonVariants({ variant, size, className }))}
+                ref={ref}
+                {...props}
+            />
         )
     },
 )
