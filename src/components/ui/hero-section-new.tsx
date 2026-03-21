@@ -22,14 +22,10 @@ const itemVariants = {
     opacity: 0,
     y: direction,
   }),
-  visible: {
+  visible: (direction: number = 1) => ({
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      type: "tween",
-    },
-  },
+  }),
 };
 
 export function HeroSectionNew() {
@@ -62,8 +58,11 @@ export function HeroSectionNew() {
       >
         {/* Badge */}
         <motion.div
+          initial="hidden"
+          animate="visible"
           custom={10}
           variants={itemVariants}
+          transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground font-body mb-6"
         >
           Now with GPT-5 support ✨
@@ -71,8 +70,11 @@ export function HeroSectionNew() {
 
         {/* Headline */}
         <motion.h1
+          initial="hidden"
+          animate="visible"
           custom={16}
           variants={itemVariants}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="text-center font-display text-5xl md:text-6xl lg:text-[5rem] leading-[0.95] tracking-tight text-foreground max-w-2xl"
         >
           Build a career you actually{' '}
@@ -81,8 +83,11 @@ export function HeroSectionNew() {
 
         {/* Subheadline */}
         <motion.p
+          initial="hidden"
+          animate="visible"
           custom={16}
           variants={itemVariants}
+          transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-4 text-center text-base md:text-lg text-muted-foreground max-w-[650px] leading-relaxed font-body"
         >
           No more boring resume builders. Cursus handles the hard stuff — so you can focus on landing that dream role.
@@ -90,8 +95,11 @@ export function HeroSectionNew() {
 
         {/* CTA Buttons */}
         <motion.div
+          initial="hidden"
+          animate="visible"
           custom={16}
           variants={itemVariants}
+          transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-5 flex items-center gap-3"
         >
           <Button
@@ -108,8 +116,11 @@ export function HeroSectionNew() {
 
         {/* Dashboard Preview */}
         <motion.div
+          initial="hidden"
+          animate="visible"
           custom={30}
           variants={itemVariants}
+          transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-8 w-full max-w-5xl px-4"
         >
           <DashboardPreview />
