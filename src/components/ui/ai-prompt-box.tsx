@@ -628,7 +628,12 @@ export const PromptInputBox = React.forwardRef((props: PromptInputBoxProps, ref:
               disabled={isLoading && !hasContent}
             >
               {isLoading ? (
-                <Square className="h-4 w-4 fill-[#1F2023] animate-pulse" />
+                <motion.div
+                  animate={{ rotate: 360, opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                >
+                  <BrainCog className="h-5 w-5 text-[#1F2023]" />
+                </motion.div>
               ) : isRecording ? (
                 <StopCircle className="h-5 w-5 text-red-500" />
               ) : hasContent ? (

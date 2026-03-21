@@ -24,9 +24,18 @@ function DashboardContent() {
     }, [searchParams]);
 
     if (!isLoaded) return (
-        <div style={{ background: '#fafafa', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-            Loading...
-        </div>
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex items-center justify-center min-h-screen bg-[#fafafa]"
+        >
+            <motion.div 
+                animate={{ scale: [1, 1.05, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                style={{ height: '40px', width: '40px', borderRadius: '50%', border: '4px solid #f59e0b', borderTopColor: 'transparent', animation: 'spin 1s linear infinite' }}
+            />
+        </motion.div>
     );
 
     const displayName = user?.firstName || (isGuest ? "Guest" : "Candidate");
@@ -86,8 +95,19 @@ function DashboardContent() {
 export default function DashboardPage() {
     return (
         <Suspense fallback={
-            <div style={{ background: '#fafafa', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
-                Loading Dashboard...
+            <div className="flex items-center justify-center min-h-screen bg-[#fafafa]">
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center justify-center"
+                >
+                    <motion.div 
+                        animate={{ scale: [1, 1.05, 1], opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        style={{ height: '40px', width: '40px', borderRadius: '50%', border: '4px solid #f59e0b', borderTopColor: 'transparent', animation: 'spin 1s linear infinite' }}
+                    />
+                </motion.div>
             </div>
         }>
             <DashboardContent />

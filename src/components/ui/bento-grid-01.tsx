@@ -252,7 +252,8 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                 <motion.p
                     style={{ color: '#64748b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.5rem', fontWeight: 600 }}
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-20px" }}
                 >
                     Your Dashboard
                 </motion.p>
@@ -286,7 +287,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     <Link href={navUrl("/dashboard/resume")} className="col-span-1 sm:col-span-2 row-span-2 no-underline" style={{ textDecoration: 'none' }}>
                         <motion.div
                             style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-20px" }}
                             whileHover={{ y: -8, boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
                             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         >
@@ -304,7 +305,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     <Link href={navUrl("/dashboard/letter")} className="col-span-1 sm:col-span-2 no-underline" style={{ textDecoration: 'none' }}>
                         <motion.div
                             style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-20px" }}
                             transition={{ delay: 0.1 }}
                             whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
                         >
@@ -322,7 +323,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     <Link href={navUrl("/dashboard/portfolio")} className="col-span-1 sm:col-span-2 row-span-2 no-underline" style={{ textDecoration: 'none' }}>
                         <motion.div
                             style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-20px" }}
                             transition={{ delay: 0.2 }}
                             whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
                         >
@@ -342,7 +343,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     <Link href={navUrl("/dashboard/jobs")} className="col-span-1 sm:col-span-2 no-underline" style={{ textDecoration: 'none' }}>
                         <motion.div
                             style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-20px" }}
                             transition={{ delay: 0.3 }}
                             whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
                         >
@@ -360,7 +361,7 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                     <Link href={navUrl("/dashboard/interview")} className="col-span-1 sm:col-span-2 no-underline" style={{ textDecoration: 'none' }}>
                         <motion.div
                             style={{ ...cardStyle }}
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-20px" }}
                             transition={{ delay: 0.4 }}
                             whileHover={{ scale: 0.98, borderColor: '#e2e8f0' }}
                         >

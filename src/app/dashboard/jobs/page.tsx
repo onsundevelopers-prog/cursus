@@ -282,60 +282,31 @@ function JobsContent() {
                 )}
 
                 {status === 'results' && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                        {/* Feed */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="lg:col-span-2 space-y-6"
-                        >
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-black text-2xl">{jobs.length} Matches Found</h3>
-                                <button onClick={() => startScan()} className="p-2 hover:bg-slate-100 rounded-full transition-all">
-                                    <UpdateIcon className="w-6 h-6 text-slate-400" />
-                                </button>
-                            </div>
-
-                            <div className="w-full">
-                                {jobs.length > 0 && (
-                                    <HoverRevealCards 
-                                        items={jobs.map((job) => ({
-                                            id: job.id,
-                                            title: job.title,
-                                            subtitle: `${job.company} • ${job.location}`,
-                                            imageUrl: `https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1470&auto=format&fit=crop`,
-                                            link: job.link
-                                        }))} 
-                                        className="grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-0 gap-6"
-                                    />
-                                )}
-                            </div>
-                        </motion.div>
-
-                        {/* Sidebar */}
-                        <div className="lg:block space-y-8 h-fit lg:sticky lg:top-24">
-                            {/* Salary Insights */}
-                            <div className="bg-[#0f172a] p-8 rounded-[32px] text-white shadow-2xl relative overflow-hidden">
-                                {/* Subtle grain pattern bg */}
-                                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #475569 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
-                                <div className="flex items-center gap-3 mb-6">
-                                    <DollarSign className="text-orange-400" />
-                                    <h3 className="font-bold">Market Insights</h3>
-                                </div>
-                                <div className="space-y-4">
-                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Avg Salary</p>
-                                        <p className="text-2xl font-black">$165,000</p>
-                                    </div>
-                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                                        <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Comp Growth</p>
-                                        <p className="text-2xl font-black text-emerald-400">+12% YoY</p>
-                                    </div>
-                                </div>
-                            </div>
-
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="w-full space-y-6"
+                    >
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-black text-2xl">{jobs.length} Matches Found</h3>
+                            <button onClick={() => startScan()} className="p-2 hover:bg-slate-100 rounded-full transition-all">
+                                <UpdateIcon className="w-6 h-6 text-slate-400" />
+                            </button>
                         </div>
-                    </div>
+
+                        {jobs.length > 0 && (
+                            <HoverRevealCards 
+                                items={jobs.map((job) => ({
+                                    id: job.id,
+                                    title: job.title,
+                                    subtitle: `${job.company} • ${job.location} • ${job.salary}`,
+                                    imageUrl: `https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1470&auto=format&fit=crop`,
+                                    link: job.link
+                                }))} 
+                                className="grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-0 gap-5"
+                            />
+                        )}
+                    </motion.div>
                 )}
             </AnimatePresence>
 

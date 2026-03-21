@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 /**
  * @typedef CardItem
@@ -46,20 +47,22 @@ const HoverRevealCards: React.FC<HoverRevealCardsProps> = ({
       )}
     >
       {items.map((item) => (
-        <div
+        <motion.div
           key={item.id}
           role="listitem"
           aria-label={`${item.title}, ${item.subtitle}`}
           tabIndex={0}
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
           onClick={() => {
             if (item.link && item.link !== "#") {
               window.open(item.link, '_blank');
             }
           }}
           className={cn(
-            'relative h-80 cursor-pointer overflow-hidden rounded-xl bg-cover bg-center shadow-lg transition-all duration-500 ease-in-out',
-            'group-hover:scale-[0.97] group-hover:opacity-60 group-hover:blur-[2px]',
-            'hover:!scale-105 hover:!opacity-100 hover:!blur-none focus-visible:!scale-105 focus-visible:!opacity-100 focus-visible:!blur-none',
+            'relative h-80 cursor-pointer overflow-hidden rounded-xl bg-cover bg-center shadow-lg',
+            'group-hover:opacity-60 group-hover:blur-[2px]',
+            'hover:!opacity-100 hover:!blur-none focus-visible:!opacity-100 focus-visible:!blur-none',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
             cardClassName
           )}
@@ -73,7 +76,7 @@ const HoverRevealCards: React.FC<HoverRevealCardsProps> = ({
             </p>
             <h3 className="text-xl font-black leading-tight line-clamp-2">{item.title}</h3>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
