@@ -48,11 +48,11 @@ body {
   transform: scale(0.75);
 }
 
-/* Cybernetic Bento Grid Styles */
+/* Modern SaaS Bento Grid Styles */
 .main-container {
   width: 100%;
   min-height: 100%;
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+  background: #ffffff;
   padding: 3rem 1.5rem;
   display: flex;
   align-items: center;
@@ -70,12 +70,12 @@ body {
   bottom: 0;
   background: radial-gradient(
     circle at 20% 50%,
-    rgba(34, 211, 238, 0.05) 0%,
+    rgba(99, 102, 241, 0.03) 0%,
     transparent 50%
   ),
   radial-gradient(
     circle at 80% 80%,
-    rgba(59, 130, 246, 0.05) 0%,
+    rgba(59, 130, 246, 0.03) 0%,
     transparent 50%
   );
   pointer-events: none;
@@ -111,17 +111,11 @@ body {
   --mouse-y: 0px;
   position: relative;
   padding: 1.5rem;
-  background: linear-gradient(
-    135deg,
-    rgba(20, 20, 40, 0.8) 0%,
-    rgba(30, 30, 60, 0.6) 100%
-  );
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   overflow: hidden;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
 }
 
 .bento-item::before {
@@ -133,15 +127,15 @@ body {
   height: 100px;
   background: radial-gradient(
     circle,
-    rgba(34, 211, 238, 0.4) 0%,
-    rgba(34, 211, 238, 0.2) 40%,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(99, 102, 241, 0.04) 40%,
     transparent 70%
   );
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
   z-index: 1;
 }
 
@@ -149,27 +143,17 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    45deg,
-    transparent 0%,
-    rgba(34, 211, 238, 0.1) 50%,
-    transparent 100%
-  );
+  background: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
   pointer-events: none;
   z-index: 2;
 }
 
 .bento-item:hover {
-  border-color: rgba(34, 211, 238, 0.6);
-  background: linear-gradient(
-    135deg,
-    rgba(20, 20, 40, 0.9) 0%,
-    rgba(34, 211, 238, 0.1) 100%
-  );
-  box-shadow: 0 0 30px rgba(34, 211, 238, 0.2),
-              inset 0 0 20px rgba(34, 211, 238, 0.05);
+  border-color: #d1d5db;
+  background: #fafbfc;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   transform: translateY(-2px);
 }
 
@@ -178,7 +162,7 @@ body {
 }
 
 .bento-item:hover::after {
-  opacity: 1;
+  opacity: 0;
 }
 
 .bento-item > * {
