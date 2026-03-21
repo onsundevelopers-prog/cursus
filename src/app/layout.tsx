@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import {
-    ClerkProvider,
-} from "@clerk/nextjs";
 import Script from "next/script";
 import "./globals.css";
 
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-import { SyncUser } from "@/components/SyncUser";
 
 export const metadata: Metadata = {
     title: "Cursus — AI Career Platform",
@@ -22,9 +18,9 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 {/* Google tag (gtag.js) */}
-                <Script 
-                    async 
-                    src="https://www.googletagmanager.com/gtag/js?id=G-TCHVB4WJG4" 
+                <Script
+                    async
+                    src="https://www.googletagmanager.com/gtag/js?id=G-TCHVB4WJG4"
                     strategy="afterInteractive"
                 />
                 <Script id="google-analytics" strategy="afterInteractive">
@@ -42,7 +38,6 @@ export default function RootLayout({
             </head>
             <body>
                 <ConvexClientProvider>
-                    <SyncUser />
                     {children}
                 </ConvexClientProvider>
             </body>

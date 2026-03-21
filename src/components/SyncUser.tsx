@@ -1,19 +1,19 @@
 "use client";
 
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { useEffect } from "react";
 import { api } from "../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 
 export function SyncUser() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const storeUser = useMutation(api.users.store);
 
   useEffect(() => {
-    if (user) {
+    if (isLoaded && user) {
       storeUser();
     }
-  }, [user, storeUser]);
+  }, [user, storeUser, isLoaded]);
 
   return null;
 }
