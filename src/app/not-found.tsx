@@ -1,6 +1,4 @@
-import React from 'react';
 import Link from 'next/link';
-import { Ghost, Home, ArrowLeft, Search } from 'lucide-react';
 
 export default function NotFound() {
     return (
@@ -36,9 +34,10 @@ export default function NotFound() {
                         padding: '3rem',
                         borderRadius: '50%',
                         position: 'relative',
-                        boxShadow: '0 20px 50px rgba(0,0,0,0.05)'
+                        boxShadow: '0 20px 50px rgba(0,0,0,0.05)',
+                        fontSize: '4rem'
                     }}>
-                        <Ghost size={80} className="text-slate-400" />
+                        👻
                         <div
                             style={{
                                 position: 'absolute',
@@ -95,12 +94,11 @@ export default function NotFound() {
                             boxShadow: '0 4px 14px rgba(15, 23, 42, 0.3)'
                         }}
                     >
-                        <Home size={18} />
-                        Back to Home
+                        ← Back to Home
                     </Link>
 
                     <Link
-                        href="/dashboard/jobs"
+                        href="/dashboard"
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -114,14 +112,8 @@ export default function NotFound() {
                             transition: 'all 0.2s',
                         }}
                     >
-                        <Search size={18} />
-                        Find Jobs
+                        🔍 Go to Dashboard
                     </Link>
-                </div>
-
-                <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center', gap: '2rem', opacity: 0.5 }}>
-                    <ArrowLeft size={20} className="animate-pulse" />
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#94a3b8' }}>DETOUR AHEAD</span>
                 </div>
             </div>
         </div>
