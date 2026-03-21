@@ -11,7 +11,14 @@ interface MascotProps {
 const features = [
     {
         title: "AI Job Application Autofill",
-        badge: "Chrome Extension",
+        badge: (
+            <motion.span 
+                whileHover={{ y: -3, boxShadow: "0 4px 12px rgba(245, 158, 11, 0.2)" }}
+                className="text-[9px] uppercase tracking-wider font-bold bg-amber-50 text-amber-600 px-2 py-1 border border-amber-200/50 rounded-md cursor-default"
+            >
+                Chrome Extension
+            </motion.span>
+        ),
         icon: <Zap size={20} className="text-amber-500" />,
         points: [
             "Auto-fills job applications in one click",
@@ -23,7 +30,14 @@ const features = [
     },
     {
         title: "Company Research AI",
-        badge: "Interview Prep",
+        badge: (
+            <motion.span 
+                whileHover={{ y: -3, boxShadow: "0 4px 12px rgba(59, 130, 246, 0.2)" }}
+                className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md cursor-default"
+            >
+                Interview Prep
+            </motion.span>
+        ),
         icon: <Target size={20} className="text-blue-500" />,
         points: [
             "Generates personalized interview prep briefs",
@@ -35,7 +49,14 @@ const features = [
     },
     {
         title: "Salary Negotiation Coach",
-        badge: "Live Coaching",
+        badge: (
+            <motion.span 
+                whileHover={{ y: -3, boxShadow: "0 4px 12px rgba(16, 185, 129, 0.2)" }}
+                className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md cursor-default"
+            >
+                Live Coaching
+            </motion.span>
+        ),
         icon: <CircleDollarSign size={20} className="text-emerald-500" />,
         points: [
             "Shows market data vs your offer",

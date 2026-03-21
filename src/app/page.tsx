@@ -10,6 +10,7 @@ import { BentoFeatures } from "@/components/ui/bento-features";
 import { InteractiveFeatureTabs } from "@/components/ui/interactive-feature-tabs";
 import { ComparisonSection } from "@/components/ui/comparison-section";
 import { Mascot } from "@/components/ui/mascot";
+import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import { duolingoEase, duolingoSpring } from "@/lib/animations";
 
 const fadeInUp: MotionProps = {
@@ -31,9 +32,43 @@ export default function Home() {
                     <HeroSection_05 />
                 </section>
 
+                <section className="py-20 border-y border-slate-100 bg-white/50 backdrop-blur-sm">
+                    <LogoMarquee />
+                </section>
 
+                <section className="bg-slate-50/30 overflow-hidden">
+                    <div className="max-w-7xl mx-auto py-32 px-6">
+                        <div className="text-center mb-16">
+                            <motion.span 
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="text-blue-600 font-extrabold text-xs uppercase tracking-[0.3em]"
+                            >
+                                The Network
+                            </motion.span>
+                            <motion.h2 
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="text-4xl md:text-5xl font-black mt-4 tracking-tighter"
+                            >
+                                Driven by <span className="text-slate-400 italic">Context.</span>
+                            </motion.h2>
+                        </div>
+                        <RadialOrbitalTimeline />
+                    </div>
+                </section>
 
+                <section>
+                    <BentoFeatures />
+                </section>
 
+                <section>
+                    <InteractiveFeatureTabs />
+                </section>
+
+                <section className="bg-white">
+                    <ComparisonSection />
+                </section>
             </main>
 
             <footer style={{ background: '#fff', borderTop: '1px solid #f1f5f9', padding: '8rem 0' }}>

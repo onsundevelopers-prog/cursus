@@ -389,9 +389,12 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                 <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Zap size={16} color="#f59e0b" /> Job Autofill
                                 </h3>
-                                <span className="text-[9px] uppercase tracking-wider font-bold bg-amber-50 text-amber-600 px-2 py-1 border border-amber-200/50 rounded-md">
+                                <motion.span 
+                                    whileHover={{ y: -5, boxShadow: "0 8px 16px -4px rgba(245, 158, 11, 0.2)" }}
+                                    className="text-[9px] uppercase tracking-wider font-bold bg-amber-50 text-amber-600 px-2 py-1 border border-amber-200/50 rounded-md cursor-default transition-shadow"
+                                >
                                     Extension
-                                </span>
+                                </motion.span>
                             </div>
                             <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.25rem' }}>One-click auto-fill for Workday, Lever, and Greenhouse.</p>
                             
@@ -431,9 +434,12 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                 <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                                     <Target size={16} color="#3b82f6" /> Company Intel
                                 </h3>
-                                <span className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md">
+                                <motion.span 
+                                    whileHover={{ y: -5, boxShadow: "0 8px 16px -4px rgba(59, 130, 246, 0.2)" }}
+                                    className="text-[9px] uppercase tracking-wider font-bold bg-blue-50 text-blue-600 px-2 py-1 border border-blue-200/50 rounded-md cursor-default transition-shadow"
+                                >
                                     Soon
-                                </span>
+                                </motion.span>
                             </div>
                             <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Deep-scraped prep briefs & custom talking points.</p>
                         </div>
@@ -454,9 +460,12 @@ export default function BentoDashboard({ navUrl, displayName }: BentoDashboardPr
                                 <h3 style={{ color: '#0f172a', fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                                     <CircleDollarSign size={16} color="#10b981" /> Salary Coach
                                 </h3>
-                                <span className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md">
+                                <motion.span 
+                                    whileHover={{ y: -5, boxShadow: "0 8px 16px -4px rgba(16, 185, 129, 0.2)" }}
+                                    className="text-[9px] uppercase tracking-wider font-bold bg-emerald-50 text-emerald-600 px-2 py-1 border border-emerald-200/50 rounded-md cursor-default transition-shadow"
+                                >
                                     Soon
-                                </span>
+                                </motion.span>
                             </div>
                             <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Live call assistant & market data to negotiate $10K+ more.</p>
                         </div>

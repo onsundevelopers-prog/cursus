@@ -10,6 +10,7 @@ import {
     FileCode2, CheckCircle2, Circle, Info, Lightbulb, 
     Globe, ShieldCheck, Heart, Zap, Download, Lock
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import React, { useRef, useEffect, useState, Suspense } from "react";
 import GuestBanner from "../../components/GuestBanner";
 import { cn } from "@/lib/utils";
@@ -165,7 +166,12 @@ function PortfolioContent() {
                     <h1 style={{ fontSize: '1.5rem', fontWeight: 850, color: '#0f172a', letterSpacing: '-0.03em' }}>Portfolio Builder</h1>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.25rem' }}>
                         <div style={{ width: '120px', height: '6px', background: '#e2e8f0', borderRadius: '10px', overflow: 'hidden' }}>
-                            <div style={{ width: `${progressValue}%`, height: '100%', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', transition: 'width 0.5s ease' }} />
+                            <motion.div 
+                                initial={{ width: 0 }}
+                                animate={{ width: `${progressValue}%` }}
+                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                                style={{ height: '100%', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)' }} 
+                            />
                         </div>
                         <p style={{ color: '#64748b', fontSize: '0.8rem', fontWeight: 600 }}>{Math.round(progressValue)}% Complete</p>
                     </div>

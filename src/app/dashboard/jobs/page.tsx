@@ -260,6 +260,7 @@ function JobsContent() {
                                     className="h-full bg-orange-500"
                                     initial={{ width: 0 }}
                                     animate={{ width: `${scanProgress}%` }}
+                                    transition={{ duration: 0.5, ease: "easeOut" }}
                                 />
                             </div>
                             <div className="space-y-3">
