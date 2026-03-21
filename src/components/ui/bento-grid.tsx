@@ -1,142 +1,79 @@
 import { ReactNode } from "react";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const BentoGrid = ({
-    children,
-    className,
+  children,
+  className,
 }: {
-    children: ReactNode;
-    className?: string;
+  children: ReactNode;
+  className?: string;
 }) => {
-    return (
-        <div
-            style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gridTemplateRows: 'repeat(3, 22rem)',
-                gap: '1rem',
-                width: '100%',
-            }}
-            className={cn(className)}
-        >
-            {children}
-        </div>
-    );
+  return (
+    <div
+      className={cn(
+        "grid w-full auto-rows-[22rem] grid-cols-3 gap-4",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 };
 
 const BentoCard = ({
-    name,
-    className,
-    background,
-    Icon,
-    description,
-    href,
-    cta,
-    gridStyle,
+  name,
+  className,
+  background,
+  Icon,
+  description,
+  href,
+  cta,
 }: {
-    name: string;
-    className: string;
-    background: ReactNode;
-    Icon: any;
-    description: string;
-    href: string;
-    cta: string;
-    gridStyle?: React.CSSProperties;
+  name: string;
+  className: string;
+  background: ReactNode;
+  Icon: any;
+  description: string;
+  href: string;
+  cta: string;
 }) => (
-    <div
-        key={name}
-        className={cn("bento-card", className)}
-        style={{
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            overflow: 'hidden',
-            borderRadius: '12px',
-            background: 'white',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.03), 0 2px 4px rgba(0,0,0,.05), 0 12px 24px rgba(0,0,0,.05)',
-            ...gridStyle,
-        }}
-    >
-        {/* Background image area */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-            {background}
-        </div>
-
-        {/* Text content — slides up on hover */}
-        <div
-            className="bento-content"
-            style={{
-                position: 'relative',
-                zIndex: 10,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                padding: '24px',
-                transition: 'transform 0.3s ease',
-            }}
-        >
-            <Icon style={{ width: '3rem', height: '3rem', color: '#404040', transition: 'transform 0.3s ease' }} />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#404040', margin: '8px 0 4px' }}>
-                {name}
-            </h3>
-            <p style={{ color: '#a3a3a3', fontSize: '0.95rem', maxWidth: '400px' }}>{description}</p>
-        </div>
-
-        {/* CTA — slides up on hover */}
-        <div
-            className="bento-cta"
-            style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                display: 'flex',
-                padding: '16px',
-                transform: 'translateY(40px)',
-                opacity: 0,
-                transition: 'transform 0.3s ease, opacity 0.3s ease',
-                zIndex: 10,
-            }}
-        >
-            <a
-                href={href}
-                style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    color: '#404040',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: '6px 8px',
-                    borderRadius: '6px',
-                    textDecoration: 'none',
-                    transition: 'background 0.2s ease',
-                }}
-            >
-                {cta}
-                <ArrowRightIcon style={{ width: '14px', height: '14px' }} />
-            </a>
-        </div>
-
-        {/* Hover overlay */}
-        <div
-            className="bento-overlay"
-            style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'transparent',
-                transition: 'background 0.3s ease',
-                zIndex: 5,
-                pointerEvents: 'none',
-            }}
-        />
+  <div
+    key={name}
+    className={cn(
+      "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl",
+      // light styles
+      "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
+      // dark styles
+      "transform-gpu dark:bg-black dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]",
+      className,
+    )}
+  >
+    <div>{background}</div>
+    <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-10">
+      <Icon className="h-12 w-12 origin-left transform-gpu text-neutral-700 transition-all duration-300 ease-in-out group-hover:scale-75 dark:text-neutral-300" />
+      <h3 className="text-xl font-semibold text-neutral-700 dark:text-neutral-300">
+        {name}
+      </h3>
+      <p className="max-w-lg text-neutral-400">{description}</p>
     </div>
+
+    <div
+      className={cn(
+        "pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
+      )}
+    >
+      <Button variant="ghost" asChild size="sm" className="pointer-events-auto">
+        <a href={href}>
+          {cta}
+          <ArrowRightIcon className="ml-2 h-4 w-4" />
+        </a>
+      </Button>
+    </div>
+    <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10" />
+  </div>
 );
 
 export { BentoCard, BentoGrid };

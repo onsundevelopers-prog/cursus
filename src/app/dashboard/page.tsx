@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import BentoDashboard from "@/components/ui/bento-grid-01";
+import { BentoDemo } from "@/components/ui/bento-demo";
 
 function DashboardContent() {
     const { user, isLoaded } = useUser();
@@ -84,8 +84,12 @@ function DashboardContent() {
             </AnimatePresence>
 
             <div className="max-w-[1400px] mx-auto px-6 py-12">
+                <div className="mb-8">
+                    <h1 className="text-3xl font-bold text-foreground mb-2">Welcome, {displayName}! 👋</h1>
+                    <p className="text-muted-foreground">Choose a tool to get started with your career journey</p>
+                </div>
                 <div className="w-full">
-                    <BentoDashboard navUrl={navUrl} displayName={displayName} />
+                    <BentoDemo />
                 </div>
             </div>
         </div>
