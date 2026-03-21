@@ -13,14 +13,19 @@ import {
 } from 'lucide-react';
 
 // Reusable BentoItem component
-const BentoItem = ({ className, children }) => {
-  const itemRef = useRef(null);
+interface BentoItemProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+const BentoItem = ({ className = '', children }: BentoItemProps) => {
+  const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const item = itemRef.current;
     if (!item) return;
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       const rect = item.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -49,7 +54,15 @@ const BentoItem = ({ className, children }) => {
   );
 };
 
-const features = [
+interface Feature {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  className: string;
+  href: string;
+}
+
+const features: Feature[] = [
   {
     title: 'Resume Builder',
     description: 'Land interviews 2x faster with AI-powered resume optimization',
