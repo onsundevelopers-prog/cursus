@@ -1,8 +1,5 @@
-"use client";
-
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { Ghost, Home, ArrowLeft, Search } from 'lucide-react';
 
 export default function NotFound() {
@@ -19,10 +16,7 @@ export default function NotFound() {
             textAlign: 'center',
             fontFamily: 'var(--font-sans)',
         }}>
-            <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, type: 'spring' }}
+            <div
                 style={{
                     maxWidth: '520px',
                     width: '100%',
@@ -30,16 +24,7 @@ export default function NotFound() {
                 }}
             >
                 {/* Quirky Ghost Illustration (Motion for Delight) */}
-                <motion.div
-                    animate={{
-                        y: [0, -20, 0],
-                        rotate: [0, 10, -10, 0]
-                    }}
-                    transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
+                <div
                     style={{
                         marginBottom: '2rem',
                         display: 'flex',
@@ -54,9 +39,7 @@ export default function NotFound() {
                         boxShadow: '0 20px 50px rgba(0,0,0,0.05)'
                     }}>
                         <Ghost size={80} className="text-slate-400" />
-                        <motion.div
-                            animate={{ opacity: [1, 0.4, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
+                        <div
                             style={{
                                 position: 'absolute',
                                 top: '20px',
@@ -68,7 +51,7 @@ export default function NotFound() {
                             }}
                         />
                     </div>
-                </motion.div>
+                </div>
 
                 <h1 style={{
                     fontSize: '3.5rem',
@@ -140,7 +123,7 @@ export default function NotFound() {
                     <ArrowLeft size={20} className="animate-pulse" />
                     <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#94a3b8' }}>DETOUR AHEAD</span>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 }

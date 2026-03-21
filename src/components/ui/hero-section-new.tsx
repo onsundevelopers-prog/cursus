@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Play } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeroNavbar } from "./hero-navbar";
 import DashboardPreview from "./dashboard-preview";
@@ -102,16 +102,21 @@ export function HeroSectionNew() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-5 flex items-center gap-3"
         >
-          <Button
-            className="rounded-full px-6 py-5 text-sm font-medium font-body bg-primary text-primary-foreground hover:bg-foreground"
-          >
-            Book a demo
-          </Button>
-          <button
-            className="h-11 w-11 rounded-full border-0 bg-background shadow-[0_2px_12px_rgba(0,0,0,0.08)] hover:bg-background/80 flex items-center justify-center transition-colors"
-          >
-            <Play className="h-4 w-4 fill-foreground text-foreground" />
-          </button>
+          <Link href="/sign-in">
+            <Button
+              className="rounded-full px-6 py-5 text-sm font-medium font-body bg-primary text-primary-foreground hover:bg-foreground"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/dashboard?guest=true">
+            <Button
+              variant="outline"
+              className="rounded-full px-6 py-5 text-sm font-medium font-body border border-border bg-background text-foreground hover:bg-secondary"
+            >
+              Create as Guest
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Dashboard Preview */}
