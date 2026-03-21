@@ -1,5 +1,3 @@
-"use client";
-
 import { HeroSectionNew } from "@/components/ui/hero-section-new";
 
 export default function Home() {
